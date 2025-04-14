@@ -9,6 +9,8 @@ If needed, update my .gitignore
 
 Suggest to me when to do a git commit
 
+Never edit index.html directly, but edit what is outputted by ``npm run build`` via Rollup
+
 
 ## Project Structure
 
