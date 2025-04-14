@@ -4,6 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Collection Heads Based</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
   <style>
     body {
       background-color: #111;
@@ -84,27 +86,27 @@
   <h1>Collection Heads Based</h1>
   <div class="mod-list">
     <label class="mod-card">
-      <input type="checkbox" value="Head_A.pak" />
+      <input type="checkbox" value="mods/Head_A.pak" />
       <img src="images/head-a.jpg" alt="Head A" />
       <span>Head A – Elven Noble</span>
     </label>
     <label class="mod-card">
-      <input type="checkbox" value="Head_B.pak" />
+      <input type="checkbox" value="mods/Head_B.pak" />
       <img src="images/head-b.jpg" alt="Head B" />
       <span>Head B – Dwarf Warrior</span>
     </label>
     <label class="mod-card">
-      <input type="checkbox" value="Head_C.pak" />
+      <input type="checkbox" value="mods/Head_C.pak" />
       <img src="images/head-c.jpg" alt="Head C" />
       <span>Head C – Tiefling Mystic</span>
     </label>
     <label class="mod-card">
-      <input type="checkbox" value="Head_D.pak" />
+      <input type="checkbox" value="mods/Head_D.pak" />
       <img src="images/head-d.jpg" alt="Head D" />
       <span>Head D – Githyanki Raider</span>
     </label>
     <label class="mod-card">
-      <input type="checkbox" value="Head_E.pak" />
+      <input type="checkbox" value="mods/Head_E.pak" />
       <img src="images/head-e.jpg" alt="Head E" />
       <span>Head E – Human Hero</span>
     </label>
@@ -118,7 +120,24 @@
         alert("Please select at least one head to generate your pack.");
         return;
       }
-      alert("This is a demo! Normally, a zip file would now be generated with: " + selected.join(", "));
+
+      const zip = new JSZip();
+      const folder = zip.folder("Collection_Heads_Based");
+
+      for (const file of selected) {
+        try {
+          const response = await fetch(file);
+          const blob = await response.blob();
+          const fileName = file.split("/").pop();
+          folder.file(fileName, blob);
+        } catch (error) {
+          console.error("Error fetching", file, error);
+        }
+      }
+
+      zip.generateAsync({ type: "blob" }).then(function(content) {
+        saveAs(content, "My_Head_Pack.zip");
+      });
     }
   </script>
 </body>
