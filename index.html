@@ -23,8 +23,30 @@
     }
     h1 {
       text-align: center;
-      margin-bottom: 2rem;
+      margin-bottom: 1rem;
       font-size: 2rem;
+    }
+    .controls {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      padding: 0 1rem;
+    }
+    .controls input, .controls select, .controls button.small {
+      padding: 0.5rem 1rem;
+      border-radius: 0.5rem;
+      border: none;
+      font-size: 1rem;
+    }
+    .controls button.small {
+      background: var(--accent);
+      color: white;
+      cursor: pointer;
+    }
+    .controls button.small:hover {
+      background: var(--accent-hover);
     }
     .mod-list {
       display: grid;
@@ -91,28 +113,43 @@
 </head>
 <body>
   <h1>Collection Heads Based</h1>
-  <div class="mod-list">
-    <label class="mod-card">
+
+  <div class="controls">
+    <input type="text" id="searchInput" placeholder="🔍 Rechercher un mod...">
+    <select id="raceFilter">
+      <option value="">🧭 Toutes les races</option>
+      <option value="elf">Elfe</option>
+      <option value="dwarf">Nain</option>
+      <option value="tiefling">Tiefling</option>
+      <option value="githyanki">Githyanki</option>
+      <option value="human">Humain</option>
+    </select>
+    <button class="small" onclick="selectAll(true)">Tout sélectionner</button>
+    <button class="small" onclick="selectAll(false)">Tout désélectionner</button>
+  </div>
+
+  <div class="mod-list" id="modList">
+    <label class="mod-card" data-name="daenerys" data-race="human">
       <input type="checkbox" value="mods/Daenerys_Head_Preset_2.0.0.zip" />
       <img src="images/head-a.jpg" alt="Daenerys Head" />
       <span>Daenerys Head Preset</span>
     </label>
-    <label class="mod-card">
+    <label class="mod-card" data-name="dwarf warrior" data-race="dwarf">
       <input type="checkbox" value="mods/Head_B.zip" />
       <img src="images/head-b.jpg" alt="Head B" />
       <span>Head B – Dwarf Warrior</span>
     </label>
-    <label class="mod-card">
+    <label class="mod-card" data-name="tiefling mystic" data-race="tiefling">
       <input type="checkbox" value="mods/Head_C.zip" />
       <img src="images/head-c.jpg" alt="Head C" />
       <span>Head C – Tiefling Mystic</span>
     </label>
-    <label class="mod-card">
+    <label class="mod-card" data-name="githyanki raider" data-race="githyanki">
       <input type="checkbox" value="mods/Head_D.zip" />
       <img src="images/head-d.jpg" alt="Head D" />
       <span>Head D – Githyanki Raider</span>
     </label>
-    <label class="mod-card">
+    <label class="mod-card" data-name="human hero" data-race="human">
       <input type="checkbox" value="mods/Head_E.zip" />
       <img src="images/head-e.jpg" alt="Head E" />
       <span>Head E – Human Hero</span>
@@ -121,6 +158,34 @@
   <button onclick="generatePack()">Generate My Pack</button>
 
   <script>
+    const searchInput = document.getElementById("searchInput");
+    const raceFilter = document.getElementById("raceFilter");
+    const modList = document.getElementById("modList");
+
+    searchInput.addEventListener("input", filterMods);
+    raceFilter.addEventListener("change", filterMods);
+
+    function filterMods() {
+      const query = searchInput.value.toLowerCase();
+      const race = raceFilter.value;
+
+      document.querySelectorAll(".mod-card").forEach(card => {
+        const name = card.dataset.name || "";
+        const cardRace = card.dataset.race || "";
+
+        const matchName = name.includes(query);
+        const matchRace = race === "" || cardRace === race;
+
+        card.style.display = matchName && matchRace ? "flex" : "none";
+      });
+    }
+
+    function selectAll(state) {
+      document.querySelectorAll(".mod-card input[type=checkbox]").forEach(checkbox => {
+        checkbox.checked = state;
+      });
+    }
+
     async function generatePack() {
       const selected = [...document.querySelectorAll('input[type=checkbox]:checked')].map(el => el.value);
       if (selected.length === 0) {
