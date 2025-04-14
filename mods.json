@@ -29,7 +29,7 @@
   {
     "id": "akira",
     "name": "akira-human",
-    "displayName": "Akira - Head Preset",
+    "displayName": "Akira - Head Preset - HUMAN",
     "race": "human",
     "bodyType": "bt1",
     "imagePath": "images/head-d.jpg",
@@ -38,7 +38,7 @@
   {
     "id": "akira",
     "name": "akira-tiefling",
-    "displayName": "Akira - Head Preset",
+    "displayName": "Akira - Head Preset - TIEFLING",
     "race": "tiefling",
     "bodyType": "bt1",
     "imagePath": "images/head-d.jpg",
@@ -47,7 +47,7 @@
   {
     "id": "akira",
     "name": "akira-drow",
-    "displayName": "Akira - Head Preset",
+    "displayName": "Akira - Head Preset - DROW",
     "race": "drow",
     "bodyType": "bt1",
     "imagePath": "images/head-d.jpg",
@@ -56,7 +56,7 @@
   {
     "id": "akira",
     "name": "akira-elf",
-    "displayName": "Akira - Head Preset",
+    "displayName": "Akira - Head Preset - ELF",
     "race": "elf",
     "bodyType": "bt1",
     "imagePath": "images/head-d.jpg",
@@ -65,7 +65,7 @@
   {
     "id": "akira",
     "name": "akira-half-elf",
-    "displayName": "Akira - Head Preset",
+    "displayName": "Akira - Head Preset - HELF",
     "race": "half-elf",
     "bodyType": "bt1",
     "imagePath": "images/head-d.jpg",
