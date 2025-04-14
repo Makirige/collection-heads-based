@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Collection Heads Based</title>
+  <style>
+    body {
+      background-color: #111;
+      color: #f0f0f0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      padding: 2rem;
+      max-width: 700px;
+      margin: auto;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 2rem;
+      font-size: 2rem;
+    }
+    .mod-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    label {
+      background: #222;
+      padding: 1rem;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+    }
+    input[type="checkbox"] {
+      margin-right: 1rem;
+    }
+    button {
+      margin-top: 2rem;
+      padding: 1rem;
+      width: 100%;
+      background: #444;
+      color: white;
+      border: none;
+      border-radius: 0.5rem;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.2s ease-in-out;
+    }
+    button:hover {
+      background: #666;
+    }
+  </style>
+</head>
+<body>
+  <h1>Collection Heads Based</h1>
+  <div class="mod-list">
+    <label><input type="checkbox" value="Head_A.pak" /> Head A – Elven Noble</label>
+    <label><input type="checkbox" value="Head_B.pak" /> Head B – Dwarf Warrior</label>
+    <label><input type="checkbox" value="Head_C.pak" /> Head C – Tiefling Mystic</label>
+    <label><input type="checkbox" value="Head_D.pak" /> Head D – Githyanki Raider</label>
+    <label><input type="checkbox" value="Head_E.pak" /> Head E – Human Hero</label>
+  </div>
+  <button onclick="generatePack()">Generate My Pack</button>
+
+  <script>
+    async function generatePack() {
+      const selected = [...document.querySelectorAll('input[type=checkbox]:checked')].map(el => el.value);
+      if (selected.length === 0) {
+        alert("Please select at least one head to generate your pack.");
+        return;
+      }
+      alert("This is a demo! Normally, a zip file would now be generated with: " + selected.join(", "));
+      // Real implementation would send these values to a backend service to package the .zip
+    }
+  </script>
+</body>
+</html>
