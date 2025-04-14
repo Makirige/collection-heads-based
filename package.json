@@ -7,7 +7,7 @@
     "doc": "docs"
   },
   "scripts": {
-    "build": "rollup -c",
+    "build": "rollup -c && node deploy.js",
     "dev": "rollup -c -w",
     "start": "rollup -c -w --environment SERVE:true"
   },
