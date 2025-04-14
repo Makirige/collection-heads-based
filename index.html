@@ -1,105 +1,113 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Collection Heads Based</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
   <style>
     :root {
       --bg-dark: #0f0f1a;
-      --bg-card: #1b1b2b;
-      --text-light: #f4f4f4;
-      --accent: #fa5c5c;
-      --accent-hover: #ff8787;
-      --badge-bg: #2e2e42;
-      --badge-color: #fff;
+      --bg-card: #1a1c24;
+      --text-light: #e3e3e3;
+      --accent: #ff5050;
+      --accent-hover: #ff7373;
+      --badge-bg: #252839;
+      --badge-color: #ffffff;
     }
+
     body {
-      background-image: url('https://rpghq.org/assets/images/background-dark.webp');
+      background: url('https://rpghq.org/assets/images/background-dark.webp') no-repeat center center fixed;
       background-size: cover;
-      background-attachment: fixed;
-      background-repeat: no-repeat;
-      background-color: var(--bg-dark);
       color: var(--text-light);
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      padding: 2rem;
       margin: 0;
+      padding: 2rem;
     }
+
     h1 {
       text-align: center;
-      margin-bottom: 1rem;
-      font-size: 2rem;
+      margin-bottom: 2rem;
     }
+
     .controls {
       display: flex;
-      justify-content: space-between;
       flex-wrap: wrap;
       gap: 1rem;
+      justify-content: center;
       margin-bottom: 2rem;
-      padding: 0 1rem;
     }
-    .controls input, .controls select, .controls button.small {
-      padding: 0.5rem 1rem;
+
+    .controls input,
+    .controls select,
+    .controls button.small {
+      padding: 0.6rem 1.2rem;
       border-radius: 0.5rem;
       border: none;
       font-size: 1rem;
+      background: var(--bg-card);
+      color: var(--text-light);
     }
+
     .controls button.small {
       background: var(--accent);
       color: white;
       cursor: pointer;
     }
+
     .controls button.small:hover {
       background: var(--accent-hover);
     }
+
     .mod-list {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
       gap: 1.5rem;
-      padding: 0 1rem;
     }
+
     .mod-card {
       background: var(--bg-card);
-      border-radius: 0.5rem;
+      border-radius: 1rem;
       padding: 1rem;
-      text-align: center;
       display: flex;
       flex-direction: column;
       align-items: center;
       position: relative;
-      transition: transform 0.2s ease-in-out;
+      transition: transform 0.2s ease-in-out, box-shadow 0.2s;
     }
+
     .mod-card:hover {
-      transform: scale(1.03);
+      transform: translateY(-5px);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
     }
+
     .mod-card input[type="checkbox"] {
       position: absolute;
-      top: 10px;
-      right: 10px;
-      width: 20px;
-      height: 20px;
-      border: 2px solid var(--accent);
-      background-color: var(--bg-dark);
+      top: 12px;
+      right: 12px;
+      width: 22px;
+      height: 22px;
       border-radius: 50%;
-      appearance: none;
+      border: 2px solid var(--accent);
+      background: var(--bg-dark);
       cursor: pointer;
-      transition: background 0.2s ease-in-out;
     }
+
     .mod-card input[type="checkbox"]:checked {
-      background-color: var(--accent);
+      background: var(--accent);
     }
+
     .mod-card img {
       width: 100%;
-      max-width: 180px;
-      border-radius: 0.5rem;
-      border: 1px solid #333;
+      border-radius: 0.75rem;
       margin-bottom: 0.5rem;
     }
+
     .mod-card span {
-      margin-top: 0.25rem;
+      font-weight: 500;
     }
+
     .badges {
       display: flex;
       gap: 0.5rem;
@@ -107,25 +115,28 @@
       flex-wrap: wrap;
       justify-content: center;
     }
+
     .badge {
-      background-color: var(--badge-bg);
+      background: var(--badge-bg);
       color: var(--badge-color);
-      padding: 0.2rem 0.5rem;
+      padding: 0.25rem 0.75rem;
       border-radius: 999px;
       font-size: 0.75rem;
     }
+
     button {
-      margin: 2rem auto 0;
+      margin: 2rem auto;
       display: block;
       padding: 1rem 2rem;
       background: var(--accent);
       color: white;
       border: none;
-      border-radius: 0.5rem;
+      border-radius: 0.75rem;
       font-size: 1rem;
       cursor: pointer;
-      transition: background 0.2s ease-in-out;
+      transition: background 0.2s;
     }
+
     button:hover {
       background: var(--accent-hover);
     }
