@@ -9,8 +9,7 @@
   "scripts": {
     "build": "rollup -c",
     "dev": "rollup -c -w",
-    "start": "rollup -c -w --environment SERVE:true",
-    "deploy": "npm run build && node deploy.js"
+    "start": "rollup -c -w --environment SERVE:true"
   },
   "repository": {
     "type": "git",

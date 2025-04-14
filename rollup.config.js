@@ -12,7 +12,7 @@ const production = !process.env.ROLLUP_WATCH;
 export default {
   input: 'src/js/main.js',
   output: {
-    file: 'dist/bundle.js',
+    file: 'bundle.js',
     format: 'iife',
     sourcemap: !production,
     name: 'app'
@@ -30,24 +30,24 @@ export default {
     }),
     
     // Extract CSS into separate file
-    css({ output: 'dist/styles.css' }),
+    css({ output: 'styles.css' }),
     
     // Copy static assets
     copy({
       targets: [
-        { src: 'public/index.html', dest: 'dist' },
-        { src: 'images/**/*', dest: 'dist/images' },
-        { src: 'mods.json', dest: 'dist' }
+        { src: 'public/index.html', dest: '.' },
+        { src: 'images/**/*', dest: 'images' },
+        { src: 'mods.json', dest: '.' }
       ]
     }),
     
     // In development, start a web server and enable live reloading
     !production && serve({
       open: true,
-      contentBase: ['dist'],
+      contentBase: ['.'],
       port: 3000,
     }),
-    !production && livereload({ watch: 'dist' }),
+    !production && livereload({ watch: '.' }),
     
     // If we're building for production, minify
     production && terser()
