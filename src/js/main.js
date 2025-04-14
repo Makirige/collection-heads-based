@@ -2,6 +2,8 @@
  * Main application entry point
  */
 import '../css/styles.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import Dropdown from './components/Dropdown';
 import RaceModal from './components/RaceModal';
 import ModList from './components/ModList';
