@@ -9,8 +9,8 @@
     "downloadUrl": "https://f.rpghq.org/zmEqUzvCM0ih.zip?n=Daenerys%20Head%20Preset%202.0.0.zip"
   },
   {
-    "id": "Aurora",
-    "name": "Aurora_elf",
+    "id": "aurora",
+    "name": "aurora_elf",
     "displayName": "Aurora Head Preset - ELF",
     "race": "elf",
     "bodyType": "bt1",
@@ -18,30 +18,57 @@
     "downloadUrl": "https://f.rpghq.org/ae6HiGBnKRI3.pak?n=Elf_F%20-%20Violet's%20Preset%201%20Aurora%20%5BDONE%5D.pak"
   },
   {
-    "id": "Aurora",
+    "id": "aurora",
     "name": "aurora_half-elf",
-    "displayName": "Aurora Head Preset",
+    "displayName": "Aurora Head Preset - HALF-ELF",
     "race": "half-elf",
     "bodyType": "bt1",
     "imagePath": "images/head-c.jpg",
     "downloadUrl": "https://f.rpghq.org/OltCbM5oJgZa.pak?n=Helf_F%20-%20Violet's%20Preset%201%20Aurora%20%5BDONE%5D.pak"
   },
   {
-    "id": "githyanki-raider",
-    "name": "githyanki raider",
-    "displayName": "Head D – Githyanki Raider",
-    "race": "githyanki",
-    "bodyType": "bt4",
-    "imagePath": "images/head-d.jpg",
-    "downloadUrl": "mods/Head_D.zip"
-  },
-  {
-    "id": "human-hero",
-    "name": "human hero",
-    "displayName": "Head E – Human Hero",
+    "id": "akira",
+    "name": "akira-human",
+    "displayName": "Akira - Head Preset",
     "race": "human",
     "bodyType": "bt1",
-    "imagePath": "images/head-e.jpg",
-    "downloadUrl": "mods/Head_E.zip"
-  }
+    "imagePath": "images/head-d.jpg",
+    "downloadUrl": "https://f.rpghq.org/cDZ6IFLjonhd.pak?n=Human_F%20-%20-%3D%3BAkira%3B%3D-%20%5BDONE%5D.pak"
+  },
+  {
+    "id": "akira",
+    "name": "akira-tiefling",
+    "displayName": "Akira - Head Preset",
+    "race": "tiefling",
+    "bodyType": "bt1",
+    "imagePath": "images/head-d.jpg",
+    "downloadUrl": "https://f.rpghq.org/yU47qaW2y4nR.pak?n=Tiefling_F%20-%20-%3D%3BAkira%3B%3D-%20%5BDONE%5D.pak"
+  }, 
+  {
+    "id": "akira",
+    "name": "akira-drow",
+    "displayName": "Akira - Head Preset",
+    "race": "drow",
+    "bodyType": "bt1",
+    "imagePath": "images/head-d.jpg",
+    "downloadUrl": "https://f.rpghq.org/jTSJty89eKG8.pak?n=Drow_F%20-%20-%3D%3BAkira%3B%3D-%20%5BDONE%5D.pak"
+  },
+  {
+    "id": "akira",
+    "name": "akira-elf",
+    "displayName": "Akira - Head Preset",
+    "race": "elf",
+    "bodyType": "bt1",
+    "imagePath": "images/head-d.jpg",
+    "downloadUrl": "https://f.rpghq.org/j8SoFD5kJmAs.pak?n=Elf_F%20-%20-%3D%3BAkira%3B%3D-%20%5BDONE%5D.pak"
+  },
+  {
+    "id": "akira",
+    "name": "akira-half-elf",
+    "displayName": "Akira - Head Preset",
+    "race": "half-elf",
+    "bodyType": "bt1",
+    "imagePath": "images/head-d.jpg",
+    "downloadUrl": "https://f.rpghq.org/aMU9lzKwqGYE.pak?n=Helf_F%20-%20-%3D%3BAkira%3B%3D-%20%5BDONE%5D.pak"
+  },
 ]
