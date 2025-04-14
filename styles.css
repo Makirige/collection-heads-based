@@ -91,6 +91,122 @@ h1 {
   color: var(--text-dim);
 }
 
+.select-wrapper {
+  position: relative;
+  width: 180px;
+}
+
+.select-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-dim);
+  z-index: 1;
+  pointer-events: none;
+}
+
+.select-wrapper select {
+  width: 100%;
+  padding-left: 2.5rem;
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238b949e' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 16px;
+}
+
+/* Styles pour les dropdowns personnalisés */
+.custom-dropdown {
+  position: relative;
+  width: 200px;
+  margin: 0 0.5rem;
+}
+
+.dropdown-selected {
+  background-color: #0d1117;
+  border: 1px solid #30363d;
+  border-radius: 0.5rem;
+  padding: 0.75rem 1rem;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-height: 46px;
+}
+
+.dropdown-selected:hover {
+  border-color: var(--accent);
+}
+
+.dropdown-icon {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 10px;
+}
+
+.dropdown-text {
+  flex-grow: 1;
+  color: var(--text-light);
+  font-size: 0.9rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dropdown-arrow {
+  color: var(--text-dim);
+  margin-left: 8px;
+  transition: transform 0.2s ease;
+}
+
+.dropdown-options {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background-color: var(--bg-card);
+  border: 1px solid #30363d;
+  border-radius: 0.5rem;
+  margin-top: 0.5rem;
+  max-height: 0;
+  overflow: hidden;
+  visibility: hidden;
+  opacity: 0;
+  z-index: 100;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.dropdown-options.show {
+  max-height: 300px;
+  overflow-y: auto;
+  visibility: visible;
+  opacity: 1;
+}
+
+.dropdown-option {
+  padding: 0.75rem 1rem;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.dropdown-option:hover {
+  background-color: var(--bg-card-hover);
+}
+
+.dropdown-option span {
+  color: var(--text-light);
+  font-size: 0.9rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .controls input, .controls select, .controls button.small {
   padding: 0.75rem 1.25rem;
   border-radius: 0.5rem;
@@ -227,6 +343,43 @@ h1 {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+}
+
+/* Style pour les cartes sélectionnées */
+.mod-card input[type="checkbox"]:checked ~ .image-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border: 3px solid var(--accent);
+  box-shadow: 0 0 10px rgba(255, 110, 110, 0.5);
+  z-index: 4;
+  pointer-events: none;
+}
+
+.mod-card input[type="checkbox"]:checked ~ .content {
+  background-color: rgba(255, 110, 110, 0.1);
+}
+
+.mod-card input[type="checkbox"]:checked ~ .image-container::after {
+  content: '\f00c';
+  font-family: 'Font Awesome 6 Free';
+  font-weight: 900;
+  color: white;
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background-color: var(--accent);
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 5;
+  font-size: 14px;
 }
 
 .badges {
@@ -471,6 +624,20 @@ footer {
     width: 100%;
   }
   
+  .select-wrapper {
+    width: 100%;
+    margin-bottom: 0.5rem;
+  }
+  
+  .custom-dropdown {
+    width: 100%;
+    margin: 0.5rem 0;
+  }
+  
+  .dropdown-options.show {
+    max-height: 250px;
+  }
+  
   .mod-list {
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   }
@@ -482,6 +649,22 @@ footer {
   .race-grid {
     grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
   }
+}
+
+/* Animation pour la rotation de la flèche */
+.dropdown-selected.active .dropdown-arrow {
+  transform: rotate(180deg);
+}
+
+/* Style indiquant un dropdown actif */
+.dropdown-selected.active {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(255, 110, 110, 0.25);
+}
+
+/* Style pour l'option sélectionnée dans le dropdown */
+.dropdown-option.selected {
+  background-color: rgba(255, 110, 110, 0.1);
 }
 
 /* Thème sombre (par défaut) */
