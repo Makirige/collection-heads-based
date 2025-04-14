@@ -289,6 +289,112 @@
       margin-top: 3rem;
       border-top: 1px solid #30363d;
     }
+    
+    /* Styles pour le modal de sélection de race */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0, 0, 0, 0.8);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      backdrop-filter: blur(5px);
+    }
+    
+    .race-selection-modal {
+      background-color: var(--bg-card);
+      border-radius: 1rem;
+      padding: 2rem;
+      max-width: 800px;
+      width: 90%;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+      border: 1px solid #30363d;
+    }
+    
+    .race-selection-modal h2 {
+      text-align: center;
+      margin-top: 0;
+      font-size: 1.8rem;
+      background: linear-gradient(to right, #ff5c8f, #ff8c5a);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 1.5rem;
+    }
+    
+    .race-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .race-option {
+      background-color: var(--bg-dark);
+      border: 1px solid #30363d;
+      border-radius: 0.5rem;
+      padding: 1rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    
+    .race-option:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+    }
+    
+    .race-option.active {
+      background-color: rgba(255, 92, 143, 0.1);
+      border-color: var(--accent);
+    }
+    
+    .race-option img {
+      width: 60px;
+      height: 60px;
+      object-fit: cover;
+      border-radius: 50%;
+      margin-bottom: 0.5rem;
+    }
+    
+    .race-option .race-name {
+      font-weight: 500;
+      font-size: 0.9rem;
+    }
+    
+    .modal-actions {
+      display: flex;
+      justify-content: center;
+    }
+    
+    .confirm-race-btn {
+      background: linear-gradient(to right, var(--accent), #ff8c5a);
+      color: white;
+      border: none;
+      border-radius: 0.5rem;
+      padding: 0.8rem 2rem;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .confirm-race-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(255, 92, 143, 0.3);
+    }
+    
+    .confirm-race-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+    
     @media (max-width: 768px) {
       .controls {
         flex-direction: column;
@@ -299,6 +405,9 @@
       }
       h1 {
         font-size: 1.8rem;
+      }
+      .race-grid {
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
       }
     }
   </style>
@@ -367,6 +476,19 @@
     </div>
   </footer>
 
+  <!-- Modal de sélection de race -->
+  <div class="modal-overlay" id="raceModal">
+    <div class="race-selection-modal">
+      <h2>Choose a Race</h2>
+      <div class="race-grid" id="raceGrid">
+        <!-- Options de race générées par JavaScript -->
+      </div>
+      <div class="modal-actions">
+        <button class="confirm-race-btn" id="confirmRaceBtn" disabled>Confirm</button>
+      </div>
+    </div>
+  </div>
+
   <script>
     // DOM Elements
     const searchInput = document.getElementById("searchInput");
@@ -377,21 +499,27 @@
     const loader = document.getElementById("loader");
     const statusMessage = document.getElementById("statusMessage");
     const generateBtn = document.getElementById("generateBtn");
+    const raceModal = document.getElementById("raceModal");
+    const raceGrid = document.getElementById("raceGrid");
+    const confirmRaceBtn = document.getElementById("confirmRaceBtn");
     
     // State
     let mods = [];
     let filteredMods = [];
+    let selectedRace = "";
     
     // Initialize
     document.addEventListener('DOMContentLoaded', () => {
       loadMods();
       setupEventListeners();
+      setupRaceModal();
     });
     
     function setupEventListeners() {
       searchInput.addEventListener("input", filterMods);
       raceFilter.addEventListener("change", filterMods);
       btFilter.addEventListener("change", filterMods);
+      confirmRaceBtn.addEventListener("click", closeRaceModal);
     }
     
     // Load mods from JSON file
@@ -409,6 +537,59 @@
       } catch (error) {
         console.error("Error loading mods:", error);
         showStatus('error', 'Error loading presets. Please refresh the page.');
+      }
+    }
+    
+    // Setup race selection modal
+    function setupRaceModal() {
+      const races = [
+        { id: 'dragonborn', name: 'Dragonborn', icon: 'https://bg3.wiki/w/images/b/b9/Dragonborn-icon.png' },
+        { id: 'drow', name: 'Drow', icon: 'https://bg3.wiki/w/images/0/06/Drow-icon.png' },
+        { id: 'duergar', name: 'Duergar', icon: 'https://bg3.wiki/w/images/d/dd/Duergar-icon.png' },
+        { id: 'dwarf', name: 'Dwarf', icon: 'https://bg3.wiki/w/images/e/e5/Dwarf-icon.png' },
+        { id: 'elf', name: 'Elf', icon: 'https://bg3.wiki/w/images/f/fe/Elf-icon.png' },
+        { id: 'githyanki', name: 'Githyanki', icon: 'https://bg3.wiki/w/images/1/11/Githyanki-icon.png' },
+        { id: 'gnome', name: 'Gnome', icon: 'https://bg3.wiki/w/images/6/6a/Gnome-icon.png' },
+        { id: 'half-elf', name: 'Half-Elf', icon: 'https://bg3.wiki/w/images/f/f4/Half-Elf-icon.png' },
+        { id: 'halfling', name: 'Halfling', icon: 'https://bg3.wiki/w/images/1/15/Halfling-icon.png' },
+        { id: 'half-orc', name: 'Half-Orc', icon: 'https://bg3.wiki/w/images/b/b5/Half-Orc-icon.png' },
+        { id: 'human', name: 'Human', icon: 'https://bg3.wiki/w/images/7/7f/Human-icon.png' },
+        { id: 'tiefling', name: 'Tiefling', icon: 'https://bg3.wiki/w/images/4/43/Tiefling-icon.png' }
+      ];
+      
+      // Générer les options de race
+      races.forEach(race => {
+        const option = document.createElement('div');
+        option.className = 'race-option';
+        option.dataset.race = race.id;
+        
+        option.innerHTML = `
+          <img src="${race.icon}" alt="${race.name}">
+          <div class="race-name">${race.name}</div>
+        `;
+        
+        option.addEventListener('click', () => {
+          // Désélectionner tous les autres
+          document.querySelectorAll('.race-option').forEach(el => el.classList.remove('active'));
+          
+          // Sélectionner celui-ci
+          option.classList.add('active');
+          selectedRace = race.id;
+          
+          // Activer le bouton de confirmation
+          confirmRaceBtn.disabled = false;
+        });
+        
+        raceGrid.appendChild(option);
+      });
+    }
+    
+    // Fermer le modal et appliquer le filtre de race
+    function closeRaceModal() {
+      if (selectedRace) {
+        raceFilter.value = selectedRace;
+        filterMods();
+        raceModal.style.display = 'none';
       }
     }
     
@@ -471,7 +652,7 @@
       modCount.textContent = `Showing ${filteredMods.length} of ${mods.length} presets`;
     }
     
-    // Get French race name
+    // Get race name
     function getRaceName(race) {
       const raceMap = {
         'dragonborn': 'Dragonborn',
@@ -532,7 +713,15 @@
             if (!response.ok) throw new Error('Failed to fetch');
             
             const blob = await response.blob();
-            const fileName = decodeURIComponent(file.split("/").pop().split("?")[0]);
+            // Extract the name parameter from the URL if it exists
+            let fileName;
+            const url = new URL(file);
+            const nameParam = url.searchParams.get('n');
+            if (nameParam) {
+              fileName = decodeURIComponent(nameParam);
+            } else {
+              fileName = decodeURIComponent(file.split("/").pop().split("?")[0]);
+            }
             folder.file(fileName, blob);
           } catch (error) {
             console.error("Error fetching", file, error);
