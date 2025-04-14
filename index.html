@@ -13,6 +13,8 @@
       --text-light: #f4f4f4;
       --accent: #fa5c5c;
       --accent-hover: #ff8787;
+      --badge-bg: #2e2e42;
+      --badge-color: #fff;
     }
     body {
       background-color: var(--bg-dark);
@@ -94,6 +96,20 @@
     .mod-card span {
       margin-top: 0.25rem;
     }
+    .badges {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .badge {
+      background-color: var(--badge-bg);
+      color: var(--badge-color);
+      padding: 0.2rem 0.5rem;
+      border-radius: 999px;
+      font-size: 0.75rem;
+    }
     button {
       margin: 2rem auto 0;
       display: block;
@@ -140,26 +156,46 @@
       <input type="checkbox" value="mods/Daenerys_Head_Preset_2.0.0.zip" />
       <img src="images/head-a.jpg" alt="Daenerys Head" />
       <span>Daenerys Head Preset</span>
+      <div class="badges">
+        <div class="badge">Humain</div>
+        <div class="badge">BT1</div>
+      </div>
     </label>
     <label class="mod-card" data-name="dwarf warrior" data-race="dwarf" data-bt="bt2">
       <input type="checkbox" value="mods/Head_B.zip" />
       <img src="images/head-b.jpg" alt="Head B" />
       <span>Head B – Dwarf Warrior</span>
+      <div class="badges">
+        <div class="badge">Nain</div>
+        <div class="badge">BT2</div>
+      </div>
     </label>
     <label class="mod-card" data-name="tiefling mystic" data-race="tiefling" data-bt="bt3">
       <input type="checkbox" value="mods/Head_C.zip" />
       <img src="images/head-c.jpg" alt="Head C" />
       <span>Head C – Tiefling Mystic</span>
+      <div class="badges">
+        <div class="badge">Tiefling</div>
+        <div class="badge">BT3</div>
+      </div>
     </label>
     <label class="mod-card" data-name="githyanki raider" data-race="githyanki" data-bt="bt4">
       <input type="checkbox" value="mods/Head_D.zip" />
       <img src="images/head-d.jpg" alt="Head D" />
       <span>Head D – Githyanki Raider</span>
+      <div class="badges">
+        <div class="badge">Githyanki</div>
+        <div class="badge">BT4</div>
+      </div>
     </label>
     <label class="mod-card" data-name="human hero" data-race="human" data-bt="bt1">
       <input type="checkbox" value="mods/Head_E.zip" />
       <img src="images/head-e.jpg" alt="Head E" />
       <span>Head E – Human Hero</span>
+      <div class="badges">
+        <div class="badge">Humain</div>
+        <div class="badge">BT1</div>
+      </div>
     </label>
   </div>
   <button onclick="generatePack()">Generate My Pack</button>
