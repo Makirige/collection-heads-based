@@ -9,22 +9,22 @@
     "downloadUrl": "https://f.rpghq.org/zmEqUzvCM0ih.zip?n=Daenerys%20Head%20Preset%202.0.0.zip"
   },
   {
-    "id": "dwarf-warrior",
-    "name": "dwarf warrior",
-    "displayName": "Head B – Dwarf Warrior",
-    "race": "dwarf",
-    "bodyType": "bt2",
+    "id": "Aurora",
+    "name": "Aurora_elf",
+    "displayName": "Aurora Head Preset - ELF",
+    "race": "elf",
+    "bodyType": "bt1",
     "imagePath": "images/head-b.jpg",
-    "downloadUrl": "mods/Head_B.zip"
+    "downloadUrl": "https://f.rpghq.org/ae6HiGBnKRI3.pak?n=Elf_F%20-%20Violet's%20Preset%201%20Aurora%20%5BDONE%5D.pak"
   },
   {
-    "id": "tiefling-mystic",
-    "name": "tiefling mystic",
-    "displayName": "Head C – Tiefling Mystic",
-    "race": "tiefling",
-    "bodyType": "bt3",
+    "id": "Aurora",
+    "name": "aurora_half-elf",
+    "displayName": "Aurora Head Preset",
+    "race": "half-elf",
+    "bodyType": "bt1",
     "imagePath": "images/head-c.jpg",
-    "downloadUrl": "mods/Head_C.zip"
+    "downloadUrl": "https://f.rpghq.org/OltCbM5oJgZa.pak?n=Helf_F%20-%20Violet's%20Preset%201%20Aurora%20%5BDONE%5D.pak"
   },
   {
     "id": "githyanki-raider",
