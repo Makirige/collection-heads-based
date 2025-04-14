@@ -1,0 +1,55 @@
+# Project Architecture
+
+This document describes the architecture of the Collection Heads Based project, a tool for creating custom head preset packs for Baldur's Gate 3.
+
+## Project Structure
+
+```
+collection-heads-based/
+├── src/                  # Source code
+│   ├── js/               # JavaScript modules
+│   │   ├── components/   # UI components
+│   │   ├── services/     # Service modules
+│   │   ├── utils/        # Utility functions
+│   │   └── main.js       # Main entry point
+│   └── css/              # CSS styles
+├── public/               # Static files to copy to dist
+│   └── index.html        # HTML template
+├── dist/                 # Build output (not in repository)
+├── images/               # Image assets
+├── docs/                 # Documentation
+├── rollup.config.js      # Rollup configuration
+├── babel.config.json     # Babel configuration
+├── package.json          # NPM package configuration
+└── deploy.js             # Script to copy files for GitHub Pages
+```
+
+## Build Process
+
+The project uses Rollup for bundling JavaScript modules and other assets.
+
+1. **Development Mode**: `npm run dev` - Starts a development server with live reloading
+2. **Production Build**: `npm run build` - Creates a production build in the `dist` directory
+3. **GitHub Pages Deployment**: `npm run deploy` - Builds the project and copies files to the root for GitHub Pages
+
+## GitHub Pages Deployment
+
+The project is deployed to GitHub Pages at https://makirige.github.io/collection-heads-based/
+
+To maintain compatibility with GitHub Pages, we:
+1. Build the project to the `dist` directory
+2. Use the `deploy.js` script to copy the necessary files to the root directory
+3. Commit and push the changes to deploy to GitHub Pages
+
+## Module Organization
+
+- **components/**: UI components like ModList, Dropdowns, RaceModal
+- **services/**: Business logic services like ModService, StorageService
+- **utils/**: Utility functions and constants
+
+## Development Workflow
+
+1. Make changes in the `src` directory
+2. Run `npm run dev` to preview changes locally
+3. Run `npm run build` to build for production
+4. Run `npm run deploy` before committing to update the GitHub Pages files

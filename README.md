@@ -1,56 +1,58 @@
-# Collection Heads Based - Pack Creator for Baldur's Gate 3
+# Collection Heads Based - BG3
 
-A simple web tool to create custom head preset packs for Baldur's Gate 3.
+A tool for creating custom head preset packs for Baldur's Gate 3.
 
-## Description
+## Features
 
-This web application allows you to:
+- Browse head presets by race and body type
+- Search for specific presets
+- Select multiple presets to include in your pack
+- Generate a zip file with selected presets
+- Compatible with BG3 mod managers
 
-- Browse a collection of head presets for your characters in BG3
-- Filter by race and body type
-- Search by name
-- Select your favorites
-- Generate a ready-to-install ZIP pack
+## Development
 
-## How to Use
+This project uses Rollup for bundling JavaScript and CSS.
 
-1. Browse the collection of available head presets
-2. Use the race and body type filters to refine your search
-3. Check the boxes of the heads you want to include
-4. Click "Generate My Pack" to download your customized collection
-5. Install the ZIP file in your BG3 mods folder
+### Setup
 
-## Installing Mods
+```bash
+# Install dependencies
+npm install
 
-1. Download the generated pack
-2. Extract the ZIP file
-3. Place the extracted files in your Baldur's Gate 3 mods folder
-   - Usually located at `[Your drive]:\Users\[Username]\AppData\Local\Larian Studios\Baldur's Gate 3\Mods`
-4. Launch the game and activate the mods in the mod manager
+# Start development server
+npm run dev
 
-## How to Add New Presets
+# Build for production
+npm run build
 
-To add new presets to the collection:
-
-1. Add the preset image to the `images/` folder
-2. Add the mod ZIP file to the `mods/` folder
-3. Edit the `mods.json` file to add information about the new preset
-
-Example entry in `mods.json`:
-
-```json
-{
-  "id": "unique-id",
-  "name": "Preset name",
-  "displayName": "Display name",
-  "race": "human",
-  "bodyType": "bt1",
-  "imagePath": "images/my-image.jpg",
-  "downloadUrl": "mods/My_Mod.zip",
-  "originalLink": "https://nexusmods.com/mod-page"
-}
+# Deploy to GitHub Pages
+npm run deploy
 ```
 
-## Contributions
+### Project Structure
 
-Contributions are welcome! Feel free to submit pull requests to add new presets or improve the interface.
+```
+collection-heads-based/
+├── src/                  # Source code
+│   ├── js/               # JavaScript modules
+│   │   ├── components/   # UI components
+│   │   ├── services/     # Service modules
+│   │   ├── utils/        # Utility functions
+│   │   └── main.js       # Main entry point
+│   └── css/              # CSS styles
+├── public/               # Static files to copy to dist
+├── docs/                 # Documentation
+└── images/               # Image assets
+```
+
+For more details on the architecture, see the [architecture documentation](docs/architecture.md).
+
+## GitHub Pages
+
+This project is deployed to GitHub Pages at:
+https://makirige.github.io/collection-heads-based/
+
+## License
+
+ISC
