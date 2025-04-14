@@ -4,8 +4,9 @@
   --bg-card-hover: #21262d;
   --text-light: #f0f6fc;
   --text-dim: #8b949e;
-  --accent: #ff5c8f;
-  --accent-hover: #ff80a4;
+  --accent: #ff6e6e;
+  --accent-hover: #ff8c8c;
+  --accent-secondary: #89a6cf;
   --badge-bg: #2e2e42;
   --badge-color: #fff;
   --header-bg: rgba(13, 17, 23, 0.9);
@@ -50,7 +51,7 @@ h1 {
   margin: 0.5rem 0;
   font-size: 2.2rem;
   font-weight: 600;
-  background: linear-gradient(to right, #ff5c8f, #ff8c5a);
+  background: linear-gradient(to right, var(--accent), var(--accent-secondary));
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -255,7 +256,7 @@ h1 {
   margin: 2.5rem auto;
   display: block;
   padding: 1rem 3rem;
-  background: linear-gradient(to right, var(--accent), #ff8c5a);
+  background: linear-gradient(to right, var(--accent), var(--accent-secondary));
   color: white;
   border: none;
   border-radius: 0.5rem;
@@ -263,7 +264,7 @@ h1 {
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(255, 92, 143, 0.3);
+  box-shadow: 0 4px 15px rgba(255, 110, 110, 0.3);
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -272,7 +273,7 @@ h1 {
 
 .generate-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(255, 92, 143, 0.4);
+  box-shadow: 0 8px 20px rgba(255, 110, 110, 0.4);
 }
 
 .generate-btn:active {
@@ -365,7 +366,7 @@ footer {
   text-align: center;
   margin-top: 0;
   font-size: 1.8rem;
-  background: linear-gradient(to right, #ff5c8f, #ff8c5a);
+  background: linear-gradient(to right, var(--accent), var(--accent-secondary));
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -428,7 +429,7 @@ footer {
 }
 
 .confirm-race-btn {
-  background: linear-gradient(to right, var(--accent), #ff8c5a);
+  background: linear-gradient(to right, var(--accent), var(--accent-secondary));
   color: white;
   border: none;
 }
@@ -490,8 +491,9 @@ footer {
   --bg-card-hover: #21262d;
   --text-light: #f0f6fc;
   --text-dim: #8b949e;
-  --accent: #ff5c8f;
-  --accent-hover: #ff80a4;
+  --accent: #ff6e6e;
+  --accent-hover: #ff8c8c;
+  --accent-secondary: #89a6cf;
   --badge-bg: #2e2e42;
   --badge-color: #fff;
   --header-bg: rgba(13, 17, 23, 0.9);
@@ -504,8 +506,9 @@ footer {
   --bg-card-hover: #f1f1f1;
   --text-light: #24292e;
   --text-dim: #586069;
-  --accent: #ff5c8f;
-  --accent-hover: #ff80a4;
+  --accent: #ff6e6e;
+  --accent-hover: #ff8c8c;
+  --accent-secondary: #89a6cf;
   --badge-bg: #e1e4e8;
   --badge-color: #24292e;
   --header-bg: rgba(255, 255, 255, 0.9);
