@@ -66,7 +66,6 @@ class ModList {
           <div class="title">${mod.displayName}</div>
           <div class="badges">
             <div class="badge race-badge">
-              <img src="${raceIcon}" alt="${raceName}" class="badge-icon" />
               ${raceName}
             </div>
             <div class="badge"><i class="fas fa-venus-mars"></i> ${bodyTypeName}</div>
