@@ -86,9 +86,9 @@
   <h1>Collection Heads Based</h1>
   <div class="mod-list">
     <label class="mod-card">
-      <input type="checkbox" value="https://vault.rpghq.org/files/Head_A.pak" />
-      <img src="images/head-a.jpg" alt="Head A" />
-      <span>Head A – Elven Noble</span>
+      <input type="checkbox" value="https://f.rpghq.org/zmEqUzvCM0ih.zip?n=Daenerys%20Head%20Preset%202.0.0.zip" />
+      <img src="images/head-a.jpg" alt="Daenerys Head" />
+      <span>Daenerys Head Preset</span>
     </label>
     <label class="mod-card">
       <input type="checkbox" value="mods/Head_B.pak" />
@@ -128,7 +128,7 @@
         try {
           const response = await fetch(file);
           const blob = await response.blob();
-          const fileName = file.split("/").pop();
+          const fileName = decodeURIComponent(file.split("/").pop().split("?")[0]);
           folder.file(fileName, blob);
         } catch (error) {
           console.error("Error fetching", file, error);
