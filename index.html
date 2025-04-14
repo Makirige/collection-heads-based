@@ -124,32 +124,39 @@
       <option value="githyanki">Githyanki</option>
       <option value="human">Humain</option>
     </select>
+    <select id="btFilter">
+      <option value="">🧠 Tous les BT</option>
+      <option value="bt1">BT1</option>
+      <option value="bt2">BT2</option>
+      <option value="bt3">BT3</option>
+      <option value="bt4">BT4</option>
+    </select>
     <button class="small" onclick="selectAll(true)">Tout sélectionner</button>
     <button class="small" onclick="selectAll(false)">Tout désélectionner</button>
   </div>
 
   <div class="mod-list" id="modList">
-    <label class="mod-card" data-name="daenerys" data-race="human">
+    <label class="mod-card" data-name="daenerys" data-race="human" data-bt="bt1">
       <input type="checkbox" value="mods/Daenerys_Head_Preset_2.0.0.zip" />
       <img src="images/head-a.jpg" alt="Daenerys Head" />
       <span>Daenerys Head Preset</span>
     </label>
-    <label class="mod-card" data-name="dwarf warrior" data-race="dwarf">
+    <label class="mod-card" data-name="dwarf warrior" data-race="dwarf" data-bt="bt2">
       <input type="checkbox" value="mods/Head_B.zip" />
       <img src="images/head-b.jpg" alt="Head B" />
       <span>Head B – Dwarf Warrior</span>
     </label>
-    <label class="mod-card" data-name="tiefling mystic" data-race="tiefling">
+    <label class="mod-card" data-name="tiefling mystic" data-race="tiefling" data-bt="bt3">
       <input type="checkbox" value="mods/Head_C.zip" />
       <img src="images/head-c.jpg" alt="Head C" />
       <span>Head C – Tiefling Mystic</span>
     </label>
-    <label class="mod-card" data-name="githyanki raider" data-race="githyanki">
+    <label class="mod-card" data-name="githyanki raider" data-race="githyanki" data-bt="bt4">
       <input type="checkbox" value="mods/Head_D.zip" />
       <img src="images/head-d.jpg" alt="Head D" />
       <span>Head D – Githyanki Raider</span>
     </label>
-    <label class="mod-card" data-name="human hero" data-race="human">
+    <label class="mod-card" data-name="human hero" data-race="human" data-bt="bt1">
       <input type="checkbox" value="mods/Head_E.zip" />
       <img src="images/head-e.jpg" alt="Head E" />
       <span>Head E – Human Hero</span>
@@ -160,23 +167,28 @@
   <script>
     const searchInput = document.getElementById("searchInput");
     const raceFilter = document.getElementById("raceFilter");
+    const btFilter = document.getElementById("btFilter");
     const modList = document.getElementById("modList");
 
     searchInput.addEventListener("input", filterMods);
     raceFilter.addEventListener("change", filterMods);
+    btFilter.addEventListener("change", filterMods);
 
     function filterMods() {
       const query = searchInput.value.toLowerCase();
       const race = raceFilter.value;
+      const bt = btFilter.value;
 
       document.querySelectorAll(".mod-card").forEach(card => {
         const name = card.dataset.name || "";
         const cardRace = card.dataset.race || "";
+        const cardBT = card.dataset.bt || "";
 
         const matchName = name.includes(query);
         const matchRace = race === "" || cardRace === race;
+        const matchBT = bt === "" || cardBT === bt;
 
-        card.style.display = matchName && matchRace ? "flex" : "none";
+        card.style.display = matchName && matchRace && matchBT ? "flex" : "none";
       });
     }
 
