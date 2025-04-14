@@ -369,12 +369,10 @@
     .modal-actions {
       display: flex;
       justify-content: center;
+      gap: 1rem;
     }
     
-    .confirm-race-btn {
-      background: linear-gradient(to right, var(--accent), #ff8c5a);
-      color: white;
-      border: none;
+    .confirm-race-btn, .skip-race-btn {
       border-radius: 0.5rem;
       padding: 0.8rem 2rem;
       font-size: 1rem;
@@ -383,9 +381,29 @@
       transition: all 0.3s ease;
     }
     
-    .confirm-race-btn:hover {
+    .confirm-race-btn {
+      background: linear-gradient(to right, var(--accent), #ff8c5a);
+      color: white;
+      border: none;
+    }
+    
+    .skip-race-btn {
+      background: transparent;
+      color: var(--text-dim);
+      border: 1px solid #30363d;
+    }
+    
+    .confirm-race-btn:hover, .skip-race-btn:hover {
       transform: translateY(-2px);
+    }
+    
+    .confirm-race-btn:hover {
       box-shadow: 0 4px 10px rgba(255, 92, 143, 0.3);
+    }
+    
+    .skip-race-btn:hover {
+      border-color: var(--text-light);
+      color: var(--text-light);
     }
     
     .confirm-race-btn:disabled {
@@ -485,6 +503,7 @@
       </div>
       <div class="modal-actions">
         <button class="confirm-race-btn" id="confirmRaceBtn" disabled>Confirm</button>
+        <button class="skip-race-btn" id="skipRaceBtn">Skip</button>
       </div>
     </div>
   </div>
@@ -502,6 +521,7 @@
     const raceModal = document.getElementById("raceModal");
     const raceGrid = document.getElementById("raceGrid");
     const confirmRaceBtn = document.getElementById("confirmRaceBtn");
+    const skipRaceBtn = document.getElementById("skipRaceBtn");
     
     // State
     let mods = [];
@@ -520,6 +540,7 @@
       raceFilter.addEventListener("change", filterMods);
       btFilter.addEventListener("change", filterMods);
       confirmRaceBtn.addEventListener("click", closeRaceModal);
+      skipRaceBtn.addEventListener("click", skipRaceSelection);
     }
     
     // Load mods from JSON file
@@ -543,18 +564,18 @@
     // Setup race selection modal
     function setupRaceModal() {
       const races = [
-        { id: 'dragonborn', name: 'Dragonborn', icon: 'https://bg3.wiki/w/images/b/b9/Dragonborn-icon.png' },
-        { id: 'drow', name: 'Drow', icon: 'https://bg3.wiki/w/images/0/06/Drow-icon.png' },
-        { id: 'duergar', name: 'Duergar', icon: 'https://bg3.wiki/w/images/d/dd/Duergar-icon.png' },
-        { id: 'dwarf', name: 'Dwarf', icon: 'https://bg3.wiki/w/images/e/e5/Dwarf-icon.png' },
-        { id: 'elf', name: 'Elf', icon: 'https://bg3.wiki/w/images/f/fe/Elf-icon.png' },
-        { id: 'githyanki', name: 'Githyanki', icon: 'https://bg3.wiki/w/images/1/11/Githyanki-icon.png' },
-        { id: 'gnome', name: 'Gnome', icon: 'https://bg3.wiki/w/images/6/6a/Gnome-icon.png' },
-        { id: 'half-elf', name: 'Half-Elf', icon: 'https://bg3.wiki/w/images/f/f4/Half-Elf-icon.png' },
-        { id: 'halfling', name: 'Halfling', icon: 'https://bg3.wiki/w/images/1/15/Halfling-icon.png' },
-        { id: 'half-orc', name: 'Half-Orc', icon: 'https://bg3.wiki/w/images/b/b5/Half-Orc-icon.png' },
-        { id: 'human', name: 'Human', icon: 'https://bg3.wiki/w/images/7/7f/Human-icon.png' },
-        { id: 'tiefling', name: 'Tiefling', icon: 'https://bg3.wiki/w/images/4/43/Tiefling-icon.png' }
+        { id: 'dragonborn', name: 'Dragonborn', icon: 'https://img.game8.co/3669466/c6b8f0c8f11fdcc44ec1a5ef93c7e6bb.png/show' },
+        { id: 'drow', name: 'Drow', icon: 'https://img.game8.co/3669468/a07cea4f91c04f8ee8c4f15b44a01a9c.png/show' },
+        { id: 'duergar', name: 'Duergar', icon: 'https://img.game8.co/3669469/1d9e48ce4b69a2c2fbfdcc0e9c71cd5b.png/show' },
+        { id: 'dwarf', name: 'Dwarf', icon: 'https://img.game8.co/3669470/bb7fb11be49ee7499e5d3df37e8dd75c.png/show' },
+        { id: 'elf', name: 'Elf', icon: 'https://img.game8.co/3669471/53a45d7d0b40cd26b5f89b6d09c1fcf2.png/show' },
+        { id: 'githyanki', name: 'Githyanki', icon: 'https://img.game8.co/3669473/1e4e38c28a9e0eb599a25f1dd61cedb3.png/show' },
+        { id: 'gnome', name: 'Gnome', icon: 'https://img.game8.co/3669474/1e879ffa95ca4bd6fbfa10a1aea6fcbc.png/show' },
+        { id: 'half-elf', name: 'Half-Elf', icon: 'https://img.game8.co/3669476/e6ae61d10a9a46ff20e2b01c6b9c7ec7.png/show' },
+        { id: 'halfling', name: 'Halfling', icon: 'https://img.game8.co/3669478/2b59eb56f53f7d6a1fe979a9ac22ed0a.png/show' },
+        { id: 'half-orc', name: 'Half-Orc', icon: 'https://img.game8.co/3669477/9cac29c3c9e3a2f2d94b76f22fb00b42.png/show' },
+        { id: 'human', name: 'Human', icon: 'https://img.game8.co/3669479/6c4bb4a05fd11a86b4e3dd4c81a22488.png/show' },
+        { id: 'tiefling', name: 'Tiefling', icon: 'https://img.game8.co/3669480/af0dfb8e32cadf80feeee5d9b87e3b94.png/show' }
       ];
       
       // Générer les options de race
@@ -564,7 +585,7 @@
         option.dataset.race = race.id;
         
         option.innerHTML = `
-          <img src="${race.icon}" alt="${race.name}">
+          <img src="${race.icon}" alt="${race.name}" onerror="this.onerror=null; this.src='data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2260%22%20height%3D%2260%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2250%25%22%20font-family%3D%22Arial%22%20font-size%3D%2220%22%20fill%3D%22%23ffffff%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22middle%22%3E${race.name.charAt(0)}%3C%2Ftext%3E%3C%2Fsvg%3E';">
           <div class="race-name">${race.name}</div>
         `;
         
@@ -584,13 +605,18 @@
       });
     }
     
-    // Fermer le modal et appliquer le filtre de race
+    // Close modal and apply race filter
     function closeRaceModal() {
       if (selectedRace) {
         raceFilter.value = selectedRace;
         filterMods();
         raceModal.style.display = 'none';
       }
+    }
+    
+    // Skip race selection
+    function skipRaceSelection() {
+      raceModal.style.display = 'none';
     }
     
     // Filter mods based on search and filters
