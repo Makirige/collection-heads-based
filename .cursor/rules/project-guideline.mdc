@@ -3,13 +3,13 @@ description:
 globs: 
 alwaysApply: true
 ---
-When you are done, run `npm run build`. Resolve any build errors and rerun until it is successful.
+When you are done, run `npm run deploy`. Resolve any build errors and rerun until it is successful.
 
 If needed, update my .gitignore
 
 Suggest to me when to do a git commit
 
-Never edit index.html directly, but edit what is outputted by ``npm run build`` via Rollup
+Never edit index.html directly, but edit what is outputted by ``npm run deploy`` via Rollup
 
 
 ## Project Structure

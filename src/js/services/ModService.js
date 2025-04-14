@@ -3,6 +3,82 @@
  */
 import { getRaceName, getBodyTypeName } from '../utils/helpers';
 
+// Fallback mods data for file:// protocol usage
+const FALLBACK_MODS = [
+  {
+    "id": "daenerys",
+    "name": "daenerys",
+    "displayName": "Daenerys Head Preset - JUSTFORTEST",
+    "race": "human",
+    "bodyType": "bt1",
+    "imagePath": "images/head-a.jpg",
+    "downloadUrl": "https://f.rpghq.org/zmEqUzvCM0ih.zip?n=Daenerys%20Head%20Preset%202.0.0.zip"
+  },
+  {
+    "id": "aurora",
+    "name": "aurora_elf",
+    "displayName": "Aurora Head Preset - ELF",
+    "race": "elf",
+    "bodyType": "bt1",
+    "imagePath": "images/Aurora-ELF.webp",
+    "downloadUrl": "https://f.rpghq.org/ae6HiGBnKRI3.pak?n=Elf_F%20-%20Violet's%20Preset%201%20Aurora%20%5BDONE%5D.pak"
+  },
+  {
+    "id": "aurora",
+    "name": "aurora_half-elf",
+    "displayName": "Aurora Head Preset - HALF-ELF",
+    "race": "half-elf",
+    "bodyType": "bt1",
+    "imagePath": "images/Aurora-HELF.webp",
+    "downloadUrl": "https://f.rpghq.org/OltCbM5oJgZa.pak?n=Helf_F%20-%20Violet's%20Preset%201%20Aurora%20%5BDONE%5D.pak"
+  },
+  {
+    "id": "akira",
+    "name": "akira-human",
+    "displayName": "Akira - Head Preset - HUMAN",
+    "race": "human",
+    "bodyType": "bt1",
+    "imagePath": "images/Akira.png",
+    "downloadUrl": "https://f.rpghq.org/cDZ6IFLjonhd.pak?n=Human_F%20-%20-%3D%3BAkira%3B%3D-%20%5BDONE%5D.pak"
+  },
+  {
+    "id": "akira",
+    "name": "akira-tiefling",
+    "displayName": "Akira - Head Preset - TIEFLING",
+    "race": "tiefling",
+    "bodyType": "bt1",
+    "imagePath": "images/Akira.png",
+    "downloadUrl": "https://f.rpghq.org/yU47qaW2y4nR.pak?n=Tiefling_F%20-%20-%3D%3BAkira%3B%3D-%20%5BDONE%5D.pak"
+  }, 
+  {
+    "id": "akira",
+    "name": "akira-drow",
+    "displayName": "Akira - Head Preset - DROW",
+    "race": "drow",
+    "bodyType": "bt1",
+    "imagePath": "images/Akira.png",
+    "downloadUrl": "https://f.rpghq.org/jTSJty89eKG8.pak?n=Drow_F%20-%20-%3D%3BAkira%3B%3D-%20%5BDONE%5D.pak"
+  },
+  {
+    "id": "akira",
+    "name": "akira-elf",
+    "displayName": "Akira - Head Preset - ELF",
+    "race": "elf",
+    "bodyType": "bt1",
+    "imagePath": "images/Akira.png",
+    "downloadUrl": "https://f.rpghq.org/j8SoFD5kJmAs.pak?n=Elf_F%20-%20-%3D%3BAkira%3B%3D-%20%5BDONE%5D.pak"
+  },
+  {
+    "id": "akira",
+    "name": "akira-half-elf",
+    "displayName": "Akira - Head Preset - HELF",
+    "race": "half-elf",
+    "bodyType": "bt1",
+    "imagePath": "images/Akira.png",
+    "downloadUrl": "https://f.rpghq.org/aMU9lzKwqGYE.pak?n=Helf_F%20-%20-%3D%3BAkira%3B%3D-%20%5BDONE%5D.pak"
+  }
+];
+
 class ModService {
   constructor() {
     this.mods = [];
@@ -11,15 +87,23 @@ class ModService {
   }
   
   /**
-   * Load mods from the JSON file
+   * Load mods from the JSON file or fallback to embedded data
    * @returns {Promise<Array>} Array of mods
    */
   async loadMods() {
     try {
-      const response = await fetch('mods.json');
-      if (!response.ok) throw new Error('Failed to load mods data');
+      // Try to fetch mods.json first
+      try {
+        const response = await fetch('mods.json');
+        if (!response.ok) throw new Error('Failed to load mods data');
+        
+        this.mods = await response.json();
+      } catch (fetchError) {
+        // If fetch fails (likely due to file:// protocol), use the fallback data
+        console.log("Using embedded mods data instead of fetch due to:", fetchError.message);
+        this.mods = FALLBACK_MODS;
+      }
       
-      this.mods = await response.json();
       this.filteredMods = [...this.mods];
       
       // Identify available races
