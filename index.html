@@ -10,425 +10,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <style>
-    :root {
-      --bg-dark: #0d1117;
-      --bg-card: #161b22;
-      --bg-card-hover: #21262d;
-      --text-light: #f0f6fc;
-      --text-dim: #8b949e;
-      --accent: #ff5c8f;
-      --accent-hover: #ff80a4;
-      --badge-bg: #2e2e42;
-      --badge-color: #fff;
-      --header-bg: rgba(13, 17, 23, 0.9);
-      --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      --container-width: 1200px;
-    }
-    * {
-      box-sizing: border-box;
-    }
-    body {
-      background-color: var(--bg-dark);
-      background-image: url('https://rpghq.org/assets/images/background-dark.webp');
-      background-attachment: fixed;
-      background-size: cover;
-      color: var(--text-light);
-      font-family: 'Poppins', sans-serif;
-      padding: 0;
-      margin: 0;
-      min-height: 100vh;
-    }
-    .container {
-      max-width: var(--container-width);
-      margin: 0 auto;
-      padding: 1rem;
-    }
-    header {
-      background-color: var(--header-bg);
-      backdrop-filter: blur(10px);
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      padding: 1rem 0;
-      box-shadow: var(--shadow);
-    }
-    h1 {
-      text-align: center;
-      margin: 0.5rem 0;
-      font-size: 2.2rem;
-      font-weight: 600;
-      background: linear-gradient(to right, #ff5c8f, #ff8c5a);
-      -webkit-background-clip: text;
-      background-clip: text;
-      -webkit-text-fill-color: transparent;
-      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-    .subtitle {
-      text-align: center;
-      color: var(--text-dim);
-      margin-bottom: 2rem;
-      font-size: 1rem;
-    }
-    .controls {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 1rem;
-      margin: 2rem 0;
-    }
-    .control-group {
-      display: flex;
-      gap: 0.5rem;
-    }
-    .controls input, .controls select, .controls button.small {
-      padding: 0.75rem 1.25rem;
-      border-radius: 0.5rem;
-      border: 1px solid #30363d;
-      background-color: #0d1117;
-      color: var(--text-light);
-      font-size: 0.9rem;
-      font-family: 'Poppins', sans-serif;
-      transition: all 0.2s ease;
-    }
-    .controls input:focus, .controls select:focus {
-      outline: none;
-      border-color: var(--accent);
-      box-shadow: 0 0 0 3px rgba(255, 92, 143, 0.25);
-    }
-    .controls input {
-      width: 250px;
-    }
-    .controls button.small {
-      background: var(--accent);
-      color: white;
-      cursor: pointer;
-      border: none;
-      font-weight: 500;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-    .controls button.small:hover {
-      background: var(--accent-hover);
-      transform: translateY(-1px);
-    }
-    .controls button.small:active {
-      transform: translateY(0);
-    }
-    .mod-list {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-      gap: 1.75rem;
-      margin-bottom: 3rem;
-    }
-    .mod-card {
-      background: var(--bg-card);
-      border-radius: 0.75rem;
-      overflow: hidden;
-      text-align: center;
-      display: flex;
-      flex-direction: column;
-      position: relative;
-      transition: all 0.3s ease;
-      box-shadow: var(--shadow);
-      border: 1px solid #30363d;
-      height: 100%;
-      cursor: pointer;
-    }
-    .mod-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
-      background: var(--bg-card-hover);
-      border-color: var(--accent);
-    }
-    .mod-card .image-container {
-      position: relative;
-      overflow: hidden;
-      padding-top: 100%;
-    }
-    .mod-card img {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition: transform 0.5s ease;
-    }
-    .mod-card:hover img {
-      transform: scale(1.05);
-    }
-    .mod-card .content {
-      padding: 1rem;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      flex-grow: 1;
-    }
-    .mod-card .title {
-      font-weight: 600;
-      margin: 0.5rem 0;
-      font-size: 1rem;
-      line-height: 1.4;
-    }
-    .mod-card input[type="checkbox"] {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      width: 22px;
-      height: 22px;
-      border: 2px solid rgba(255, 255, 255, 0.8);
-      background-color: rgba(0, 0, 0, 0.5);
-      border-radius: 50%;
-      appearance: none;
-      cursor: pointer;
-      transition: all 0.2s ease-in-out;
-      z-index: 5;
-    }
-    .mod-card input[type="checkbox"]:checked {
-      background-color: var(--accent);
-      border-color: white;
-    }
-    .mod-card input[type="checkbox"]:checked::after {
-      content: '✓';
-      color: white;
-      font-size: 14px;
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-    }
-    .badges {
-      display: flex;
-      gap: 0.5rem;
-      margin-top: 0.75rem;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-    .badge {
-      background-color: var(--badge-bg);
-      color: var(--badge-color);
-      padding: 0.3rem 0.6rem;
-      border-radius: 999px;
-      font-size: 0.75rem;
-      display: flex;
-      align-items: center;
-      gap: 0.3rem;
-    }
-    .badge i {
-      font-size: 0.7rem;
-    }
-    .generate-btn {
-      margin: 2.5rem auto;
-      display: block;
-      padding: 1rem 3rem;
-      background: linear-gradient(to right, var(--accent), #ff8c5a);
-      color: white;
-      border: none;
-      border-radius: 0.5rem;
-      font-size: 1.1rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 15px rgba(255, 92, 143, 0.3);
-    }
-    .generate-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 20px rgba(255, 92, 143, 0.4);
-    }
-    .generate-btn:active {
-      transform: translateY(0);
-    }
-    .loader {
-      display: none;
-      text-align: center;
-      margin: 2rem auto;
-    }
-    .loader-spinner {
-      border: 4px solid rgba(255, 255, 255, 0.1);
-      border-top: 4px solid var(--accent);
-      border-radius: 50%;
-      width: 40px;
-      height: 40px;
-      animation: spin 1s linear infinite;
-      margin: 0 auto 1rem;
-    }
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-    .status {
-      text-align: center;
-      padding: 1rem;
-      border-radius: 0.5rem;
-      margin: 1rem 0;
-      display: none;
-    }
-    .status.error {
-      background-color: rgba(229, 83, 75, 0.1);
-      color: #e5534b;
-      border: 1px solid rgba(229, 83, 75, 0.3);
-    }
-    .status.success {
-      background-color: rgba(87, 202, 134, 0.1);
-      color: #57ca86;
-      border: 1px solid rgba(87, 202, 134, 0.3);
-    }
-    .mod-count {
-      text-align: center;
-      color: var(--text-dim);
-      margin-bottom: 1rem;
-      font-size: 0.9rem;
-    }
-    footer {
-      text-align: center;
-      padding: 2rem 0;
-      color: var(--text-dim);
-      font-size: 0.9rem;
-      margin-top: 3rem;
-      border-top: 1px solid #30363d;
-    }
-    
-    /* Styles pour le modal de sélection de race */
-    .modal-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background-color: rgba(0, 0, 0, 0.8);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 1000;
-      backdrop-filter: blur(5px);
-    }
-    
-    .race-selection-modal {
-      background-color: var(--bg-card);
-      border-radius: 1rem;
-      padding: 2rem;
-      max-width: 800px;
-      width: 90%;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
-      border: 1px solid #30363d;
-    }
-    
-    .race-selection-modal h2 {
-      text-align: center;
-      margin-top: 0;
-      font-size: 1.8rem;
-      background: linear-gradient(to right, #ff5c8f, #ff8c5a);
-      -webkit-background-clip: text;
-      background-clip: text;
-      -webkit-text-fill-color: transparent;
-      margin-bottom: 1.5rem;
-    }
-    
-    .race-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-      gap: 1rem;
-      margin-bottom: 1.5rem;
-    }
-    
-    .race-option {
-      background-color: var(--bg-dark);
-      border: 1px solid #30363d;
-      border-radius: 0.5rem;
-      padding: 1rem;
-      text-align: center;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-    
-    .race-option:hover {
-      border-color: var(--accent);
-      transform: translateY(-2px);
-    }
-    
-    .race-option.active {
-      background-color: rgba(255, 92, 143, 0.1);
-      border-color: var(--accent);
-    }
-    
-    .race-option img {
-      width: 60px;
-      height: 60px;
-      object-fit: cover;
-      border-radius: 50%;
-      margin-bottom: 0.5rem;
-    }
-    
-    .race-option .race-name {
-      font-weight: 500;
-      font-size: 0.9rem;
-    }
-    
-    .modal-actions {
-      display: flex;
-      justify-content: center;
-      gap: 1rem;
-    }
-    
-    .confirm-race-btn, .skip-race-btn {
-      border-radius: 0.5rem;
-      padding: 0.8rem 2rem;
-      font-size: 1rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-    
-    .confirm-race-btn {
-      background: linear-gradient(to right, var(--accent), #ff8c5a);
-      color: white;
-      border: none;
-    }
-    
-    .skip-race-btn {
-      background: transparent;
-      color: var(--text-dim);
-      border: 1px solid #30363d;
-    }
-    
-    .confirm-race-btn:hover, .skip-race-btn:hover {
-      transform: translateY(-2px);
-    }
-    
-    .confirm-race-btn:hover {
-      box-shadow: 0 4px 10px rgba(255, 92, 143, 0.3);
-    }
-    
-    .skip-race-btn:hover {
-      border-color: var(--text-light);
-      color: var(--text-light);
-    }
-    
-    .confirm-race-btn:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-      transform: none;
-      box-shadow: none;
-    }
-    
-    @media (max-width: 768px) {
-      .controls {
-        flex-direction: column;
-        align-items: center;
-      }
-      .mod-list {
-        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      }
-      h1 {
-        font-size: 1.8rem;
-      }
-      .race-grid {
-        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-      }
-    }
-  </style>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <header>
@@ -440,10 +22,13 @@
 
   <div class="container">
     <div class="controls">
-      <input type="text" id="searchInput" placeholder="🔍 Search for a preset...">
+      <div class="search-control">
+        <i class="fas fa-search search-icon"></i>
+        <input type="text" id="searchInput" placeholder="Search for a preset...">
+      </div>
       
       <select id="raceFilter">
-        <option value="">🧭 All Races</option>
+        <option value=""><i class="fas fa-globe"></i> All Races</option>
         <option value="dragonborn">Dragonborn</option>
         <option value="drow">Drow</option>
         <option value="duergar">Duergar</option>
@@ -459,11 +44,10 @@
       </select>
       
       <select id="btFilter">
-        <option value="">⚧ Body Type</option>
-        <option value="bt1">BT1</option>
-        <option value="bt2">BT2</option>
-        <option value="bt3">BT3</option>
-        <option value="bt4">BT4</option>
+        <option value=""><i class="fas fa-venus-mars"></i> Body Type</option>
+        <option value="bt1">Female</option>
+        <option value="bt2">Male</option>
+        <option value="bt4">Male - Strong</option>
       </select>
       
       <div class="control-group">
@@ -486,7 +70,7 @@
       <!-- Mod cards will be generated here via JavaScript -->
     </div>
     
-    <button class="generate-btn" id="generateBtn" onclick="generatePack()">Generate My Pack</button>
+    <button class="generate-btn" id="generateBtn" onclick="generatePack()"><i class="fas fa-download"></i> Generate My Pack</button>
   </div>
 
   <footer>
@@ -634,6 +218,13 @@
     
     // Filter mods based on search and filters
     function filterMods() {
+      // Store current selections before filtering
+      const selectedModIds = {};
+      document.querySelectorAll('.mod-card input[type=checkbox]:checked').forEach(checkbox => {
+        const modId = checkbox.closest('.mod-card').dataset.id;
+        selectedModIds[modId] = true;
+      });
+      
       const query = searchInput.value.toLowerCase();
       const race = raceFilter.value;
       const bt = btFilter.value;
@@ -648,10 +239,22 @@
       
       renderMods();
       updateModCount();
+      
+      // Restore selections after rendering
+      applyStoredSelections(selectedModIds);
     }
     
     // Render mod cards
     function renderMods() {
+      // Save current selections before clearing
+      const currentSelections = {};
+      document.querySelectorAll('.mod-card').forEach(card => {
+        const checkbox = card.querySelector('input[type=checkbox]');
+        if (checkbox && checkbox.checked) {
+          currentSelections[card.dataset.id] = true;
+        }
+      });
+      
       modList.innerHTML = '';
       
       if (filteredMods.length === 0) {
@@ -664,12 +267,15 @@
         card.className = 'mod-card';
         card.dataset.id = mod.id;
         
-        // Get race name in French
+        // Get race name
         const raceName = getRaceName(mod.race);
-        const bodyTypeName = mod.bodyType.toUpperCase();
+        const bodyTypeName = getBodyTypeName(mod.bodyType);
+        
+        // Check if this mod was previously selected
+        const isChecked = currentSelections[mod.id] ? 'checked' : '';
         
         card.innerHTML = `
-          <input type="checkbox" value="${mod.downloadUrl}" />
+          <input type="checkbox" value="${mod.downloadUrl}" ${isChecked} />
           <div class="image-container">
             <img src="${mod.imagePath}" alt="${mod.displayName}" />
           </div>
@@ -677,7 +283,7 @@
             <div class="title">${mod.displayName}</div>
             <div class="badges">
               <div class="badge"><i class="fas fa-user"></i> ${raceName}</div>
-              <div class="badge"><i class="fas fa-child"></i> ${bodyTypeName}</div>
+              <div class="badge"><i class="fas fa-venus-mars"></i> ${bodyTypeName}</div>
             </div>
           </div>
         `;
@@ -708,6 +314,16 @@
         'tiefling': 'Tiefling'
       };
       return raceMap[race] || race;
+    }
+    
+    // Get body type name
+    function getBodyTypeName(bt) {
+      const btMap = {
+        'bt1': 'Female',
+        'bt2': 'Male',
+        'bt4': 'Male - Strong'
+      };
+      return btMap[bt] || bt.toUpperCase();
     }
     
     // Select/Deselect all checkboxes
@@ -801,13 +417,12 @@
     
     // Save selected mods to localStorage
     function saveSelectedModsToStorage() {
-      const selectedMods = [...document.querySelectorAll('.mod-card input[type=checkbox]:checked')].map(el => {
-        return {
-          url: el.value,
-          id: el.closest('.mod-card').dataset.id
-        };
+      const selectedModIds = {};
+      document.querySelectorAll('.mod-card input[type=checkbox]:checked').forEach(checkbox => {
+        const modId = checkbox.closest('.mod-card').dataset.id;
+        selectedModIds[modId] = true;
       });
-      localStorage.setItem('selectedHeadPresets', JSON.stringify(selectedMods));
+      localStorage.setItem('selectedHeadPresets', JSON.stringify(selectedModIds));
     }
     
     // Load state from localStorage
@@ -838,21 +453,23 @@
       setTimeout(() => {
         const savedSelectedMods = localStorage.getItem('selectedHeadPresets');
         if (savedSelectedMods) {
-          const selectedMods = JSON.parse(savedSelectedMods);
-          
-          // Match saved selections with current DOM
-          selectedMods.forEach(savedMod => {
-            document.querySelectorAll('.mod-card').forEach(card => {
-              if (card.dataset.id === savedMod.id) {
-                const checkbox = card.querySelector('input[type=checkbox]');
-                if (checkbox && checkbox.value === savedMod.url) {
-                  checkbox.checked = true;
-                }
-              }
-            });
-          });
+          const selectedModIds = JSON.parse(savedSelectedMods);
+          applyStoredSelections(selectedModIds);
         }
       }, 300);
+    }
+    
+    // Apply stored selections to checkboxes
+    function applyStoredSelections(selectedModIds) {
+      document.querySelectorAll('.mod-card').forEach(card => {
+        const modId = card.dataset.id;
+        if (selectedModIds[modId]) {
+          const checkbox = card.querySelector('input[type=checkbox]');
+          if (checkbox) {
+            checkbox.checked = true;
+          }
+        }
+      });
     }
     
     // Clear storage and reset page
