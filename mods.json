@@ -14,7 +14,7 @@
     "displayName": "Aurora Head Preset - ELF",
     "race": "elf",
     "bodyType": "bt1",
-    "imagePath": "images/head-b.jpg",
+    "imagePath": "images/Aurora-ELF.webp",
     "downloadUrl": "https://f.rpghq.org/ae6HiGBnKRI3.pak?n=Elf_F%20-%20Violet's%20Preset%201%20Aurora%20%5BDONE%5D.pak"
   },
   {
@@ -23,7 +23,7 @@
     "displayName": "Aurora Head Preset - HALF-ELF",
     "race": "half-elf",
     "bodyType": "bt1",
-    "imagePath": "images/head-c.jpg",
+    "imagePath": "images/Aurora-HELF.webp",
     "downloadUrl": "https://f.rpghq.org/OltCbM5oJgZa.pak?n=Helf_F%20-%20Violet's%20Preset%201%20Aurora%20%5BDONE%5D.pak"
   },
   {
