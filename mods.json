@@ -1,0 +1,47 @@
+[
+  {
+    "id": "daenerys",
+    "name": "daenerys",
+    "displayName": "Daenerys Head Preset",
+    "race": "human",
+    "bodyType": "bt1",
+    "imagePath": "images/head-a.jpg",
+    "downloadUrl": "https://f.rpghq.org/zmEqUzvCM0ih.zip?n=Daenerys%20Head%20Preset%202.0.0.zip"
+  },
+  {
+    "id": "dwarf-warrior",
+    "name": "dwarf warrior",
+    "displayName": "Head B – Dwarf Warrior",
+    "race": "dwarf",
+    "bodyType": "bt2",
+    "imagePath": "images/head-b.jpg",
+    "downloadUrl": "mods/Head_B.zip"
+  },
+  {
+    "id": "tiefling-mystic",
+    "name": "tiefling mystic",
+    "displayName": "Head C – Tiefling Mystic",
+    "race": "tiefling",
+    "bodyType": "bt3",
+    "imagePath": "images/head-c.jpg",
+    "downloadUrl": "mods/Head_C.zip"
+  },
+  {
+    "id": "githyanki-raider",
+    "name": "githyanki raider",
+    "displayName": "Head D – Githyanki Raider",
+    "race": "githyanki",
+    "bodyType": "bt4",
+    "imagePath": "images/head-d.jpg",
+    "downloadUrl": "mods/Head_D.zip"
+  },
+  {
+    "id": "human-hero",
+    "name": "human hero",
+    "displayName": "Head E – Human Hero",
+    "race": "human",
+    "bodyType": "bt1",
+    "imagePath": "images/head-e.jpg",
+    "downloadUrl": "mods/Head_E.zip"
+  }
+]

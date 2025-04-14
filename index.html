@@ -3,274 +3,561 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Collection Heads Based</title>
+  <title>Collection Heads Based - BG3</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     :root {
-      --bg-dark: #0f0f1a;
-      --bg-card: #1b1b2b;
-      --text-light: #f4f4f4;
-      --accent: #fa5c5c;
-      --accent-hover: #ff8787;
+      --bg-dark: #0d1117;
+      --bg-card: #161b22;
+      --bg-card-hover: #21262d;
+      --text-light: #f0f6fc;
+      --text-dim: #8b949e;
+      --accent: #ff5c8f;
+      --accent-hover: #ff80a4;
       --badge-bg: #2e2e42;
       --badge-color: #fff;
+      --header-bg: rgba(13, 17, 23, 0.9);
+      --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      --container-width: 1200px;
+    }
+    * {
+      box-sizing: border-box;
     }
     body {
       background-color: var(--bg-dark);
       background-image: url('https://rpghq.org/assets/images/background-dark.webp');
-      background-size: contain;
-      background-repeat: repeat;
+      background-attachment: fixed;
+      background-size: cover;
       color: var(--text-light);
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      padding: 2rem;
+      font-family: 'Poppins', sans-serif;
+      padding: 0;
       margin: 0;
+      min-height: 100vh;
+    }
+    .container {
+      max-width: var(--container-width);
+      margin: 0 auto;
+      padding: 1rem;
+    }
+    header {
+      background-color: var(--header-bg);
+      backdrop-filter: blur(10px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      padding: 1rem 0;
+      box-shadow: var(--shadow);
     }
     h1 {
       text-align: center;
-      margin-bottom: 1rem;
-      font-size: 2rem;
+      margin: 0.5rem 0;
+      font-size: 2.2rem;
+      font-weight: 600;
+      background: linear-gradient(to right, #ff5c8f, #ff8c5a);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    .subtitle {
+      text-align: center;
+      color: var(--text-dim);
+      margin-bottom: 2rem;
+      font-size: 1rem;
     }
     .controls {
       display: flex;
-      justify-content: space-between;
+      justify-content: center;
       flex-wrap: wrap;
       gap: 1rem;
-      margin-bottom: 2rem;
-      padding: 0 1rem;
+      margin: 2rem 0;
+    }
+    .control-group {
+      display: flex;
+      gap: 0.5rem;
     }
     .controls input, .controls select, .controls button.small {
-      padding: 0.5rem 1rem;
+      padding: 0.75rem 1.25rem;
       border-radius: 0.5rem;
-      border: none;
-      font-size: 1rem;
+      border: 1px solid #30363d;
+      background-color: #0d1117;
+      color: var(--text-light);
+      font-size: 0.9rem;
+      font-family: 'Poppins', sans-serif;
+      transition: all 0.2s ease;
+    }
+    .controls input:focus, .controls select:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(255, 92, 143, 0.25);
+    }
+    .controls input {
+      width: 250px;
     }
     .controls button.small {
       background: var(--accent);
       color: white;
       cursor: pointer;
+      border: none;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
     }
     .controls button.small:hover {
       background: var(--accent-hover);
+      transform: translateY(-1px);
+    }
+    .controls button.small:active {
+      transform: translateY(0);
     }
     .mod-list {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 1.5rem;
-      padding: 0 1rem;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 1.75rem;
+      margin-bottom: 3rem;
     }
     .mod-card {
       background: var(--bg-card);
-      border-radius: 0.5rem;
-      padding: 1rem;
+      border-radius: 0.75rem;
+      overflow: hidden;
       text-align: center;
       display: flex;
       flex-direction: column;
-      align-items: center;
       position: relative;
-      transition: transform 0.2s ease-in-out;
+      transition: all 0.3s ease;
+      box-shadow: var(--shadow);
+      border: 1px solid #30363d;
+      height: 100%;
+      cursor: pointer;
     }
     .mod-card:hover {
-      transform: scale(1.03);
+      transform: translateY(-5px);
+      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
+      background: var(--bg-card-hover);
+      border-color: var(--accent);
+    }
+    .mod-card .image-container {
+      position: relative;
+      overflow: hidden;
+      padding-top: 100%;
+    }
+    .mod-card img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+    .mod-card:hover img {
+      transform: scale(1.05);
+    }
+    .mod-card .content {
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex-grow: 1;
+    }
+    .mod-card .title {
+      font-weight: 600;
+      margin: 0.5rem 0;
+      font-size: 1rem;
+      line-height: 1.4;
     }
     .mod-card input[type="checkbox"] {
       position: absolute;
       top: 10px;
       right: 10px;
-      width: 20px;
-      height: 20px;
-      border: 2px solid var(--accent);
-      background-color: var(--bg-dark);
+      width: 22px;
+      height: 22px;
+      border: 2px solid rgba(255, 255, 255, 0.8);
+      background-color: rgba(0, 0, 0, 0.5);
       border-radius: 50%;
       appearance: none;
       cursor: pointer;
-      transition: background 0.2s ease-in-out;
+      transition: all 0.2s ease-in-out;
+      z-index: 5;
     }
     .mod-card input[type="checkbox"]:checked {
       background-color: var(--accent);
+      border-color: white;
     }
-    .mod-card img {
-      width: 100%;
-      max-width: 180px;
-      border-radius: 0.5rem;
-      border: 1px solid #333;
-      margin-bottom: 0.5rem;
-    }
-    .mod-card span {
-      margin-top: 0.25rem;
+    .mod-card input[type="checkbox"]:checked::after {
+      content: '✓';
+      color: white;
+      font-size: 14px;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
     }
     .badges {
       display: flex;
       gap: 0.5rem;
-      margin-top: 0.5rem;
+      margin-top: 0.75rem;
       flex-wrap: wrap;
       justify-content: center;
     }
     .badge {
       background-color: var(--badge-bg);
       color: var(--badge-color);
-      padding: 0.2rem 0.5rem;
+      padding: 0.3rem 0.6rem;
       border-radius: 999px;
       font-size: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
     }
-    button {
-      margin: 2rem auto 0;
+    .badge i {
+      font-size: 0.7rem;
+    }
+    .generate-btn {
+      margin: 2.5rem auto;
       display: block;
-      padding: 1rem 2rem;
-      background: var(--accent);
+      padding: 1rem 3rem;
+      background: linear-gradient(to right, var(--accent), #ff8c5a);
       color: white;
       border: none;
       border-radius: 0.5rem;
-      font-size: 1rem;
+      font-size: 1.1rem;
+      font-weight: 600;
       cursor: pointer;
-      transition: background 0.2s ease-in-out;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(255, 92, 143, 0.3);
     }
-    button:hover {
-      background: var(--accent-hover);
+    .generate-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(255, 92, 143, 0.4);
+    }
+    .generate-btn:active {
+      transform: translateY(0);
+    }
+    .loader {
+      display: none;
+      text-align: center;
+      margin: 2rem auto;
+    }
+    .loader-spinner {
+      border: 4px solid rgba(255, 255, 255, 0.1);
+      border-top: 4px solid var(--accent);
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 1rem;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .status {
+      text-align: center;
+      padding: 1rem;
+      border-radius: 0.5rem;
+      margin: 1rem 0;
+      display: none;
+    }
+    .status.error {
+      background-color: rgba(229, 83, 75, 0.1);
+      color: #e5534b;
+      border: 1px solid rgba(229, 83, 75, 0.3);
+    }
+    .status.success {
+      background-color: rgba(87, 202, 134, 0.1);
+      color: #57ca86;
+      border: 1px solid rgba(87, 202, 134, 0.3);
+    }
+    .mod-count {
+      text-align: center;
+      color: var(--text-dim);
+      margin-bottom: 1rem;
+      font-size: 0.9rem;
+    }
+    footer {
+      text-align: center;
+      padding: 2rem 0;
+      color: var(--text-dim);
+      font-size: 0.9rem;
+      margin-top: 3rem;
+      border-top: 1px solid #30363d;
+    }
+    @media (max-width: 768px) {
+      .controls {
+        flex-direction: column;
+        align-items: center;
+      }
+      .mod-list {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      }
+      h1 {
+        font-size: 1.8rem;
+      }
     }
   </style>
 </head>
 <body>
-  <h1>Collection Heads Based</h1>
+  <header>
+    <div class="container">
+      <h1>Collection Heads Based</h1>
+      <p class="subtitle">Head Preset Creator for Baldur's Gate 3</p>
+    </div>
+  </header>
 
+  <div class="container">
+    <div class="controls">
+      <input type="text" id="searchInput" placeholder="🔍 Search for a preset...">
+      
+      <select id="raceFilter">
+        <option value="">🧭 All Races</option>
+        <option value="dragonborn">Dragonborn</option>
+        <option value="drow">Drow</option>
+        <option value="duergar">Duergar</option>
+        <option value="dwarf">Dwarf</option>
+        <option value="elf">Elf</option>
+        <option value="githyanki">Githyanki</option>
+        <option value="gnome">Gnome</option>
+        <option value="half-elf">Half-Elf</option>
+        <option value="halfling">Halfling</option>
+        <option value="half-orc">Half-Orc</option>
+        <option value="human">Human</option>
+        <option value="tiefling">Tiefling</option>
+      </select>
+      
+      <select id="btFilter">
+        <option value="">⚧ Body Type</option>
+        <option value="bt1">BT1</option>
+        <option value="bt2">BT2</option>
+        <option value="bt3">BT3</option>
+        <option value="bt4">BT4</option>
+      </select>
+      
+      <div class="control-group">
+        <button class="small" onclick="selectAll(true)"><i class="fas fa-check-square"></i> Select All</button>
+        <button class="small" onclick="selectAll(false)"><i class="fas fa-square"></i> Deselect All</button>
+      </div>
+    </div>
 
-  <div class="controls">
-    <input type="text" id="searchInput" placeholder="🔍 Rechercher un mod...">
-    <select id="raceFilter">
-  <option value="">🧭 Toutes les races</option>
-  <option value="dragonborn"> <img src="https://static.wikia.nocookie.net/baldursgate/images/4/4b/Dragonborn_Icon.png" width="16"> Dragonborn</option>
-  <option value="drow"> <img src="https://static.wikia.nocookie.net/baldursgate/images/e/e6/Drow_Icon.png" width="16"> Drow</option>
-  <option value="duergar"> <img src="https://static.wikia.nocookie.net/baldursgate/images/c/cb/Duergar_Icon.png" width="16"> Duergar</option>
-  <option value="dwarf"> <img src="https://static.wikia.nocookie.net/baldursgate/images/5/56/Dwarf_Icon.png" width="16"> Nain</option>
-  <option value="elf"> <img src="https://static.wikia.nocookie.net/baldursgate/images/5/59/Elf_Icon.png" width="16"> Elfe</option>
-  <option value="githyanki"> <img src="https://static.wikia.nocookie.net/baldursgate/images/1/10/Githyanki_Icon.png" width="16"> Githyanki</option>
-  <option value="gnome"> <img src="https://static.wikia.nocookie.net/baldursgate/images/f/f2/Gnome_Icon.png" width="16"> Gnome</option>
-  <option value="half-elf"> <img src="https://static.wikia.nocookie.net/baldursgate/images/4/4a/Half-elf_Icon.png" width="16"> Demi-Elfe</option>
-  <option value="halfling"> <img src="https://static.wikia.nocookie.net/baldursgate/images/f/f9/Halfling_Icon.png" width="16"> Halfelin</option>
-  <option value="half-orc"> <img src="https://static.wikia.nocookie.net/baldursgate/images/4/4e/Half-orc_Icon.png" width="16"> Demi-Orc</option>
-  <option value="human"> <img src="https://static.wikia.nocookie.net/baldursgate/images/4/4c/Human_Icon.png" width="16"> Humain</option>
-  <option value="tiefling"> <img src="https://static.wikia.nocookie.net/baldursgate/images/4/4e/Tiefling_Icon.png" width="16"> Tiefling</option>
-</select>
-    <select id="btFilter">
-      <option value="">Body Type</option>
-      <option value="bt1">BT1</option>
-      <option value="bt2">BT2</option>
-      <option value="bt3">BT3</option>
-      <option value="bt4">BT4</option>
-    </select>
-    <button class="small" onclick="selectAll(true)">Tout sélectionner</button>
-    <button class="small" onclick="selectAll(false)">Tout désélectionner</button>
+    <div class="mod-count" id="modCount">Loading presets...</div>
+
+    <div class="status" id="statusMessage"></div>
+    
+    <div class="loader" id="loader">
+      <div class="loader-spinner"></div>
+      <p>Generating your pack...</p>
+    </div>
+
+    <div class="mod-list" id="modList">
+      <!-- Mod cards will be generated here via JavaScript -->
+    </div>
+    
+    <button class="generate-btn" id="generateBtn" onclick="generatePack()">Generate My Pack</button>
   </div>
 
-  <div class="mod-list" id="modList">
-    <label class="mod-card" data-name="daenerys" data-race="human" data-bt="bt1">
-      <input type="checkbox" value="https://f.rpghq.org/zmEqUzvCM0ih.zip?n=Daenerys%20Head%20Preset%202.0.0.zip" />
-      <img src="images/head-a.jpg" alt="Daenerys Head" />
-      <span>Daenerys Head Preset</span>
-      <div class="badges">
-        <div class="badge">Humain</div>
-        <div class="badge">BT1</div>
-      </div>
-    </label>
-    <label class="mod-card" data-name="dwarf warrior" data-race="dwarf" data-bt="bt2">
-      <input type="checkbox" value="mods/Head_B.zip" />
-      <img src="images/head-b.jpg" alt="Head B" />
-      <span>Head B – Dwarf Warrior</span>
-      <div class="badges">
-        <div class="badge">Nain</div>
-        <div class="badge">BT2</div>
-      </div>
-    </label>
-    <label class="mod-card" data-name="tiefling mystic" data-race="tiefling" data-bt="bt3">
-      <input type="checkbox" value="mods/Head_C.zip" />
-      <img src="images/head-c.jpg" alt="Head C" />
-      <span>Head C – Tiefling Mystic</span>
-      <div class="badges">
-        <div class="badge">Tiefling</div>
-        <div class="badge">BT3</div>
-      </div>
-    </label>
-    <label class="mod-card" data-name="githyanki raider" data-race="githyanki" data-bt="bt4">
-      <input type="checkbox" value="mods/Head_D.zip" />
-      <img src="images/head-d.jpg" alt="Head D" />
-      <span>Head D – Githyanki Raider</span>
-      <div class="badges">
-        <div class="badge">Githyanki</div>
-        <div class="badge">BT4</div>
-      </div>
-    </label>
-    <label class="mod-card" data-name="human hero" data-race="human" data-bt="bt1">
-      <input type="checkbox" value="mods/Head_E.zip" />
-      <img src="images/head-e.jpg" alt="Head E" />
-      <span>Head E – Human Hero</span>
-      <div class="badges">
-        <div class="badge">Humain</div>
-        <div class="badge">BT1</div>
-      </div>
-    </label>
-  </div>
-  <button onclick="generatePack()">Generate My Pack</button>
+  <footer>
+    <div class="container">
+      <p>Collection Heads Based for Baldur's Gate 3 &copy; 2023-2024</p>
+    </div>
+  </footer>
 
   <script>
+    // DOM Elements
     const searchInput = document.getElementById("searchInput");
     const raceFilter = document.getElementById("raceFilter");
     const btFilter = document.getElementById("btFilter");
     const modList = document.getElementById("modList");
-
-    searchInput.addEventListener("input", filterMods);
-    raceFilter.addEventListener("change", filterMods);
-    btFilter.addEventListener("change", filterMods);
-
+    const modCount = document.getElementById("modCount");
+    const loader = document.getElementById("loader");
+    const statusMessage = document.getElementById("statusMessage");
+    const generateBtn = document.getElementById("generateBtn");
+    
+    // State
+    let mods = [];
+    let filteredMods = [];
+    
+    // Initialize
+    document.addEventListener('DOMContentLoaded', () => {
+      loadMods();
+      setupEventListeners();
+    });
+    
+    function setupEventListeners() {
+      searchInput.addEventListener("input", filterMods);
+      raceFilter.addEventListener("change", filterMods);
+      btFilter.addEventListener("change", filterMods);
+    }
+    
+    // Load mods from JSON file
+    async function loadMods() {
+      try {
+        const response = await fetch('mods.json');
+        if (!response.ok) throw new Error('Failed to load mods data');
+        
+        mods = await response.json();
+        filteredMods = [...mods];
+        
+        renderMods();
+        updateModCount();
+        showStatus('success', `${mods.length} head presets loaded successfully!`);
+      } catch (error) {
+        console.error("Error loading mods:", error);
+        showStatus('error', 'Error loading presets. Please refresh the page.');
+      }
+    }
+    
+    // Filter mods based on search and filters
     function filterMods() {
       const query = searchInput.value.toLowerCase();
       const race = raceFilter.value;
       const bt = btFilter.value;
-
-      document.querySelectorAll(".mod-card").forEach(card => {
-        const name = card.dataset.name || "";
-        const cardRace = card.dataset.race || "";
-        const cardBT = card.dataset.bt || "";
-
-        const matchName = name.includes(query);
-        const matchRace = race === "" || cardRace === race;
-        const matchBT = bt === "" || cardBT === bt;
-
-        card.style.display = matchName && matchRace && matchBT ? "flex" : "none";
+      
+      filteredMods = mods.filter(mod => {
+        const matchName = mod.name.toLowerCase().includes(query);
+        const matchRace = race === "" || mod.race === race;
+        const matchBT = bt === "" || mod.bodyType === bt;
+        
+        return matchName && matchRace && matchBT;
+      });
+      
+      renderMods();
+      updateModCount();
+    }
+    
+    // Render mod cards
+    function renderMods() {
+      modList.innerHTML = '';
+      
+      if (filteredMods.length === 0) {
+        modList.innerHTML = `<p style="grid-column: 1/-1; text-align: center; padding: 2rem;">No presets found matching these criteria.</p>`;
+        return;
+      }
+      
+      filteredMods.forEach(mod => {
+        const card = document.createElement('label');
+        card.className = 'mod-card';
+        card.dataset.id = mod.id;
+        
+        // Get race name in French
+        const raceName = getRaceName(mod.race);
+        const bodyTypeName = mod.bodyType.toUpperCase();
+        
+        card.innerHTML = `
+          <input type="checkbox" value="${mod.downloadUrl}" />
+          <div class="image-container">
+            <img src="${mod.imagePath}" alt="${mod.displayName}" />
+          </div>
+          <div class="content">
+            <div class="title">${mod.displayName}</div>
+            <div class="badges">
+              <div class="badge"><i class="fas fa-user"></i> ${raceName}</div>
+              <div class="badge"><i class="fas fa-child"></i> ${bodyTypeName}</div>
+            </div>
+          </div>
+        `;
+        
+        modList.appendChild(card);
       });
     }
-
+    
+    // Update mod count display
+    function updateModCount() {
+      modCount.textContent = `Showing ${filteredMods.length} of ${mods.length} presets`;
+    }
+    
+    // Get French race name
+    function getRaceName(race) {
+      const raceMap = {
+        'dragonborn': 'Dragonborn',
+        'drow': 'Drow',
+        'duergar': 'Duergar',
+        'dwarf': 'Dwarf',
+        'elf': 'Elf',
+        'githyanki': 'Githyanki',
+        'gnome': 'Gnome',
+        'half-elf': 'Half-Elf',
+        'halfling': 'Halfling',
+        'half-orc': 'Half-Orc',
+        'human': 'Human',
+        'tiefling': 'Tiefling'
+      };
+      return raceMap[race] || race;
+    }
+    
+    // Select/Deselect all checkboxes
     function selectAll(state) {
       document.querySelectorAll(".mod-card input[type=checkbox]").forEach(checkbox => {
         checkbox.checked = state;
       });
     }
-
+    
+    // Show status message
+    function showStatus(type, message) {
+      statusMessage.textContent = message;
+      statusMessage.className = `status ${type}`;
+      statusMessage.style.display = 'block';
+      
+      setTimeout(() => {
+        statusMessage.style.display = 'none';
+      }, 5000);
+    }
+    
+    // Generate mod pack
     async function generatePack() {
       const selected = [...document.querySelectorAll('input[type=checkbox]:checked')].map(el => el.value);
+      
       if (selected.length === 0) {
-        alert("Please select at least one head to generate your pack.");
+        showStatus('error', 'Please select at least one preset to generate your pack.');
         return;
       }
-
-      const zip = new JSZip();
-      const folder = zip.folder("Collection_Heads_Based");
-
-      for (const file of selected) {
-        try {
-          const response = await fetch(file);
-          if (!response.ok) throw new Error('Failed to fetch');
-          const blob = await response.blob();
-          const fileName = decodeURIComponent(file.split("/").pop().split("?")[0]);
-          folder.file(fileName, blob);
-        } catch (error) {
-          alert(`Un des fichiers n'a pas pu être téléchargé : ${file}`);
-          console.error("Error fetching", file, error);
+      
+      try {
+        // Show loader
+        loader.style.display = 'block';
+        generateBtn.disabled = true;
+        
+        const zip = new JSZip();
+        const folder = zip.folder("Collection_Heads_Based");
+        let failedFiles = [];
+        
+        for (const file of selected) {
+          try {
+            const response = await fetch(file);
+            if (!response.ok) throw new Error('Failed to fetch');
+            
+            const blob = await response.blob();
+            const fileName = decodeURIComponent(file.split("/").pop().split("?")[0]);
+            folder.file(fileName, blob);
+          } catch (error) {
+            console.error("Error fetching", file, error);
+            failedFiles.push(file);
+          }
         }
+        
+        if (failedFiles.length > 0) {
+          showStatus('error', `${failedFiles.length} file(s) could not be downloaded.`);
+        }
+        
+        const content = await zip.generateAsync({ type: "blob" });
+        saveAs(content, "Collection_Heads_Based.zip");
+        
+        if (failedFiles.length === 0) {
+          showStatus('success', 'Your pack has been generated successfully!');
+        }
+      } catch (error) {
+        console.error("Error generating pack:", error);
+        showStatus('error', 'An error occurred while generating the pack.');
+      } finally {
+        // Hide loader
+        loader.style.display = 'none';
+        generateBtn.disabled = false;
       }
-
-      zip.generateAsync({ type: "blob" }).then(function(content) {
-        saveAs(content, "My_Head_Pack.zip");
-      });
     }
   </script>
 </body>
