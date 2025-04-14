@@ -9,105 +9,96 @@
   <style>
     :root {
       --bg-dark: #0f0f1a;
-      --bg-card: #1a1c24;
-      --text-light: #e3e3e3;
-      --accent: #ff5050;
-      --accent-hover: #ff7373;
-      --badge-bg: #252839;
-      --badge-color: #ffffff;
+      --bg-card: #1b1b2b;
+      --text-light: #f4f4f4;
+      --accent: #fa5c5c;
+      --accent-hover: #ff8787;
+      --badge-bg: #2e2e42;
+      --badge-color: #fff;
     }
-
     body {
-      background: url('https://rpghq.org/assets/images/background-dark.webp') no-repeat center center fixed;
-      background-size: cover;
+      background-color: var(--bg-dark);
+      background-image: url('https://rpghq.org/assets/images/background-dark.webp');
+      background-size: contain;
+      background-repeat: repeat;
       color: var(--text-light);
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      margin: 0;
       padding: 2rem;
+      margin: 0;
     }
-
     h1 {
       text-align: center;
-      margin-bottom: 2rem;
+      margin-bottom: 1rem;
+      font-size: 2rem;
     }
-
     .controls {
       display: flex;
+      justify-content: space-between;
       flex-wrap: wrap;
       gap: 1rem;
-      justify-content: center;
       margin-bottom: 2rem;
+      padding: 0 1rem;
     }
-
-    .controls input,
-    .controls select,
-    .controls button.small {
-      padding: 0.6rem 1.2rem;
+    .controls input, .controls select, .controls button.small {
+      padding: 0.5rem 1rem;
       border-radius: 0.5rem;
       border: none;
       font-size: 1rem;
-      background: var(--bg-card);
-      color: var(--text-light);
     }
-
     .controls button.small {
       background: var(--accent);
       color: white;
       cursor: pointer;
     }
-
     .controls button.small:hover {
       background: var(--accent-hover);
     }
-
     .mod-list {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
       gap: 1.5rem;
+      padding: 0 1rem;
     }
-
     .mod-card {
       background: var(--bg-card);
-      border-radius: 1rem;
+      border-radius: 0.5rem;
       padding: 1rem;
+      text-align: center;
       display: flex;
       flex-direction: column;
       align-items: center;
       position: relative;
-      transition: transform 0.2s ease-in-out, box-shadow 0.2s;
+      transition: transform 0.2s ease-in-out;
     }
-
     .mod-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+      transform: scale(1.03);
     }
-
     .mod-card input[type="checkbox"] {
       position: absolute;
-      top: 12px;
-      right: 12px;
-      width: 22px;
-      height: 22px;
-      border-radius: 50%;
+      top: 10px;
+      right: 10px;
+      width: 20px;
+      height: 20px;
       border: 2px solid var(--accent);
-      background: var(--bg-dark);
+      background-color: var(--bg-dark);
+      border-radius: 50%;
+      appearance: none;
       cursor: pointer;
+      transition: background 0.2s ease-in-out;
     }
-
     .mod-card input[type="checkbox"]:checked {
-      background: var(--accent);
+      background-color: var(--accent);
     }
-
     .mod-card img {
       width: 100%;
-      border-radius: 0.75rem;
+      max-width: 180px;
+      border-radius: 0.5rem;
+      border: 1px solid #333;
       margin-bottom: 0.5rem;
     }
-
     .mod-card span {
-      font-weight: 500;
+      margin-top: 0.25rem;
     }
-
     .badges {
       display: flex;
       gap: 0.5rem;
@@ -115,28 +106,25 @@
       flex-wrap: wrap;
       justify-content: center;
     }
-
     .badge {
-      background: var(--badge-bg);
+      background-color: var(--badge-bg);
       color: var(--badge-color);
-      padding: 0.25rem 0.75rem;
+      padding: 0.2rem 0.5rem;
       border-radius: 999px;
       font-size: 0.75rem;
     }
-
     button {
-      margin: 2rem auto;
+      margin: 2rem auto 0;
       display: block;
       padding: 1rem 2rem;
       background: var(--accent);
       color: white;
       border: none;
-      border-radius: 0.75rem;
+      border-radius: 0.5rem;
       font-size: 1rem;
       cursor: pointer;
-      transition: background 0.2s;
+      transition: background 0.2s ease-in-out;
     }
-
     button:hover {
       background: var(--accent-hover);
     }
@@ -144,6 +132,7 @@
 </head>
 <body>
   <h1>Collection Heads Based</h1>
+
 
   <div class="controls">
     <input type="text" id="searchInput" placeholder="🔍 Rechercher un mod...">
