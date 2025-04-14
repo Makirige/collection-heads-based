@@ -7,9 +7,16 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
   <style>
+    :root {
+      --bg-dark: #0f0f1a;
+      --bg-card: #1b1b2b;
+      --text-light: #f4f4f4;
+      --accent: #fa5c5c;
+      --accent-hover: #ff8787;
+    }
     body {
-      background-color: #111;
-      color: #f0f0f0;
+      background-color: var(--bg-dark);
+      color: var(--text-light);
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       padding: 2rem;
       margin: 0;
@@ -26,7 +33,7 @@
       padding: 0 1rem;
     }
     .mod-card {
-      background: #222;
+      background: var(--bg-card);
       border-radius: 0.5rem;
       padding: 1rem;
       text-align: center;
@@ -45,15 +52,15 @@
       right: 10px;
       width: 20px;
       height: 20px;
-      border: 2px solid #00ffcc;
-      background-color: #111;
+      border: 2px solid var(--accent);
+      background-color: var(--bg-dark);
       border-radius: 50%;
       appearance: none;
       cursor: pointer;
       transition: background 0.2s ease-in-out;
     }
     .mod-card input[type="checkbox"]:checked {
-      background-color: #00ffcc;
+      background-color: var(--accent);
     }
     .mod-card img {
       width: 100%;
@@ -69,7 +76,7 @@
       margin: 2rem auto 0;
       display: block;
       padding: 1rem 2rem;
-      background: #444;
+      background: var(--accent);
       color: white;
       border: none;
       border-radius: 0.5rem;
@@ -78,7 +85,7 @@
       transition: background 0.2s ease-in-out;
     }
     button:hover {
-      background: #666;
+      background: var(--accent-hover);
     }
   </style>
 </head>
@@ -86,7 +93,7 @@
   <h1>Collection Heads Based</h1>
   <div class="mod-list">
     <label class="mod-card">
-      <input type="checkbox" value="https://f.rpghq.org/zmEqUzvCM0ih.zip?n=Daenerys%20Head%20Preset%202.0.0.zip" />
+      <input type="checkbox" value="mods/Daenerys_Head_Preset_2.0.0.zip" />
       <img src="images/head-a.jpg" alt="Daenerys Head" />
       <span>Daenerys Head Preset</span>
     </label>
@@ -127,10 +134,12 @@
       for (const file of selected) {
         try {
           const response = await fetch(file);
+          if (!response.ok) throw new Error('Failed to fetch');
           const blob = await response.blob();
           const fileName = decodeURIComponent(file.split("/").pop().split("?")[0]);
           folder.file(fileName, blob);
         } catch (error) {
+          alert(`Un des fichiers n'a pas pu être téléchargé : ${file}`);
           console.error("Error fetching", file, error);
         }
       }
