@@ -36,7 +36,8 @@ To add a new head preset:
   "race": "human",                      // Race (see list below)
   "bodyType": "bt1",                    // Body type (bt1, bt2, bt3, or bt4)
   "imagePath": "images/my-image.jpg",   // Path to the preview image
-  "downloadUrl": "mods/My_Mod.zip"      // URL or path to the ZIP file
+  "downloadUrl": "mods/My_Mod.zip",     // URL or path to the ZIP file
+  "originalLink": "https://example.com" // Optional: URL to the original mod (can be omitted)
 }
 ```
 
@@ -45,7 +46,6 @@ To add a new head preset:
 Accepted values for the `race` field:
 - `dragonborn` - Dragonborn
 - `drow` - Drow
-- `duergar` - Duergar
 - `dwarf` - Dwarf
 - `elf` - Elf
 - `githyanki` - Githyanki

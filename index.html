@@ -71,6 +71,12 @@
       </div>
     </div>
 
+    <div class="selection-counter" id="selectionCounter">
+      <div class="counter-badge">
+        <i class="fas fa-check-circle"></i> <span id="selectedCount">0</span> préréglages sélectionnés
+      </div>
+    </div>
+
     <div class="mod-count" id="modCount">Loading presets...</div>
 
     <div class="status" id="statusMessage"></div>
@@ -80,11 +86,24 @@
       <p>Generating your pack...</p>
     </div>
 
+    <div class="download-progress" id="downloadProgress">
+      <div class="progress-header">
+        <h3>Preparing your head presets</h3>
+        <div class="progress-stats">
+          <span id="downloadedCount">0</span> / <span id="totalCount">0</span> files
+        </div>
+      </div>
+      <div class="progress-bar-container">
+        <div class="progress-bar" id="progressBar"></div>
+      </div>
+      <p class="progress-status" id="progressStatus">Initializing download...</p>
+    </div>
+
     <div class="mod-list" id="modList">
       <!-- Mod cards will be generated here via JavaScript -->
     </div>
     
-    <button class="generate-btn" id="generateBtn" onclick="generatePack()"><i class="fas fa-download"></i> Generate My Pack</button>
+    <button class="generate-btn" id="generateBtn"><i class="fas fa-download"></i> Generate My Pack</button>
   </div>
 
   <footer>
@@ -126,30 +145,29 @@
     let mods = [];
     let filteredMods = [];
     let selectedRace = "";
+    let isGenerating = false; // Variable pour le debouncing du bouton de génération
+    let availableRaces = []; // Stocke les races effectivement disponibles
     
-    // Liste des races avec leurs icônes
-    const races = [
-      { id: '', name: 'All Races', icon: 'images/races/150px-Race_Human.png' },
-      { id: 'dragonborn', name: 'Dragonborn', icon: 'images/races/150px-Race_Dragonborn.png' },
-      { id: 'drow', name: 'Drow', icon: 'images/races/150px-Race_Drow.png' },
-      { id: 'duergar', name: 'Duergar', icon: 'images/races/150px-Race_Duergar.png' },
-      { id: 'dwarf', name: 'Dwarf', icon: 'images/races/150px-Race_Dwarf.png' },
-      { id: 'elf', name: 'Elf', icon: 'images/races/150px-Race_Elf.png' },
-      { id: 'githyanki', name: 'Githyanki', icon: 'images/races/150px-Race_Githyanki.png' },
-      { id: 'gnome', name: 'Gnome', icon: 'images/races/150px-Race_Gnome.png' },
-      { id: 'half-elf', name: 'Half-Elf', icon: 'images/races/150px-Race_Half-Elf.png' },
-      { id: 'halfling', name: 'Halfling', icon: 'images/races/150px-Race_Halfling.png' },
-      { id: 'half-orc', name: 'Half-Orc', icon: 'images/races/150px-Race_Half-Orc.png' },
-      { id: 'human', name: 'Human', icon: 'images/races/150px-Race_Human.png' },
-      { id: 'tiefling', name: 'Tiefling', icon: 'images/races/150px-Race_Tiefling.png' }
-    ];
+    // Configuration des icônes de races (utilisée pour les races disponibles uniquement)
+    const raceIcons = {
+      '': 'images/races/150px-Race_Human.png', // Option "Toutes les races"
+      'dragonborn': 'images/races/150px-Race_Dragonborn.png',
+      'drow': 'images/races/150px-Race_Drow.png',
+      'dwarf': 'images/races/150px-Race_Dwarf.png',
+      'elf': 'images/races/150px-Race_Elf.png',
+      'githyanki': 'images/races/150px-Race_Githyanki.png',
+      'gnome': 'images/races/150px-Race_Gnome.png',
+      'half-elf': 'images/races/150px-Race_Half-Elf.png',
+      'halfling': 'images/races/150px-Race_Halfling.png',
+      'half-orc': 'images/races/150px-Race_Half-Orc.png',
+      'human': 'images/races/150px-Race_Human.png',
+      'tiefling': 'images/races/150px-Race_Tiefling.png'
+    };
     
     // Initialize
     document.addEventListener('DOMContentLoaded', () => {
       loadMods();
       setupEventListeners();
-      setupRaceModal();
-      setupCustomDropdowns();
       loadStateFromStorage();
     });
     
@@ -180,6 +198,9 @@
           saveSelectedModsToStorage();
         }
       });
+      
+      // Ajout du gestionnaire d'événement pour le bouton de génération avec debounce
+      generateBtn.addEventListener("click", debounce(generatePack, 1000));
     }
     
     // Load mods from JSON file
@@ -191,6 +212,13 @@
         mods = await response.json();
         filteredMods = [...mods];
         
+        // Identifier les races disponibles
+        identifyAvailableRaces();
+        
+        // Configurer les interfaces après avoir identifié les races disponibles
+        setupRaceModal();
+        setupCustomDropdowns();
+        
         renderMods();
         updateModCount();
         updateFilterCounts();
@@ -201,10 +229,53 @@
       }
     }
     
+    // Identifie les races disponibles à partir des données chargées
+    function identifyAvailableRaces() {
+      // Ajouter l'option "Toutes les races" par défaut
+      availableRaces = [{ 
+        id: '', 
+        name: 'All Races', 
+        icon: raceIcons[''],
+        count: mods.length
+      }];
+      
+      // Compteur pour les races
+      const raceCounts = {};
+      
+      // Compter les occurrences de chaque race
+      mods.forEach(mod => {
+        if (mod.race) {
+          raceCounts[mod.race] = (raceCounts[mod.race] || 0) + 1;
+        }
+      });
+      
+      // Créer les entrées pour les races qui ont des préréglages
+      for (const raceId in raceCounts) {
+        if (raceCounts[raceId] > 0 && raceIcons[raceId]) {
+          availableRaces.push({
+            id: raceId,
+            name: getRaceName(raceId),
+            icon: raceIcons[raceId],
+            count: raceCounts[raceId]
+          });
+        }
+      }
+      
+      // Trier les races par ordre alphabétique (après "Toutes les races")
+      availableRaces.sort((a, b) => {
+        if (a.id === '') return -1;
+        if (b.id === '') return 1;
+        return a.name.localeCompare(b.name);
+      });
+    }
+    
     // Setup race selection modal
     function setupRaceModal() {
-      // Générer les options de race
-      races.filter(race => race.id !== '').forEach(race => {
+      // Vider le grid actuel
+      raceGrid.innerHTML = '';
+      
+      // Générer les options de race (uniquement celles disponibles, sans "Toutes les races")
+      availableRaces.filter(race => race.id !== '').forEach(race => {
         const option = document.createElement('div');
         option.className = 'race-option';
         option.dataset.race = race.id;
@@ -234,9 +305,9 @@
     function closeRaceModal() {
       if (selectedRace) {
         // Trouver l'icône correcte pour la race sélectionnée
-        const raceData = races.find(race => race.id === selectedRace);
-        const raceName = getRaceName(selectedRace);
-        const raceIcon = raceData ? raceData.icon : `images/races/150px-Race_${selectedRace.charAt(0).toUpperCase() + selectedRace.slice(1)}.png`;
+        const raceData = availableRaces.find(race => race.id === selectedRace);
+        const raceName = raceData ? raceData.name : getRaceName(selectedRace);
+        const raceIcon = raceData ? raceData.icon : raceIcons[selectedRace] || `images/races/150px-Race_${selectedRace.charAt(0).toUpperCase() + selectedRace.slice(1)}.png`;
         
         // Mettre à jour le dropdown sélectionné
         const selectedText = document.getElementById('raceSelectedText');
@@ -317,22 +388,34 @@
         card.className = 'mod-card';
         card.dataset.id = mod.id;
         
-        // Get race name
+        // Get race name and icon
         const raceName = getRaceName(mod.race);
+        const raceIcon = raceIcons[mod.race] || 'images/races/150px-Race_Human.png';
         const bodyTypeName = getBodyTypeName(mod.bodyType);
         
         // Check if this mod was previously selected
         const isChecked = currentSelections[mod.id] ? 'checked' : '';
         
+        // Ajouter le lien original s'il existe
+        const originalLink = mod.originalLink 
+          ? `<a href="${mod.originalLink}" class="original-link" target="_blank" title="View original mod" onclick="event.stopPropagation();">
+              <i class="fas fa-external-link-alt"></i>
+            </a>` 
+          : '';
+        
         card.innerHTML = `
           <input type="checkbox" value="${mod.downloadUrl}" ${isChecked} />
           <div class="image-container">
             <img src="${mod.imagePath}" alt="${mod.displayName}" />
+            ${originalLink}
           </div>
           <div class="content">
             <div class="title">${mod.displayName}</div>
             <div class="badges">
-              <div class="badge"><i class="fas fa-user"></i> ${raceName}</div>
+              <div class="badge race-badge">
+                <img src="${raceIcon}" alt="${raceName}" class="badge-icon" />
+                ${raceName}
+              </div>
               <div class="badge"><i class="fas fa-venus-mars"></i> ${bodyTypeName}</div>
             </div>
           </div>
@@ -346,6 +429,17 @@
     function updateModCount() {
       const selectedCount = document.querySelectorAll('.mod-card input[type=checkbox]:checked').length;
       modCount.textContent = `Showing ${filteredMods.length} of ${mods.length} presets (${selectedCount} selected)`;
+      
+      // Mettre à jour également le nouveau compteur de sélection
+      document.getElementById('selectedCount').textContent = selectedCount;
+      
+      // Afficher ou masquer le compteur de sélection en fonction du nombre
+      const selectionCounter = document.getElementById('selectionCounter');
+      if (selectedCount > 0) {
+        selectionCounter.classList.add('show');
+      } else {
+        selectionCounter.classList.remove('show');
+      }
     }
     
     // Get race name
@@ -353,7 +447,6 @@
       const raceMap = {
         'dragonborn': 'Dragonborn',
         'drow': 'Drow',
-        'duergar': 'Duergar',
         'dwarf': 'Dwarf',
         'elf': 'Elf',
         'githyanki': 'Githyanki',
@@ -398,24 +491,37 @@
     
     // Generate mod pack
     async function generatePack() {
+      // Empêcher les clics multiples pendant le traitement
+      if (isGenerating) return;
+      isGenerating = true;
+      
       const selected = [...document.querySelectorAll('input[type=checkbox]:checked')].map(el => el.value);
       
       if (selected.length === 0) {
         showStatus('error', 'Please select at least one preset to generate your pack.');
+        isGenerating = false;
         return;
       }
       
       try {
-        // Show loader
-        loader.style.display = 'block';
+        // Initialiser l'interface de progression
+        document.getElementById('downloadedCount').textContent = '0';
+        document.getElementById('totalCount').textContent = selected.length;
+        document.getElementById('progressBar').style.width = '0%';
+        document.getElementById('progressStatus').textContent = 'Initializing download...';
+        document.getElementById('downloadProgress').style.display = 'block';
         generateBtn.disabled = true;
         
         const zip = new JSZip();
         const folder = zip.folder("Collection_Heads_Based");
         let failedFiles = [];
+        let downloadedCount = 0;
         
         for (const file of selected) {
           try {
+            // Mettre à jour le statut
+            document.getElementById('progressStatus').textContent = `Downloading ${getFileNameFromUrl(file)}...`;
+            
             const response = await fetch(file);
             if (!response.ok) throw new Error('Failed to fetch');
             
@@ -430,29 +536,68 @@
               fileName = decodeURIComponent(file.split("/").pop().split("?")[0]);
             }
             folder.file(fileName, blob);
+            
+            // Mettre à jour le compteur et la barre de progression
+            downloadedCount++;
+            document.getElementById('downloadedCount').textContent = downloadedCount;
+            const progressPercentage = (downloadedCount / selected.length) * 100;
+            document.getElementById('progressBar').style.width = `${progressPercentage}%`;
           } catch (error) {
             console.error("Error fetching", file, error);
             failedFiles.push(file);
+            
+            // Mettre à jour le statut pour l'échec
+            document.getElementById('progressStatus').textContent = `Failed to download ${getFileNameFromUrl(file)}`;
+            await new Promise(resolve => setTimeout(resolve, 1000)); // Pause brève pour montrer l'erreur
           }
         }
         
-        if (failedFiles.length > 0) {
-          showStatus('error', `${failedFiles.length} file(s) could not be downloaded.`);
-        }
+        // Finalisation du zip
+        document.getElementById('progressStatus').textContent = 'Finalizing your pack...';
         
-        const content = await zip.generateAsync({ type: "blob" });
+        const content = await zip.generateAsync({ 
+          type: "blob",
+          compression: "DEFLATE",
+          compressionOptions: { level: 5 },
+          // Ajouter un callback de progression pour la génération du ZIP
+          onUpdate: metadata => {
+            const compressionPercent = Math.round(metadata.percent);
+            document.getElementById('progressBar').style.width = `${compressionPercent}%`;
+          }
+        });
+        
+        document.getElementById('progressStatus').textContent = 'Download ready!';
         saveAs(content, "Collection_Heads_Based.zip");
         
-        if (failedFiles.length === 0) {
+        if (failedFiles.length > 0) {
+          showStatus('error', `${failedFiles.length} file(s) could not be downloaded.`);
+        } else {
           showStatus('success', 'Your pack has been generated successfully!');
         }
       } catch (error) {
         console.error("Error generating pack:", error);
         showStatus('error', 'An error occurred while generating the pack.');
       } finally {
-        // Hide loader
-        loader.style.display = 'none';
-        generateBtn.disabled = false;
+        // Cacher l'interface de progression après un court délai
+        setTimeout(() => {
+          document.getElementById('downloadProgress').style.display = 'none';
+          generateBtn.disabled = false;
+          isGenerating = false;
+        }, 2000);
+      }
+    }
+    
+    // Fonction utilitaire pour obtenir un nom de fichier à partir d'une URL
+    function getFileNameFromUrl(url) {
+      try {
+        const urlObj = new URL(url);
+        const nameParam = urlObj.searchParams.get('n');
+        if (nameParam) {
+          return decodeURIComponent(nameParam);
+        }
+        return decodeURIComponent(url.split("/").pop().split("?")[0]);
+      } catch (e) {
+        return url.split("/").pop().split("?")[0];
       }
     }
     
@@ -629,8 +774,11 @@
       // Setup race dropdown options
       const raceOptions = document.getElementById('raceOptions');
       
-      // Create race options
-      races.forEach(race => {
+      // Vider les options existantes
+      raceOptions.innerHTML = '';
+      
+      // Create race options (uniquement pour les races disponibles)
+      availableRaces.forEach(race => {
         const option = document.createElement('div');
         option.className = 'dropdown-option';
         option.dataset.value = race.id;
@@ -639,7 +787,7 @@
         
         option.innerHTML = `
           <img src="${race.icon}" alt="${race.name}" class="dropdown-icon">
-          <span>${race.name}</span>
+          <span>${race.name} (${race.count})</span>
         `;
         
         option.addEventListener('click', (e) => {
@@ -748,6 +896,20 @@
       
       filterMods();
       saveStateToStorage();
+    }
+
+    // Fonction de debounce pour limiter le taux d'appels d'une fonction
+    function debounce(func, delay) {
+      let timeoutId;
+      return function(...args) {
+        if (timeoutId) {
+          clearTimeout(timeoutId);
+        }
+        timeoutId = setTimeout(() => {
+          func.apply(this, args);
+          timeoutId = null;
+        }, delay);
+      };
     }
   </script>
 </body>

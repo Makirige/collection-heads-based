@@ -46,7 +46,8 @@ Example entry in `mods.json`:
   "race": "human",
   "bodyType": "bt1",
   "imagePath": "images/my-image.jpg",
-  "downloadUrl": "mods/My_Mod.zip"
+  "downloadUrl": "mods/My_Mod.zip",
+  "originalLink": "https://nexusmods.com/mod-page"
 }
 ```
 
