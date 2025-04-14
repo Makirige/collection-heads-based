@@ -284,7 +284,7 @@ h1 {
   padding-top: 100%;
 }
 
-.mod-card img {
+.mod-card .image-container img {
   position: absolute;
   top: 0;
   left: 0;
@@ -429,21 +429,30 @@ h1 {
   font-size: 0.7rem;
 }
 
-.badge-icon {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  object-fit: cover;
-  margin-right: 4px;
-  background-color: var(--bg-dark);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  z-index: 1;
+.badge .badge-icon {
+  width: 14px !important;
+  height: 14px !important;
+  border-radius: 50% !important;
+  object-fit: cover !important;
+  margin-right: 4px !important;
+  background-color: var(--bg-dark) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  z-index: 1 !important;
+  position: static !important;
 }
 
 .race-badge {
   padding-left: 0.4rem;
   display: flex;
   align-items: center;
+}
+
+.race-icon {
+  width: 14px !important;
+  height: 14px !important;
+  position: static !important;
+  object-fit: cover !important;
+  margin-right: 4px !important;
 }
 
 .generate-btn {
