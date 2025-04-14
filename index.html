@@ -132,4 +132,139 @@
   </style>
 </head>
 <body>
-<!-- le reste ne change pas -->
+  <h1>Collection Heads Based</h1>
+
+  <div class="controls">
+    <input type="text" id="searchInput" placeholder="🔍 Rechercher un mod...">
+    <select id="raceFilter">
+      <option value="">🧭 Toutes les races</option>
+      <option value="elf">Elfe</option>
+      <option value="dwarf">Nain</option>
+      <option value="tiefling">Tiefling</option>
+      <option value="githyanki">Githyanki</option>
+      <option value="human">Humain</option>
+    </select>
+    <select id="btFilter">
+      <option value="">🧠 Tous les BT</option>
+      <option value="bt1">BT1</option>
+      <option value="bt2">BT2</option>
+      <option value="bt3">BT3</option>
+      <option value="bt4">BT4</option>
+    </select>
+    <button class="small" onclick="selectAll(true)">Tout sélectionner</button>
+    <button class="small" onclick="selectAll(false)">Tout désélectionner</button>
+  </div>
+
+  <div class="mod-list" id="modList">
+    <label class="mod-card" data-name="daenerys" data-race="human" data-bt="bt1">
+      <input type="checkbox" value="mods/Daenerys_Head_Preset_2.0.0.zip" />
+      <img src="images/head-a.jpg" alt="Daenerys Head" />
+      <span>Daenerys Head Preset</span>
+      <div class="badges">
+        <div class="badge">Humain</div>
+        <div class="badge">BT1</div>
+      </div>
+    </label>
+    <label class="mod-card" data-name="dwarf warrior" data-race="dwarf" data-bt="bt2">
+      <input type="checkbox" value="mods/Head_B.zip" />
+      <img src="images/head-b.jpg" alt="Head B" />
+      <span>Head B – Dwarf Warrior</span>
+      <div class="badges">
+        <div class="badge">Nain</div>
+        <div class="badge">BT2</div>
+      </div>
+    </label>
+    <label class="mod-card" data-name="tiefling mystic" data-race="tiefling" data-bt="bt3">
+      <input type="checkbox" value="mods/Head_C.zip" />
+      <img src="images/head-c.jpg" alt="Head C" />
+      <span>Head C – Tiefling Mystic</span>
+      <div class="badges">
+        <div class="badge">Tiefling</div>
+        <div class="badge">BT3</div>
+      </div>
+    </label>
+    <label class="mod-card" data-name="githyanki raider" data-race="githyanki" data-bt="bt4">
+      <input type="checkbox" value="mods/Head_D.zip" />
+      <img src="images/head-d.jpg" alt="Head D" />
+      <span>Head D – Githyanki Raider</span>
+      <div class="badges">
+        <div class="badge">Githyanki</div>
+        <div class="badge">BT4</div>
+      </div>
+    </label>
+    <label class="mod-card" data-name="human hero" data-race="human" data-bt="bt1">
+      <input type="checkbox" value="mods/Head_E.zip" />
+      <img src="images/head-e.jpg" alt="Head E" />
+      <span>Head E – Human Hero</span>
+      <div class="badges">
+        <div class="badge">Humain</div>
+        <div class="badge">BT1</div>
+      </div>
+    </label>
+  </div>
+  <button onclick="generatePack()">Generate My Pack</button>
+
+  <script>
+    const searchInput = document.getElementById("searchInput");
+    const raceFilter = document.getElementById("raceFilter");
+    const btFilter = document.getElementById("btFilter");
+    const modList = document.getElementById("modList");
+
+    searchInput.addEventListener("input", filterMods);
+    raceFilter.addEventListener("change", filterMods);
+    btFilter.addEventListener("change", filterMods);
+
+    function filterMods() {
+      const query = searchInput.value.toLowerCase();
+      const race = raceFilter.value;
+      const bt = btFilter.value;
+
+      document.querySelectorAll(".mod-card").forEach(card => {
+        const name = card.dataset.name || "";
+        const cardRace = card.dataset.race || "";
+        const cardBT = card.dataset.bt || "";
+
+        const matchName = name.includes(query);
+        const matchRace = race === "" || cardRace === race;
+        const matchBT = bt === "" || cardBT === bt;
+
+        card.style.display = matchName && matchRace && matchBT ? "flex" : "none";
+      });
+    }
+
+    function selectAll(state) {
+      document.querySelectorAll(".mod-card input[type=checkbox]").forEach(checkbox => {
+        checkbox.checked = state;
+      });
+    }
+
+    async function generatePack() {
+      const selected = [...document.querySelectorAll('input[type=checkbox]:checked')].map(el => el.value);
+      if (selected.length === 0) {
+        alert("Please select at least one head to generate your pack.");
+        return;
+      }
+
+      const zip = new JSZip();
+      const folder = zip.folder("Collection_Heads_Based");
+
+      for (const file of selected) {
+        try {
+          const response = await fetch(file);
+          if (!response.ok) throw new Error('Failed to fetch');
+          const blob = await response.blob();
+          const fileName = decodeURIComponent(file.split("/").pop().split("?")[0]);
+          folder.file(fileName, blob);
+        } catch (error) {
+          alert(`Un des fichiers n'a pas pu être téléchargé : ${file}`);
+          console.error("Error fetching", file, error);
+        }
+      }
+
+      zip.generateAsync({ type: "blob" }).then(function(content) {
+        saveAs(content, "My_Head_Pack.zip");
+      });
+    }
+  </script>
+</body>
+</html>
