@@ -64,11 +64,22 @@ class ModList {
         </div>
         <div class="content">
           <div class="title">${mod.displayName}</div>
-          <div class="badges">
-            <div class="badge race-badge" style="background-image: url(${raceIcon}); background-size: 12px; background-repeat: no-repeat; background-position: 5px center; padding-left: 22px;">
-              ${raceName}
+          <div class="badges-container">
+            <div class="badges">
+              <div class="badge race-badge" style="background-image: url(${raceIcon}); background-size: 12px; background-repeat: no-repeat; background-position: 5px center; padding-left: 22px;">
+                ${raceName}
+              </div>
+              <div class="badge body-type-badge">
+                ${mod.bodyType.toUpperCase()} - ${bodyTypeName}
+              </div>
             </div>
-            <div class="badge"><i class="fas fa-venus-mars"></i> ${bodyTypeName}</div>
+            <div class="badge-link-wrapper">
+              <div class="badge link-badge">
+                <a href="https://bg3.wiki" target="_blank" onclick="event.stopPropagation();">
+                  <i class="fas fa-info-circle"></i> Plus d'infos
+                </a>
+              </div>
+            </div>
           </div>
         </div>
       `;

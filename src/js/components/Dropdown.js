@@ -82,7 +82,22 @@ class Dropdown {
   selectOption(option) {
     const value = option.dataset.value;
     const text = option.querySelector('span').textContent;
-    const icon = option.querySelector('img').src;
+    let icon = option.querySelector('img')?.src;
+    
+    // If we're in the body type dropdown but there's no icon, use the default one
+    if (this.id === 'btDropdown' && !icon) {
+      const bodyTypeId = option.dataset.value;
+      // Use the icon from the constants if available
+      if (bodyTypeId === '') {
+        icon = 'images/body_types/body_type_all.png';
+      } else if (bodyTypeId === 'bt1') {
+        icon = 'images/body_types/body_type_female.png';
+      } else if (bodyTypeId === 'bt2') {
+        icon = 'images/body_types/body_type_male.png';
+      } else if (bodyTypeId === 'bt4') {
+        icon = 'images/body_types/body_type_male_strong.png';
+      }
+    }
     
     // Update selected display
     this.selectedTextElement.textContent = text;
@@ -135,10 +150,18 @@ class Dropdown {
       option.className = 'dropdown-option';
       option.dataset.value = opt.id;
       
-      option.innerHTML = `
-        <img src="${opt.icon}" alt="${opt.name}" class="dropdown-icon">
-        <span>${opt.name} (${opt.count})</span>
-      `;
+      // Pour le dropdown des races, inclure l'icône
+      if (this.id === 'raceDropdown') {
+        option.innerHTML = `
+          <img src="${opt.icon}" alt="${opt.name}" class="dropdown-icon">
+          <span>${opt.name} (${opt.count !== undefined ? opt.count : 0})</span>
+        `;
+      } else {
+        // Pour les autres dropdowns (comme le dropdown de type de corps)
+        option.innerHTML = `
+          <span>${opt.name} (${opt.count !== undefined ? opt.count : 0})</span>
+        `;
+      }
       
       option.addEventListener('click', (e) => {
         e.stopPropagation();

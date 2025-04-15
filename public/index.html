@@ -3,20 +3,31 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Collection Heads Based - BG3</title>
+  <title>Maki's Mugs - BG3</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="styles.css">
+  
+  <style>
+    @font-face {
+      font-family: 'Press Start 2P';
+      font-style: normal;
+      font-weight: 400;
+      src: url('fonts/PressStart2P-Regular.woff') format('woff');
+      font-display: swap;
+    }
+  </style>
 </head>
 <body>
   <header>
     <div class="container">
-      <h1>Collection Heads Based</h1>
-      <p class="subtitle">Head Preset Creator for Baldur's Gate 3</p>
+      <h1><span class="maki">Maki</span><span class="apostrophe">'s</span> <span class="mugs">Mugs</span></h1>
+      <p class="subtitle">A collection of Head Presets for Baldur's Gate 3 to individually download from ModHQ.</p>
     </div>
   </header>
 
@@ -40,26 +51,21 @@
       
       <div class="custom-dropdown" id="btDropdown">
         <div class="dropdown-selected">
-          <img src="images/body_types/body_type_all.png" alt="Body Type" class="dropdown-icon" id="btSelectedIcon">
           <span class="dropdown-text" id="btSelectedText">Body Type</span>
           <i class="fas fa-chevron-down dropdown-arrow"></i>
         </div>
         <div class="dropdown-options" id="btOptions">
           <div class="dropdown-option" data-value="">
-            <img src="images/body_types/body_type_all.png" alt="All Types" class="dropdown-icon">
             <span>All Types</span>
           </div>
           <div class="dropdown-option" data-value="bt1">
-            <img src="images/body_types/body_type_female.png" alt="Female" class="dropdown-icon">
-            <span>Female</span>
+            <span>BT1 - Female</span>
           </div>
           <div class="dropdown-option" data-value="bt2">
-            <img src="images/body_types/body_type_male.png" alt="Male" class="dropdown-icon">
-            <span>Male</span>
+            <span>BT2 - Male</span>
           </div>
           <div class="dropdown-option" data-value="bt4">
-            <img src="images/body_types/body_type_male_strong.png" alt="Male - Strong" class="dropdown-icon">
-            <span>Male - Strong</span>
+            <span>BT4 - Male - Strong</span>
           </div>
         </div>
       </div>
@@ -73,7 +79,7 @@
 
     <div class="selection-counter" id="selectionCounter">
       <div class="counter-badge">
-        <i class="fas fa-check-circle"></i> <span id="selectedCount">0</span> préréglages sélectionnés
+        <i class="fas fa-check-circle"></i> <span id="selectedCount">0</span> presets selected
       </div>
     </div>
 
@@ -108,7 +114,7 @@
 
   <footer>
     <div class="container">
-      <p>Collection Heads Based for Baldur's Gate 3 &copy; 2023-2024</p>
+      <p>Maki's Mugs for Baldur's Gate 3 &copy; 2023-2024</p>
     </div>
   </footer>
 

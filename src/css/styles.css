@@ -1,3 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
 :root {
   --bg-dark: #0d1117;
   --bg-card: #161b22;
@@ -12,6 +15,7 @@
   --header-bg: rgba(13, 17, 23, 0.9);
   --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   --container-width: 1200px;
+  --pixel-font: 'Press Start 2P', cursive;
 }
 
 * {
@@ -50,12 +54,37 @@ h1 {
   text-align: center;
   margin: 0.5rem 0;
   font-size: 2.2rem;
-  font-weight: 600;
-  background: linear-gradient(to right, var(--accent), var(--accent-secondary));
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  font-family: var(--pixel-font);
+  font-weight: 400;
+  letter-spacing: -0.05em;
+  text-transform: uppercase;
+  position: relative;
+  image-rendering: pixelated;
+  -webkit-font-smoothing: none;
+  font-smooth: never;
+}
+
+h1 .maki {
+  color: #ff6e6e;
+  -webkit-text-fill-color: #ff6e6e;
+  letter-spacing: -0.05em;
+}
+
+h1 .apostrophe {
+  color: #ff6e6e;
+  -webkit-text-fill-color: #ff6e6e;
+  margin-left: -0.2em;
+  letter-spacing: -0.5em;
+}
+
+h1 .mugs {
+  color: #0080FF;
+  -webkit-text-fill-color: #0080FF;
+  margin-left: -0.1em;
+}
+
+h1::after {
+  display: none;
 }
 
 .subtitle {
@@ -328,6 +357,8 @@ h1 {
   flex-direction: column;
   align-items: center;
   flex-grow: 1;
+  position: relative;
+  padding-bottom: 4.5rem; /* Augmenté pour faire de la place pour le badge supplémentaire */
 }
 
 .mod-card .title {
@@ -371,47 +402,46 @@ h1 {
 
 /* Style pour les cartes sélectionnées */
 .mod-card input[type="checkbox"]:checked ~ .image-container::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  border: 3px solid var(--accent);
-  box-shadow: 0 0 10px rgba(255, 110, 110, 0.5);
-  z-index: 4;
-  pointer-events: none;
+  display: none;
+}
+
+.mod-card input[type="checkbox"]:checked {
+  background-color: var(--accent);
+  border-color: white;
 }
 
 .mod-card input[type="checkbox"]:checked ~ .content {
   background-color: rgba(255, 110, 110, 0.1);
 }
 
-.mod-card input[type="checkbox"]:checked ~ .image-container::after {
-  content: '\f00c';
-  font-family: 'Font Awesome 6 Free';
-  font-weight: 900;
-  color: white;
+/* Ajout d'un style pour mettre en évidence toute la carte */
+.mod-card:has(input[type="checkbox"]:checked) {
+  border: 3px solid var(--accent);
+  box-shadow: 0 0 10px rgba(255, 110, 110, 0.5);
+}
+
+.badges-container {
   position: absolute;
-  top: 10px;
-  left: 10px;
-  background-color: var(--accent);
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
+  bottom: 0.75rem;
+  left: 0;
+  right: 0;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  z-index: 5;
-  font-size: 12px;
+  gap: 0.5rem;
 }
 
 .badges {
   display: flex;
   gap: 0.5rem;
-  margin-top: 0.75rem;
   flex-wrap: wrap;
   justify-content: center;
+}
+
+.badge-link-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: 0.25rem;
 }
 
 .badge {
@@ -427,6 +457,26 @@ h1 {
 
 .badge i {
   font-size: 0.7rem;
+}
+
+.badge.link-badge {
+  background-color: rgba(13, 17, 23, 0.7);
+  border: 1px solid rgba(137, 166, 207, 0.5);
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.badge.link-badge:hover {
+  background-color: var(--accent);
+  transform: translateY(-2px);
+}
+
+.badge.link-badge a {
+  color: var(--text-light);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 5px;
 }
 
 .badge .badge-icon {
@@ -456,8 +506,8 @@ h1 {
 }
 
 .generate-btn {
-  margin: 2.5rem auto;
   display: block;
+  margin: 2.5rem auto;
   padding: 1rem 3rem;
   background: linear-gradient(to right, var(--accent), var(--accent-secondary));
   color: white;
@@ -837,4 +887,22 @@ footer {
 
 .counter-badge i {
   font-size: 1.1rem;
+}
+
+.body-type-code {
+  font-weight: bold;
+  background-color: rgba(20, 24, 33, 0.7);
+  color: white;
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  margin-right: 0.3rem;
+  display: inline-block;
+  border: 1px solid rgba(137, 166, 207, 0.5);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  font-size: 0.75rem;
+}
+
+/* Masquer toutes les icônes Font Awesome dans les badges des types de corps */
+.badge.body-type-badge i, .badge.body-type-badge .fas, .badge .fas.fa-venus-mars {
+  display: none !important;
 }

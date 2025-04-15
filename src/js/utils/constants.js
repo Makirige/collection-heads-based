@@ -25,15 +25,15 @@ export const BODY_TYPES = {
     icon: 'images/body_types/body_type_all.png'
   },
   'bt1': {
-    name: 'Female',
+    name: 'BT1 - Female',
     icon: 'images/body_types/body_type_female.png'
   },
   'bt2': {
-    name: 'Male',
+    name: 'BT2 - Male',
     icon: 'images/body_types/body_type_male.png'
   },
   'bt4': {
-    name: 'Male - Strong',
+    name: 'BT4 - Male - Strong',
     icon: 'images/body_types/body_type_male_strong.png'
   }
 };

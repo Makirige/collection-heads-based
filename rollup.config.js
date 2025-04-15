@@ -30,7 +30,7 @@ export default {
     }),
     
     // Extract CSS into separate file
-    css({ output: 'dist/styles.css' }),
+    css({ output: 'styles.css' }),
     
     // Copy static assets
     copy({
@@ -45,7 +45,7 @@ export default {
     !production && serve({
       open: true,
       contentBase: ['dist'],
-      port: 3000,
+      port: 8080,
     }),
     !production && livereload({ watch: 'dist' }),
     

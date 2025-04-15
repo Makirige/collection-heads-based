@@ -142,7 +142,7 @@ class ModService {
         this.availableRaces.push({
           id: raceId,
           name: getRaceName(raceId),
-          icon: `images/races/150px-Race_${raceId.charAt(0).toUpperCase() + raceId.slice(1)}.png`,
+          icon: `images/races/150px-Race_${this.capitalizeRaceName(raceId)}.png`,
           count: raceCounts[raceId]
         });
       }
@@ -156,6 +156,17 @@ class ModService {
     });
     
     return this.availableRaces;
+  }
+  
+  /**
+   * Capitalize each part of a race name that contains hyphens
+   * @param {string} raceId - Race identifier (e.g., 'half-elf')
+   * @returns {string} Capitalized race name (e.g., 'Half-Elf')
+   */
+  capitalizeRaceName(raceId) {
+    return raceId.split('-')
+      .map(part => part.charAt(0).toUpperCase() + part.slice(1))
+      .join('-');
   }
   
   /**
