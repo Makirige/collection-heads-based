@@ -156,8 +156,20 @@ class Dropdown {
           <img src="${opt.icon}" alt="${opt.name}" class="dropdown-icon">
           <span>${opt.name} (${opt.count !== undefined ? opt.count : 0})</span>
         `;
+      } else if (this.id === 'btDropdown') {
+        // Pour le dropdown des types de corps, inclure l'icône si elle existe
+        if (opt.icon) {
+          option.innerHTML = `
+            <img src="${opt.icon}" alt="${opt.name}" class="dropdown-icon">
+            <span>${opt.name} (${opt.count !== undefined ? opt.count : 0})</span>
+          `;
+        } else {
+          option.innerHTML = `
+            <span>${opt.name} (${opt.count !== undefined ? opt.count : 0})</span>
+          `;
+        }
       } else {
-        // Pour les autres dropdowns (comme le dropdown de type de corps)
+        // Pour les autres dropdowns
         option.innerHTML = `
           <span>${opt.name} (${opt.count !== undefined ? opt.count : 0})</span>
         `;

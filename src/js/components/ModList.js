@@ -76,7 +76,7 @@ class ModList {
             <div class="badge-link-wrapper">
               <div class="badge link-badge">
                 <a href="https://bg3.wiki" target="_blank" onclick="event.stopPropagation();">
-                  <i class="fas fa-info-circle"></i> Plus d'infos
+                  <i class="fas fa-info-circle"></i> More info
                 </a>
               </div>
             </div>

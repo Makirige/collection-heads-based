@@ -56,7 +56,7 @@ h1 {
   font-size: 2.2rem;
   font-family: var(--pixel-font);
   font-weight: 400;
-  letter-spacing: -0.05em;
+  letter-spacing: -0.08em;
   text-transform: uppercase;
   position: relative;
   image-rendering: pixelated;
@@ -74,13 +74,13 @@ h1 .apostrophe {
   color: #ff6e6e;
   -webkit-text-fill-color: #ff6e6e;
   margin-left: -0.2em;
-  letter-spacing: -0.5em;
+  letter-spacing: -0.12em;
 }
 
 h1 .mugs {
   color: #0080FF;
   -webkit-text-fill-color: #0080FF;
-  margin-left: -0.1em;
+  margin-left: -0.15em;
 }
 
 h1::after {
