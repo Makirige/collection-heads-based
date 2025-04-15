@@ -70,7 +70,7 @@ class ModList {
                 ${raceName}
               </div>
               <div class="badge body-type-badge">
-                <i class="fas fa-venus-mars"></i> ${mod.bodyType.toUpperCase()} - ${bodyTypeName}
+                ${mod.bodyType.toUpperCase()} - ${bodyTypeName}
               </div>
             </div>
             <div class="badge-link-wrapper">

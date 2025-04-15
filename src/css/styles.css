@@ -901,8 +901,3 @@ footer {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
   font-size: 0.75rem;
 }
-
-/* Masquer toutes les icônes Font Awesome dans les badges des types de corps */
-.badge.body-type-badge i, .badge.body-type-badge .fas, .badge .fas.fa-venus-mars {
-  display: none !important;
-}
