@@ -84,7 +84,7 @@ class Dropdown {
     const text = option.querySelector('span').textContent;
     let icon = null;
     
-    // Récupérer l'icône seulement pour le dropdown des races
+    // Get the icon only for the race dropdown
     if (this.id === 'raceDropdown') {
       icon = option.querySelector('img')?.src;
     }
@@ -92,7 +92,7 @@ class Dropdown {
     // Update selected display
     this.selectedTextElement.textContent = text;
     
-    // Mettre à jour l'icône seulement si on est dans le dropdown des races
+    // Update the icon only if we're in the race dropdown
     if (this.id === 'raceDropdown' && this.selectedIconElement && icon) {
       this.selectedIconElement.src = icon;
       this.selectedIconElement.alt = text;
@@ -145,14 +145,14 @@ class Dropdown {
       option.className = 'dropdown-option';
       option.dataset.value = opt.id;
       
-      // Pour le dropdown des races, inclure l'icône
+      // For the race dropdown, include the icon
       if (this.id === 'raceDropdown') {
         option.innerHTML = `
           <img src="${opt.icon}" alt="${opt.name}" class="dropdown-icon">
           <span>${opt.name} (${opt.count !== undefined ? opt.count : 0})</span>
         `;
       } else {
-        // Pour les autres dropdowns, y compris body type (sans icône)
+        // For other dropdowns, including body type (without icon)
         option.innerHTML = `
           <span>${opt.name} (${opt.count !== undefined ? opt.count : 0})</span>
         `;
