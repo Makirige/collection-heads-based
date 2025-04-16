@@ -6,8 +6,7 @@
     "race": "human",
     "bodyType": "bt1",
     "imagePath": "images/head-a.jpg",
-    "downloadUrl": "https://f.rpghq.org/zmEqUzvCM0ih.zip?n=Daenerys%20Head%20Preset%202.0.0.zip",
-    "infoLink": "https://bg3.wiki/wiki/Baldur%27s_Gate_3_Wiki"
+    "downloadUrl": "https://f.rpghq.org/zmEqUzvCM0ih.zip?n=Daenerys%20Head%20Preset%202.0.0.zip"
   },
   {
     "id": "aurora",
@@ -16,8 +15,7 @@
     "race": "elf",
     "bodyType": "bt1",
     "imagePath": "images/Aurora-ELF.webp",
-    "downloadUrl": "https://f.rpghq.org/ae6HiGBnKRI3.pak?n=Elf_F%20-%20Violet's%20Preset%201%20Aurora%20%5BDONE%5D.pak",
-    "infoLink": "https://bg3.wiki/wiki/Elf"
+    "downloadUrl": "https://f.rpghq.org/ae6HiGBnKRI3.pak?n=Elf_F%20-%20Violet's%20Preset%201%20Aurora%20%5BDONE%5D.pak"
   },
   {
     "id": "aurora",
@@ -26,8 +24,7 @@
     "race": "half-elf",
     "bodyType": "bt1",
     "imagePath": "images/Aurora-HELF.webp",
-    "downloadUrl": "https://f.rpghq.org/OltCbM5oJgZa.pak?n=Helf_F%20-%20Violet's%20Preset%201%20Aurora%20%5BDONE%5D.pak",
-    "infoLink": "https://bg3.wiki/wiki/Half-Elf"
+    "downloadUrl": "https://f.rpghq.org/OltCbM5oJgZa.pak?n=Helf_F%20-%20Violet's%20Preset%201%20Aurora%20%5BDONE%5D.pak"
   },
   {
     "id": "akira",
@@ -36,8 +33,7 @@
     "race": "human",
     "bodyType": "bt1",
     "imagePath": "images/Akira.png",
-    "downloadUrl": "https://f.rpghq.org/cDZ6IFLjonhd.pak?n=Human_F%20-%20-%3D%3BAkira%3B%3D-%20%5BDONE%5D.pak",
-    "infoLink": "https://bg3.wiki/wiki/Human"
+    "downloadUrl": "https://f.rpghq.org/cDZ6IFLjonhd.pak?n=Human_F%20-%20-%3D%3BAkira%3B%3D-%20%5BDONE%5D.pak"
   },
   {
     "id": "akira",
@@ -46,9 +42,8 @@
     "race": "tiefling",
     "bodyType": "bt1",
     "imagePath": "images/Akira.png",
-    "downloadUrl": "https://f.rpghq.org/yU47qaW2y4nR.pak?n=Tiefling_F%20-%20-%3D%3BAkira%3B%3D-%20%5BDONE%5D.pak",
-    "infoLink": "https://bg3.wiki/wiki/Tiefling"
-  },
+    "downloadUrl": "https://f.rpghq.org/yU47qaW2y4nR.pak?n=Tiefling_F%20-%20-%3D%3BAkira%3B%3D-%20%5BDONE%5D.pak"
+  }, 
   {
     "id": "akira",
     "name": "akira-drow",
@@ -56,8 +51,7 @@
     "race": "drow",
     "bodyType": "bt1",
     "imagePath": "images/Akira.png",
-    "downloadUrl": "https://f.rpghq.org/jTSJty89eKG8.pak?n=Drow_F%20-%20-%3D%3BAkira%3B%3D-%20%5BDONE%5D.pak",
-    "infoLink": "https://bg3.wiki/wiki/Drow"
+    "downloadUrl": "https://f.rpghq.org/jTSJty89eKG8.pak?n=Drow_F%20-%20-%3D%3BAkira%3B%3D-%20%5BDONE%5D.pak"
   },
   {
     "id": "akira",
@@ -66,8 +60,7 @@
     "race": "elf",
     "bodyType": "bt1",
     "imagePath": "images/Akira.png",
-    "downloadUrl": "https://f.rpghq.org/j8SoFD5kJmAs.pak?n=Elf_F%20-%20-%3D%3BAkira%3B%3D-%20%5BDONE%5D.pak",
-    "infoLink": "https://bg3.wiki/wiki/Elf"
+    "downloadUrl": "https://f.rpghq.org/j8SoFD5kJmAs.pak?n=Elf_F%20-%20-%3D%3BAkira%3B%3D-%20%5BDONE%5D.pak"
   },
   {
     "id": "akira",
@@ -76,17 +69,6 @@
     "race": "half-elf",
     "bodyType": "bt1",
     "imagePath": "images/Akira.png",
-    "downloadUrl": "https://f.rpghq.org/aMU9lzKwqGYE.pak?n=Helf_F%20-%20-%3D%3BAkira%3B%3D-%20%5BDONE%5D.pak",
-    "infoLink": "https://bg3.wiki/wiki/Half-Elf"
-  },
-  {
-    "id": "test",
-    "name": "test",
-    "displayName": "lore zoomer",
-    "race": "dwarf",
-    "bodyType": "bt2",
-    "imagePath": "",
-    "downloadUrl": "ee",
-    "infoLink": "https://bg3.wiki/wiki/Dwarf"
+    "downloadUrl": "https://f.rpghq.org/aMU9lzKwqGYE.pak?n=Helf_F%20-%20-%3D%3BAkira%3B%3D-%20%5BDONE%5D.pak"
   }
 ]
