@@ -31,7 +31,7 @@ class DownloadManager {
    * @param {boolean} fromModal - Whether the action was triggered from the modal
    * @returns {Promise<void>} Promise that resolves when pack is generated
    */
-  async generatePack(selectedUrls, fromModal = true) {
+  async generatePack(selectedUrls, fromModal = false) {
     // Prevent multiple generation attempts
     if (this.isGenerating) return;
     this.isGenerating = true;

@@ -88,7 +88,7 @@ class App {
     // Generate button
     this.generateBtn.addEventListener('click', debounce(() => {
       const selectedUrls = this.modList.getSelectedUrls();
-      this.downloadManager.generatePack(selectedUrls);
+      this.downloadManager.generatePack(selectedUrls, false);
     }, 1000));
     
     // Selection counter click (open modal)

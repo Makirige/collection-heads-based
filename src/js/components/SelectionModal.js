@@ -46,7 +46,7 @@ class SelectionModal {
     // Generate button
     this.modalGenerateBtn.addEventListener('click', () => {
       const selectedUrls = this.modList.getSelectedUrls();
-      this.downloadManager.generatePack(selectedUrls);
+      this.downloadManager.generatePack(selectedUrls, true);
     });
     
     // Ajouter un écouteur d'événement pour la touche Escape
@@ -65,6 +65,11 @@ class SelectionModal {
     this.modalElement.classList.remove('hidden');
     this.modalElement.classList.add('visible');
     document.body.style.overflow = 'hidden'; // Prevent scrolling behind modal
+    
+    // Mettre le focus sur le bouton de téléchargement si des préréglages sont sélectionnés
+    if (Object.keys(this.modList.currentSelections).length > 0) {
+      this.modalGenerateBtn.focus();
+    }
   }
   
   /**
@@ -111,7 +116,7 @@ class SelectionModal {
     // Create a card for each selected mod
     selectedModsArray.forEach(mod => {
       const card = document.createElement('div');
-      card.className = 'selection-card';
+      card.className = 'mod-card';
       card.dataset.id = mod.id;
       card.dataset.name = mod.name;
       
@@ -120,36 +125,52 @@ class SelectionModal {
       const raceIcon = RACE_ICONS[mod.race] || 'images/races/150px-Race_Human.png';
       const bodyTypeName = getBodyTypeName(mod.bodyType);
       
-      // Get info link
+      // Get info link - use mod-specific link if available, otherwise use default
       const infoLink = mod.infoLink || 'https://bg3.wiki';
       
+      // Add original link if it exists
+      const originalLink = mod.originalLink 
+        ? `<a href="${mod.originalLink}" class="original-link" target="_blank" title="View original mod" onclick="event.stopPropagation();">
+            <i class="fas fa-external-link-alt"></i>
+          </a>` 
+        : '';
+      
+      // Format card HTML to match the main site cards
       card.innerHTML = `
-        <div class="selection-image">
-          <img src="${mod.imagePath}" alt="${mod.displayName}">
+        <button class="remove-mod-btn" data-id="${mod.id}" data-name="${mod.name}">
+          <i class="fas fa-times"></i>
+        </button>
+        <div class="image-container">
+          <img src="${mod.imagePath}" alt="${mod.displayName}" />
+          ${originalLink}
         </div>
-        <div class="selection-content">
-          <div class="selection-title">${mod.displayName}</div>
-          <div class="selection-badges">
-            <div class="badge race-badge">
-              <img src="${raceIcon}" alt="${raceName}" class="badge-icon">
-              ${raceName}
+        <div class="content">
+          <div class="title">${mod.displayName}</div>
+          <div class="badges-container">
+            <div class="badges">
+              <div class="badge race-badge" style="background-image: url(${raceIcon}); background-size: 12px; background-repeat: no-repeat; background-position: 5px center; padding-left: 22px;">
+                ${raceName}
+              </div>
+              <div class="badge body-type-badge">
+                ${mod.bodyType.toUpperCase()} - ${bodyTypeName}
+              </div>
             </div>
-            <div class="badge body-type-badge">
-              ${mod.bodyType.toUpperCase()} - ${bodyTypeName}
+            <div class="badge-link-wrapper">
+              <div class="badge link-badge">
+                <a href="${infoLink}" target="_blank" onclick="event.stopPropagation();">
+                  <i class="fas fa-info-circle"></i> More info
+                </a>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="selection-actions">
-          <button class="remove-selection" data-id="${mod.id}" data-name="${mod.name}">
-            <i class="fas fa-times"></i>
-          </button>
         </div>
       `;
       
       // Add event listeners for the remove button
-      const removeButton = card.querySelector('.remove-selection');
+      const removeButton = card.querySelector('.remove-mod-btn');
       removeButton.addEventListener('click', (e) => {
         e.preventDefault();
+        e.stopPropagation();
         this.removeSelectedMod(mod.id, mod.name);
       });
       

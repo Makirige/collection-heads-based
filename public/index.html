@@ -27,6 +27,68 @@
       display: none !important;
     }
     
+    .modal-overlay.visible {
+      display: flex !important;
+      animation: fadeIn 0.3s ease forwards;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    
+    /* Amélioration de la modal */
+    .selection-modal {
+      animation: slideIn 0.4s ease forwards;
+      transform-origin: top;
+      width: 90%;
+      max-width: 1200px;
+      background-color: var(--bg-dark);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      border: 1px solid #30363d;
+    }
+    
+    .modal-header {
+      padding: 1rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #30363d;
+      background-color: var(--bg-card);
+    }
+    
+    .modal-header h2 {
+      margin: 0;
+      font-size: 1.5rem;
+      color: var(--text-light);
+    }
+    
+    .close-modal-btn {
+      background: none;
+      border: none;
+      color: var(--text-dim);
+      font-size: 1.2rem;
+      cursor: pointer;
+      padding: 0.5rem;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+    }
+    
+    .close-modal-btn:hover {
+      color: var(--text-light);
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+    
+    @keyframes slideIn {
+      from { transform: translateY(-50px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    
     /* Style pour rendre le compteur vraiment cliquable */
     .selection-counter {
       pointer-events: auto !important;
@@ -59,6 +121,24 @@
       gap: 0.75rem !important;
       font-size: 1.1rem !important;
       transition: all 0.3s ease !important;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .counter-badge::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.1);
+      transform: translateX(-100%);
+      transition: transform 0.3s ease;
+    }
+    
+    .selection-counter:hover .counter-badge::after {
+      transform: translateX(0);
     }
     
     .selection-counter:hover .counter-badge {
@@ -70,83 +150,100 @@
       font-size: 1.3rem !important;
     }
     
-    /* Styles améliorés pour les cartes dans le modal */
+    /* Styles pour les cartes dans la modal */
     .selected-presets-list {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 1rem;
-      padding: 1rem;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 1.75rem;
+      padding: 1.5rem;
+      overflow-y: auto;
+      max-height: 70vh;
     }
     
-    .selection-card {
-      background-color: var(--bg-card);
-      border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-      overflow: hidden;
-      transition: transform 0.2s, box-shadow 0.2s;
-      position: relative;
-      border: 1px solid #30363d;
-    }
-    
-    .selection-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
-      border-color: var(--accent);
-    }
-    
-    .selection-image {
-      width: 100%;
-      height: 150px;
-      object-fit: cover;
-    }
-    
-    .selection-content {
-      padding: 10px;
-    }
-    
-    .selection-title {
-      font-weight: bold;
-      margin-bottom: 5px;
-      color: var(--text-light);
-    }
-    
-    .selection-badges {
-      display: flex;
-      gap: 5px;
-      margin-bottom: 10px;
-    }
-    
-    .selection-badge {
-      background-color: var(--badge-bg);
-      padding: 2px 6px;
-      border-radius: 4px;
-      font-size: 0.8rem;
-      color: var(--badge-color);
-    }
-    
-    .remove-selection {
-      background-color: var(--accent);
+    /* Bouton de suppression pour les cartes dans la modal */
+    .remove-mod-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background-color: rgba(0, 0, 0, 0.6);
       color: white;
       border: none;
-      border-radius: 4px;
-      padding: 5px 10px;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       cursor: pointer;
-      width: 100%;
-      transition: background-color 0.2s ease;
+      z-index: 10;
+      transition: all 0.2s ease;
+      font-size: 10px;
     }
     
-    .remove-selection:hover {
-      background-color: var(--accent-hover);
+    .remove-mod-btn:hover {
+      background-color: var(--accent);
+      transform: scale(1.1);
     }
     
     /* Styles pour le modal */
     .modal-content {
       background-color: var(--bg-dark);
-      max-width: 90%;
-      width: 800px;
-      max-height: 90vh;
-      overflow-y: auto;
-      border-radius: 8px;
+      width: 100%;
+    }
+    
+    .modal-footer {
+      padding: 1.5rem;
+      display: flex;
+      justify-content: center;
+      border-top: 1px solid #30363d;
+      background-color: var(--bg-card);
+    }
+    
+    .modal-generate-btn {
+      background: linear-gradient(to right, var(--accent), var(--accent-secondary));
+      color: white;
+      border: none;
+      padding: 0.8rem 2rem;
+      border-radius: 30px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      font-size: 1rem;
+      min-width: 200px;
+      justify-content: center;
+    }
+    
+    .modal-generate-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(255, 110, 110, 0.4);
+    }
+    
+    .modal-generate-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+    
+    /* Style pour la barre de progression dans la modal */
+    .modal-progress {
+      margin: 0;
+      padding: 1.5rem;
+      background-color: var(--bg-card);
+      border-top: 1px solid #30363d;
+    }
+    
+    @media (max-width: 768px) {
+      .selected-presets-list {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      }
+      
+      .selection-modal {
+        width: 95%;
+      }
     }
   </style>
   <script src="bundle.js" defer></script>
@@ -205,7 +302,7 @@
       </div>
     </div>
 
-    <button class="selection-counter button" id="selectionCounter" onclick="openSelectionModal()">
+    <button class="selection-counter button" id="selectionCounter">
       <div class="counter-badge">
         <i class="fas fa-check-circle"></i> <span id="selectedCount">0</span> préréglages sélectionnés
       </div>
@@ -304,31 +401,6 @@
     // S'assure que la modal est cachée au chargement
     document.addEventListener('DOMContentLoaded', function() {
       document.getElementById('selectionModal').classList.add('hidden');
-      
-      // Ajouter une fonction globale pour ouvrir la modal directement depuis l'attribut onclick
-      window.openSelectionModal = function() {
-        const modal = document.getElementById('selectionModal');
-        modal.classList.remove('hidden');
-        modal.classList.add('visible');
-        document.body.style.overflow = 'hidden';
-      }
-      
-      // Ajouter un gestionnaire d'événement pour fermer la modal
-      document.getElementById('closeSelectionBtn').addEventListener('click', function() {
-        const modal = document.getElementById('selectionModal');
-        modal.classList.remove('visible');
-        modal.classList.add('hidden');
-        document.body.style.overflow = '';
-      });
-      
-      // Fermer la modal en cliquant à l'extérieur
-      document.getElementById('selectionModal').addEventListener('click', function(e) {
-        if (e.target === this) {
-          this.classList.remove('visible');
-          this.classList.add('hidden');
-          document.body.style.overflow = '';
-        }
-      });
     });
   </script>
   
