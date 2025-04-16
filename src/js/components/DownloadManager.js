@@ -5,6 +5,7 @@ import { getFileNameFromUrl, showStatus } from '../utils/helpers';
 
 class DownloadManager {
   constructor() {
+    // Main progress elements
     this.downloadProgressElement = document.getElementById('downloadProgress');
     this.progressBarElement = document.getElementById('progressBar');
     this.downloadedCountElement = document.getElementById('downloadedCount');
@@ -12,15 +13,25 @@ class DownloadManager {
     this.progressStatusElement = document.getElementById('progressStatus');
     this.statusMessageElement = document.getElementById('statusMessage');
     this.generateBtnElement = document.getElementById('generateBtn');
+    
+    // Modal progress elements
+    this.modalDownloadProgressElement = document.getElementById('modalDownloadProgress');
+    this.modalProgressBarElement = document.getElementById('modalProgressBar');
+    this.modalDownloadedCountElement = document.getElementById('modalDownloadedCount');
+    this.modalTotalCountElement = document.getElementById('modalTotalCount');
+    this.modalProgressStatusElement = document.getElementById('modalProgressStatus');
+    this.modalGenerateBtnElement = document.getElementById('modalGenerateBtn');
+    
     this.isGenerating = false;
   }
   
   /**
    * Generate a mod pack from selected URLs
    * @param {Array} selectedUrls - Array of URLs to download and package
+   * @param {boolean} fromModal - Whether the action was triggered from the modal
    * @returns {Promise<void>} Promise that resolves when pack is generated
    */
-  async generatePack(selectedUrls) {
+  async generatePack(selectedUrls, fromModal = true) {
     // Prevent multiple generation attempts
     if (this.isGenerating) return;
     this.isGenerating = true;
@@ -32,13 +43,21 @@ class DownloadManager {
     }
     
     try {
+      // Select the elements to use based on context
+      const progressElement = fromModal ? this.modalDownloadProgressElement : this.downloadProgressElement;
+      const progressBarElement = fromModal ? this.modalProgressBarElement : this.progressBarElement;
+      const downloadedCountElement = fromModal ? this.modalDownloadedCountElement : this.downloadedCountElement;
+      const totalCountElement = fromModal ? this.modalTotalCountElement : this.totalCountElement;
+      const progressStatusElement = fromModal ? this.modalProgressStatusElement : this.progressStatusElement;
+      const generateBtnElement = fromModal ? this.modalGenerateBtnElement : this.generateBtnElement;
+      
       // Initialize progress UI
-      this.downloadedCountElement.textContent = '0';
-      this.totalCountElement.textContent = selectedUrls.length;
-      this.progressBarElement.style.width = '0%';
-      this.progressStatusElement.textContent = 'Initializing download...';
-      this.downloadProgressElement.style.display = 'block';
-      this.generateBtnElement.disabled = true;
+      downloadedCountElement.textContent = '0';
+      totalCountElement.textContent = selectedUrls.length;
+      progressBarElement.style.width = '0%';
+      progressStatusElement.textContent = 'Initializing download...';
+      progressElement.style.display = 'block';
+      generateBtnElement.disabled = true;
       
       const zip = new JSZip();
       const folder = zip.folder("Collection_Heads_Based");
@@ -48,7 +67,7 @@ class DownloadManager {
       for (const file of selectedUrls) {
         try {
           // Update status
-          this.progressStatusElement.textContent = `Downloading ${getFileNameFromUrl(file)}...`;
+          progressStatusElement.textContent = `Downloading ${getFileNameFromUrl(file)}...`;
           
           const response = await fetch(file);
           if (!response.ok) throw new Error('Failed to fetch');
@@ -67,21 +86,21 @@ class DownloadManager {
           
           // Update counter and progress bar
           downloadedCount++;
-          this.downloadedCountElement.textContent = downloadedCount;
+          downloadedCountElement.textContent = downloadedCount;
           const progressPercentage = (downloadedCount / selectedUrls.length) * 100;
-          this.progressBarElement.style.width = `${progressPercentage}%`;
+          progressBarElement.style.width = `${progressPercentage}%`;
         } catch (error) {
           console.error("Error fetching", file, error);
           failedFiles.push(file);
           
           // Update status for failure
-          this.progressStatusElement.textContent = `Failed to download ${getFileNameFromUrl(file)}`;
+          progressStatusElement.textContent = `Failed to download ${getFileNameFromUrl(file)}`;
           await new Promise(resolve => setTimeout(resolve, 1000)); // Brief pause to show error
         }
       }
       
       // Finalize zip
-      this.progressStatusElement.textContent = 'Finalizing your pack...';
+      progressStatusElement.textContent = 'Finalizing your pack...';
       
       const content = await zip.generateAsync({ 
         type: "blob",
@@ -90,11 +109,11 @@ class DownloadManager {
         // Add progress callback for ZIP generation
         onUpdate: metadata => {
           const compressionPercent = Math.round(metadata.percent);
-          this.progressBarElement.style.width = `${compressionPercent}%`;
+          progressBarElement.style.width = `${compressionPercent}%`;
         }
       });
       
-      this.progressStatusElement.textContent = 'Download ready!';
+      progressStatusElement.textContent = 'Download ready!';
       saveAs(content, "Collection_Heads_Based.zip");
       
       if (failedFiles.length > 0) {
@@ -108,8 +127,13 @@ class DownloadManager {
     } finally {
       // Hide progress UI after a short delay
       setTimeout(() => {
-        this.downloadProgressElement.style.display = 'none';
-        this.generateBtnElement.disabled = false;
+        if (fromModal) {
+          this.modalDownloadProgressElement.style.display = 'none';
+          this.modalGenerateBtnElement.disabled = false;
+        } else {
+          this.downloadProgressElement.style.display = 'none';
+          this.generateBtnElement.disabled = false;
+        }
         this.isGenerating = false;
       }, 2000);
     }

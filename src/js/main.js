@@ -6,6 +6,7 @@ import Dropdown from './components/Dropdown';
 import RaceModal from './components/RaceModal';
 import ModList from './components/ModList';
 import DownloadManager from './components/DownloadManager';
+import SelectionModal from './components/SelectionModal';
 import ModService from './services/ModService';
 import StorageService from './services/StorageService';
 import { debounce, showStatus } from './utils/helpers';
@@ -27,6 +28,7 @@ class App {
     this.btDropdown = new Dropdown('btDropdown', this.handleBodyTypeChange.bind(this));
     this.raceModal = new RaceModal(this.handleRaceSelect.bind(this), this.handleRaceSkip.bind(this));
     this.downloadManager = new DownloadManager();
+    this.selectionModal = new SelectionModal(this.modList, this.downloadManager);
     
     // State
     this.currentFilters = {
@@ -88,6 +90,11 @@ class App {
       const selectedUrls = this.modList.getSelectedUrls();
       this.downloadManager.generatePack(selectedUrls);
     }, 1000));
+    
+    // Selection counter click (open modal)
+    this.selectionCounter.addEventListener('click', () => {
+      this.selectionModal.show();
+    });
     
     // Select/Deselect All buttons
     document.querySelector('button[onclick="selectAll(true)"]').addEventListener('click', (e) => {
@@ -298,19 +305,31 @@ class App {
     this.raceDropdown.setValue('');
     this.btDropdown.setValue('');
     
-    // Reload mods view
-    this.filterMods();
-    this.updateFilterDropdowns();
+    // Clear selections
+    this.modList.selectAll(false);
     
-    showStatus('success', 'All filters and selections have been cleared.', this.statusMessage);
+    // Apply filters
+    this.filterMods();
+    
+    showStatus('success', 'Preferences and selections cleared.', this.statusMessage);
   }
 }
 
-// Initialize the app when the DOM is ready
-document.addEventListener('DOMContentLoaded', () => {
-  window.app = new App();
+// Initialize app on load
+window.addEventListener('DOMContentLoaded', () => {
+  const app = new App();
+  
+  // Add global event handlers
+  window.selectAll = (state) => {
+    if (app.modList) {
+      app.modList.selectAll(state);
+    }
+  };
+  
+  window.clearStorage = () => {
+    if (app) {
+      app.clearStorage();
+    }
+  };
 });
-
-// Make utilities available globally for compatibility with old HTML
-window.selectAll = (state) => window.app.modList.selectAll(state);
 window.clearStorage = () => window.app.clearStorage();

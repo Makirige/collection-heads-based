@@ -2,11 +2,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
 :root {
-  --fa-style-family-brands: "Font Awesome 6 Brands";
-  --fa-font-brands: normal 400 1em/1 "Font Awesome 6 Brands";
-  --fa-font-regular: normal 400 1em/1 "Font Awesome 6 Free";
-  --fa-style-family-classic: "Font Awesome 6 Free";
-  --fa-font-solid: normal 900 1em/1 "Font Awesome 6 Free";
   --bg-dark: #0d1117;
   --bg-card: #161b22;
   --bg-card-hover: #21262d;
@@ -482,13 +477,6 @@ h1::after {
   display: flex;
   align-items: center;
   gap: 5px;
-  font-family: 'Poppins', sans-serif;
-  text-align: center;
-  font-size: 0.75rem;
-}
-
-.badge.link-badge a i {
-  font-size: 0.7rem;
 }
 
 .badge .badge-icon {
@@ -912,4 +900,4 @@ footer {
   border: 1px solid rgba(137, 166, 207, 0.5);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
   font-size: 0.75rem;
-} 
+}

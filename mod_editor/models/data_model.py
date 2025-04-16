@@ -16,6 +16,7 @@ class ModEntry:
         self.body_type = data.get('bodyType', '')
         self.image_path = data.get('imagePath', '')
         self.download_url = data.get('downloadUrl', '')
+        self.info_link = data.get('infoLink', '')
         
     def to_dict(self) -> Dict[str, Any]:
         """Convertit l'objet en dictionnaire pour le JSON"""
@@ -26,7 +27,8 @@ class ModEntry:
             'race': self.race,
             'bodyType': self.body_type,
             'imagePath': self.image_path,
-            'downloadUrl': self.download_url
+            'downloadUrl': self.download_url,
+            'infoLink': self.info_link
         }
     
     @property

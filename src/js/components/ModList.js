@@ -56,6 +56,9 @@ class ModList {
           </a>` 
         : '';
       
+      // Get info link - use mod-specific link if available, otherwise use default
+      const infoLink = mod.infoLink || 'https://bg3.wiki';
+      
       card.innerHTML = `
         <input type="checkbox" value="${mod.downloadUrl}" ${isChecked} />
         <div class="image-container">
@@ -75,7 +78,7 @@ class ModList {
             </div>
             <div class="badge-link-wrapper">
               <div class="badge link-badge">
-                <a href="https://bg3.wiki" target="_blank" onclick="event.stopPropagation();">
+                <a href="${infoLink}" target="_blank" onclick="event.stopPropagation();">
                   <i class="fas fa-info-circle"></i> More info
                 </a>
               </div>

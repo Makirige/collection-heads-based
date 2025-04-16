@@ -73,6 +73,10 @@ class ModEditorDialog(QDialog):
         self.download_url_input = QLineEdit()
         form_layout.addRow("URL de téléchargement:", self.download_url_input)
         
+        # URL d'information
+        self.info_link_input = QLineEdit()
+        form_layout.addRow("URL d'information:", self.info_link_input)
+        
         # Boutons
         button_layout = QHBoxLayout()
         self.ok_button = QPushButton("OK")
@@ -113,6 +117,7 @@ class ModEditorDialog(QDialog):
             
         self.image_path_input.setText(self.mod.image_path)
         self.download_url_input.setText(self.mod.download_url)
+        self.info_link_input.setText(self.mod.info_link)
         
     def update_image_preview(self):
         """Met à jour l'aperçu de l'image"""
@@ -161,7 +166,8 @@ class ModEditorDialog(QDialog):
             'race': self.race_combo.currentText(),
             'bodyType': self.body_type_combo.currentText(),
             'imagePath': self.image_path_input.text().strip(),
-            'downloadUrl': self.download_url_input.text().strip()
+            'downloadUrl': self.download_url_input.text().strip(),
+            'infoLink': self.info_link_input.text().strip()
         }
         
         return ModEntry(data) 
