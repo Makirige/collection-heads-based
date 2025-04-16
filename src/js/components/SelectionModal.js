@@ -49,7 +49,7 @@ class SelectionModal {
       this.downloadManager.generatePack(selectedUrls, true);
     });
     
-    // Add an event listener for the Escape key
+    // Ajouter un écouteur d'événement pour la touche Escape
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && !this.modalElement.classList.contains('hidden')) {
         this.hide();
@@ -66,7 +66,7 @@ class SelectionModal {
     this.modalElement.classList.add('visible');
     document.body.style.overflow = 'hidden'; // Prevent scrolling behind modal
     
-    // Focus on the download button if presets are selected
+    // Mettre le focus sur le bouton de téléchargement si des préréglages sont sélectionnés
     if (Object.keys(this.modList.currentSelections).length > 0) {
       this.modalGenerateBtn.focus();
     }

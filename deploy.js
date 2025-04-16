@@ -5,54 +5,60 @@ const path = require('path');
 const distDir = path.join(__dirname, 'dist');
 const rootDir = __dirname;
 
-// Liste des éléments à ne pas copier depuis dist/
-const excludedItems = [
-  'dist' // Éviter de copier dist/dist de manière récursive
+// Files to copy to root
+const filesToCopy = [
+  'index.html',
+  'bundle.js',
+  'styles.css',
+  'mods.json'
+];
+
+// Directories to copy
+const dirsToCopy = [
+  'images'
 ];
 
 // Copy files
 console.log('Starting GitHub Pages deployment...');
-console.log('Copying all files from dist to root...');
+console.log('Copying files from dist to root...');
 
-try {
-  // Lire le contenu du répertoire dist de manière synchrone
-  const dirents = fs.readdirSync(distDir, { withFileTypes: true });
-
-  // Copier chaque élément qui n'est pas dans la liste d'exclusion
-  dirents.forEach(dirent => {
-    const itemName = dirent.name;
-    
-    // Ignorer les éléments exclus
-    if (excludedItems.includes(itemName)) {
-      console.log(`Skipping excluded item: ${itemName}`);
-      return;
-    }
-    
-    const srcPath = path.join(distDir, itemName);
-    const destPath = path.join(rootDir, itemName);
-    
-    try {
-      if (dirent.isDirectory()) {
-        // Pour les répertoires, supprimer d'abord s'ils existent déjà
-        if (fs.existsSync(destPath)) {
-          fs.removeSync(destPath);
-          console.log(`Removed existing directory: ${itemName}`);
-        }
-        
-        // Copier le répertoire
-        fs.copySync(srcPath, destPath);
-        console.log(`Copied directory: ${itemName}`);
-      } else {
-        // Copier le fichier
-        fs.copyFileSync(srcPath, destPath);
-        console.log(`Copied file: ${itemName}`);
-      }
-    } catch (copyErr) {
-      console.error(`Error copying ${itemName}:`, copyErr);
-    }
-  });
+// Copy individual files
+filesToCopy.forEach(file => {
+  const srcPath = path.join(distDir, file);
+  const destPath = path.join(rootDir, file);
   
-  console.log('Deployment completed successfully!');
-} catch (err) {
-  console.error('Error during deployment:', err);
-}
+  if (fs.existsSync(srcPath)) {
+    try {
+      fs.copyFileSync(srcPath, destPath);
+      console.log(`Copied: ${file}`);
+    } catch (err) {
+      console.error(`Error copying ${file}:`, err);
+    }
+  } else {
+    console.warn(`Warning: ${file} does not exist in dist directory`);
+  }
+});
+
+// Copy directories
+dirsToCopy.forEach(dir => {
+  const srcDir = path.join(distDir, dir);
+  const destDir = path.join(rootDir, dir);
+  
+  if (fs.existsSync(srcDir)) {
+    try {
+      // Remove existing directory first to avoid merge issues
+      if (fs.existsSync(destDir)) {
+        fs.removeSync(destDir);
+      }
+      
+      fs.copySync(srcDir, destDir);
+      console.log(`Copied directory: ${dir}`);
+    } catch (err) {
+      console.error(`Error copying directory ${dir}:`, err);
+    }
+  } else {
+    console.warn(`Warning: ${dir} directory does not exist in dist`);
+  }
+});
+
+console.log('Deployment completed!');
