@@ -1,58 +1,65 @@
-# Collection Heads Based - BG3
+# Éditeur de Mod Heads
 
-A tool for creating custom head preset packs for Baldur's Gate 3.
+Application de gestion des mods de têtes pour le fichier `mods.json`.
 
-## Features
+## Fonctionnalités
 
-- Browse head presets by race and body type
-- Search for specific presets
-- Select multiple presets to include in your pack
-- Generate a zip file with selected presets
-- Compatible with BG3 mod managers
+- Visualisation des mods existants
+- Ajout de nouveaux mods
+- Modification des mods existants
+- Suppression de mods
+- Filtrage par ID ou par race
+- Prévisualisation des images des mods
+- Validation des données saisies
 
-## Development
+## Installation
 
-This project uses Rollup for bundling JavaScript and CSS.
-
-### Setup
+1. Assurez-vous d'avoir Python 3.8 ou plus récent installé
+2. Installez les dépendances :
 
 ```bash
-# Install dependencies
-npm install
-
-# Start development server
-npm run dev
-
-# Build for production
-npm run build
-
-# Deploy to GitHub Pages
-npm run deploy
+pip install -r requirements.txt
 ```
 
-### Project Structure
+## Utilisation
 
-```
-collection-heads-based/
-├── src/                  # Source code
-│   ├── js/               # JavaScript modules
-│   │   ├── components/   # UI components
-│   │   ├── services/     # Service modules
-│   │   ├── utils/        # Utility functions
-│   │   └── main.js       # Main entry point
-│   └── css/              # CSS styles
-├── public/               # Static files to copy to dist
-├── docs/                 # Documentation
-└── images/               # Image assets
+Lancez l'application avec la commande suivante :
+
+```bash
+cd mod_editor
+python main.py
 ```
 
-For more details on the architecture, see the [architecture documentation](docs/architecture.md).
+## Structure du projet
 
-## GitHub Pages
+```
+mod_editor/
+├── models/              # Modèles de données
+│   ├── __init__.py
+│   └── data_model.py    # Gestion des données JSON
+├── views/               # Interfaces utilisateur
+│   ├── __init__.py
+│   ├── main_window.py   # Fenêtre principale
+│   └── mod_editor.py    # Formulaire d'édition
+├── controllers/         # Contrôleurs
+│   ├── __init__.py
+│   └── mod_controller.py # Liaison modèle-vue
+├── utils/               # Utilitaires
+│   ├── __init__.py
+│   ├── image_utils.py   # Gestion des images
+│   └── validators.py    # Validation des entrées
+├── __init__.py
+└── main.py              # Point d'entrée principal
+```
 
-This project is deployed to GitHub Pages at:
-https://makirige.github.io/collection-heads-based/
+## Format des données
 
-## License
+Chaque entrée de mod possède les champs suivants :
 
-ISC
+- `id` : Identifiant unique du mod
+- `name` : Nom technique
+- `displayName` : Nom d'affichage
+- `race` : Type de race (human, elf, etc.)
+- `bodyType` : Type de corps
+- `imagePath` : Chemin vers l'image
+- `downloadUrl` : URL de téléchargement

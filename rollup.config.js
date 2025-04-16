@@ -45,7 +45,7 @@ export default {
     !production && serve({
       open: true,
       contentBase: ['dist'],
-      port: 8080,
+      port: 8081,
     }),
     !production && livereload({ watch: 'dist' }),
     
