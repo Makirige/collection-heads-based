@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -22,7 +22,7 @@
       font-display: swap;
     }
     
-    /* Style added directly here to ensure it works */
+    /* Style ajouté directement ici pour s'assurer que ça fonctionne */
     .modal-overlay.hidden {
       display: none !important;
     }
@@ -37,7 +37,7 @@
       to { opacity: 1; }
     }
     
-    /* Modal improvements */
+    /* Amélioration de la modal */
     .selection-modal {
       animation: slideIn 0.4s ease forwards;
       transform-origin: top;
@@ -89,7 +89,7 @@
       to { transform: translateY(0); opacity: 1; }
     }
     
-    /* Style to make the counter truly clickable */
+    /* Style pour rendre le compteur vraiment cliquable */
     .selection-counter {
       pointer-events: auto !important;
       cursor: pointer !important;
@@ -150,7 +150,7 @@
       font-size: 1.3rem !important;
     }
     
-    /* Styles for cards in the modal */
+    /* Styles pour les cartes dans la modal */
     .selected-presets-list {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
@@ -160,7 +160,7 @@
       max-height: 70vh;
     }
     
-    /* Delete button for cards in the modal */
+    /* Bouton de suppression pour les cartes dans la modal */
     .remove-mod-btn {
       position: absolute;
       top: 10px;
@@ -185,7 +185,7 @@
       transform: scale(1.1);
     }
     
-    /* Styles for the modal */
+    /* Styles pour le modal */
     .modal-content {
       background-color: var(--bg-dark);
       width: 100%;
@@ -228,7 +228,7 @@
       box-shadow: none;
     }
     
-    /* Style for the progress bar in the modal */
+    /* Style pour la barre de progression dans la modal */
     .modal-progress {
       margin: 0;
       padding: 1.5rem;
@@ -252,7 +252,7 @@
   <header>
     <div class="container">
       <h1><span class="maki">Maki</span><span class="apostrophe">'s</span> <span class="mugs">Mugs</span></h1>
-      <p class="subtitle">A collection of head presets for Baldur's Gate 3 to download individually from ModHQ.</p>
+      <p class="subtitle">Une collection de préréglages de têtes pour Baldur's Gate 3 à télécharger individuellement depuis ModHQ.</p>
     </div>
   </header>
 
@@ -260,13 +260,13 @@
     <div class="controls">
       <div class="search-control">
         <i class="fas fa-search search-icon"></i>
-        <input type="text" id="searchInput" placeholder="Search for a preset...">
+        <input type="text" id="searchInput" placeholder="Rechercher un préréglage...">
       </div>
       
       <div class="custom-dropdown" id="raceDropdown">
         <div class="dropdown-selected" data-value="">
-          <img src="images/races/150px-Race_Human.png" alt="All races" class="dropdown-icon" id="raceSelectedIcon">
-          <span class="dropdown-text" id="raceSelectedText">All races</span>
+          <img src="images/races/150px-Race_Human.png" alt="Toutes les races" class="dropdown-icon" id="raceSelectedIcon">
+          <span class="dropdown-text" id="raceSelectedText">Toutes les races</span>
           <i class="fas fa-chevron-down dropdown-arrow"></i>
         </div>
         <div class="dropdown-options" id="raceOptions">
@@ -276,143 +276,143 @@
       
       <div class="custom-dropdown" id="btDropdown">
         <div class="dropdown-selected">
-          <span class="dropdown-text" id="btSelectedText">Body type</span>
+          <span class="dropdown-text" id="btSelectedText">Type de corps</span>
           <i class="fas fa-chevron-down dropdown-arrow"></i>
         </div>
         <div class="dropdown-options" id="btOptions">
           <div class="dropdown-option" data-value="">
-            <span>All types</span>
+            <span>Tous les types</span>
           </div>
           <div class="dropdown-option" data-value="bt1">
-            <span>BT1 - Female</span>
+            <span>BT1 - Féminin</span>
           </div>
           <div class="dropdown-option" data-value="bt2">
-            <span>BT2 - Male</span>
+            <span>BT2 - Masculin</span>
           </div>
           <div class="dropdown-option" data-value="bt4">
-            <span>BT4 - Strong male</span>
+            <span>BT4 - Masculin fort</span>
           </div>
         </div>
       </div>
       
       <div class="control-group">
-        <button class="small" onclick="selectAll(true)"><i class="fas fa-check-square"></i> Select all</button>
-        <button class="small" onclick="selectAll(false)"><i class="fas fa-square"></i> Deselect all</button>
-        <button class="small" onclick="clearStorage()"><i class="fas fa-trash"></i> Clear all</button>
+        <button class="small" onclick="selectAll(true)"><i class="fas fa-check-square"></i> Tout sélectionner</button>
+        <button class="small" onclick="selectAll(false)"><i class="fas fa-square"></i> Tout désélectionner</button>
+        <button class="small" onclick="clearStorage()"><i class="fas fa-trash"></i> Tout effacer</button>
       </div>
     </div>
 
     <button class="selection-counter button" id="selectionCounter">
       <div class="counter-badge">
-        <i class="fas fa-check-circle"></i> <span id="selectedCount">0</span> selected presets
+        <i class="fas fa-check-circle"></i> <span id="selectedCount">0</span> préréglages sélectionnés
       </div>
     </button>
 
-    <div class="mod-count" id="modCount">Loading presets...</div>
+    <div class="mod-count" id="modCount">Chargement des préréglages...</div>
 
     <div class="status" id="statusMessage"></div>
     
     <div class="loader" id="loader">
       <div class="loader-spinner"></div>
-      <p>Generating your pack...</p>
+      <p>Génération de votre pack...</p>
     </div>
 
     <div class="download-progress" id="downloadProgress">
       <div class="progress-header">
-        <h3>Preparing your head presets</h3>
+        <h3>Préparation de vos préréglages de têtes</h3>
         <div class="progress-stats">
-          <span id="downloadedCount">0</span> / <span id="totalCount">0</span> files
+          <span id="downloadedCount">0</span> / <span id="totalCount">0</span> fichiers
         </div>
       </div>
       <div class="progress-bar-container">
         <div class="progress-bar" id="progressBar"></div>
       </div>
-      <p class="progress-status" id="progressStatus">Initializing download...</p>
+      <p class="progress-status" id="progressStatus">Initialisation du téléchargement...</p>
     </div>
 
     <div class="mod-list" id="modList">
       <!-- Mod cards will be generated here via JavaScript -->
     </div>
     
-    <button class="generate-btn" id="generateBtn"><i class="fas fa-download"></i> Generate my pack</button>
+    <button class="generate-btn" id="generateBtn"><i class="fas fa-download"></i> Générer mon pack</button>
   </div>
 
   <footer>
     <div class="container">
-      <p>Maki's Mugs for Baldur's Gate 3 &copy; 2023-2024</p>
+      <p>Maki's Mugs pour Baldur's Gate 3 &copy; 2023-2024</p>
     </div>
   </footer>
 
-  <!-- Race selection modal -->
+  <!-- Modal de sélection de race -->
   <div class="modal-overlay" id="raceModal">
     <div class="race-selection-modal">
-      <h2>Choose a race</h2>
+      <h2>Choisir une race</h2>
       <div class="race-grid" id="raceGrid">
-        <!-- Race options generated by JavaScript -->
+        <!-- Options de race générées par JavaScript -->
       </div>
       <div class="modal-actions">
-        <button class="confirm-race-btn" id="confirmRaceBtn" disabled>Confirm</button>
-        <button class="skip-race-btn" id="skipRaceBtn">Skip</button>
+        <button class="confirm-race-btn" id="confirmRaceBtn" disabled>Confirmer</button>
+        <button class="skip-race-btn" id="skipRaceBtn">Passer</button>
       </div>
     </div>
   </div>
 
-  <!-- Selected presets modal -->
+  <!-- Modal de presets sélectionnés -->
   <div class="modal-overlay hidden" id="selectionModal">
     <div class="selection-modal">
       <div class="modal-header">
-        <h2>Selected presets</h2>
+        <h2>Préréglages sélectionnés</h2>
         <button class="close-modal-btn" id="closeSelectionBtn">
           <i class="fas fa-times"></i>
         </button>
       </div>
       
       <div class="modal-content">
-        <p id="noSelectionsMessage" style="display: none;">No presets selected yet.</p>
+        <p id="noSelectionsMessage" style="display: none;">Aucun préréglage sélectionné pour l'instant.</p>
         <div class="selected-presets-list" id="selectedPresetsList">
-          <!-- Selected presets will be generated here via JavaScript -->
+          <!-- Les presets sélectionnés seront générés ici via JavaScript -->
         </div>
       </div>
       
       <div class="modal-footer">
         <button class="modal-generate-btn" id="modalGenerateBtn">
-          <i class="fas fa-download"></i> Generate my pack
+          <i class="fas fa-download"></i> Générer mon pack
         </button>
       </div>
       
-      <!-- Progress bar in the modal -->
+      <!-- Barre de progression dans la modal -->
       <div class="download-progress modal-progress" id="modalDownloadProgress" style="display: none;">
         <div class="progress-header">
-          <h3>Preparing your head presets</h3>
+          <h3>Préparation de vos préréglages de têtes</h3>
           <div class="progress-stats">
-            <span id="modalDownloadedCount">0</span> / <span id="modalTotalCount">0</span> files
+            <span id="modalDownloadedCount">0</span> / <span id="modalTotalCount">0</span> fichiers
           </div>
         </div>
         <div class="progress-bar-container">
           <div class="progress-bar" id="modalProgressBar"></div>
         </div>
-        <p class="progress-status" id="modalProgressStatus">Initializing download...</p>
+        <p class="progress-status" id="modalProgressStatus">Initialisation du téléchargement...</p>
       </div>
     </div>
   </div>
 
-  <!-- Additional script to ensure the modal is hidden -->
+  <!-- Script supplémentaire pour s'assurer que la modal est masquée -->
   <script>
-    // Ensures the modal is hidden on loading
+    // S'assure que la modal est cachée au chargement
     document.addEventListener('DOMContentLoaded', function() {
       document.getElementById('selectionModal').classList.add('hidden');
     });
   </script>
   
-  <!-- Debug script to display test cards -->
+  <!-- Script de débogage pour afficher des cartes de test -->
   <script>
     document.addEventListener('DOMContentLoaded', function() {
-      // Test data for presets
+      // Données de test pour des préréglages
       const testMods = [
         {
           "id": "test1",
           "name": "test-head-1",
-          "displayName": "Test Preset 1",
+          "displayName": "Test Préréglage 1",
           "race": "human",
           "bodyType": "bt1",
           "imagePath": "https://via.placeholder.com/200x200",
@@ -421,7 +421,7 @@
         {
           "id": "test2",
           "name": "test-head-2",
-          "displayName": "Test Preset 2",
+          "displayName": "Test Préréglage 2",
           "race": "elf",
           "bodyType": "bt2",
           "imagePath": "https://via.placeholder.com/200x200",
@@ -429,9 +429,9 @@
         }
       ];
       
-      console.log('Page loaded - displaying test cards');
+      console.log('Page chargée - affichage des cartes de test');
       
-      // Creation of test cards in the main list
+      // Création des cartes de test dans la liste principale
       testMods.forEach(mod => {
         const card = document.createElement('div');
         card.className = 'mod-card';
@@ -447,11 +447,11 @@
         document.getElementById('modList').appendChild(card);
       });
       
-      // Make the selection counter visible
+      // Rendre le compteur de sélection visible
       document.getElementById('selectedCount').textContent = '2';
       document.getElementById('selectionCounter').classList.add('show');
       
-      // Add cards in the modal
+      // Ajouter des cartes dans la modal
       const modalList = document.getElementById('selectedPresetsList');
       testMods.forEach(mod => {
         const card = document.createElement('div');
@@ -474,7 +474,7 @@
         modalList.appendChild(card);
       });
       
-      // Hide the no selections message
+      // Cacher le message d'absence de sélections
       document.getElementById('noSelectionsMessage').style.display = 'none';
     });
   </script>
