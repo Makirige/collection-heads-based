@@ -1,0 +1,19 @@
+# Exclusions pour Jekyll / GitHub Pages build
+exclude:
+  - node_modules/
+  - frontend/
+  - frontend_src/
+  - mods_feature/
+  - backend/
+  - scripts/
+  - dist/        # Le dossier dist est la sortie de Rollup, pas l'entrée de Jekyll
+  - rollup.config.js
+  - package.json
+  - package-lock.json
+  - babel.config.json
+  - README.md    # Souvent géré séparément par GitHub
+  - README.fr.md
+  - vendor/      # Exclusions Jekyll par défaut
+  - Gemfile
+  - Gemfile.lock
+# Ajouter d'autres fichiers/dossiers spécifiques au projet si nécessaire 
