@@ -11,12 +11,23 @@ class Dropdown {
   constructor(id, onChange) {
     this.id = id;
     this.dropdownElement = document.getElementById(id);
+    
+    if (!this.dropdownElement) {
+      console.error(`[Dropdown ${id}] Error: Element with ID '${id}' not found.`);
+      return; // Stop if the main element is not found
+    }
+    
     this.selectedElement = this.dropdownElement.querySelector('.dropdown-selected');
     this.optionsElement = this.dropdownElement.querySelector('.dropdown-options');
     this.selectedTextElement = this.dropdownElement.querySelector('.dropdown-text');
     this.selectedIconElement = this.dropdownElement.querySelector('.dropdown-icon');
     this.onChange = onChange || (() => {});
     
+    if (!this.selectedElement || !this.optionsElement) {
+      console.error(`[Dropdown ${id}] Error: Could not find .dropdown-selected or .dropdown-options within #${id}. Check HTML structure.`);
+      return; // Stop if crucial elements are missing
+    }
+
     this.setupEventListeners();
   }
   
@@ -49,6 +60,7 @@ class Dropdown {
    * Toggle dropdown open/closed
    */
   toggle() {
+    console.log('[Dropdown ${this.id}] Toggle called. Options element:', this.optionsElement); // Log pour débogage
     // Close all other dropdowns first
     document.querySelectorAll('.dropdown-options').forEach(dropdown => {
       if (dropdown !== this.optionsElement) {
@@ -63,8 +75,10 @@ class Dropdown {
     });
     
     // Toggle this dropdown
-    this.optionsElement.classList.toggle('show');
-    this.selectedElement.classList.toggle('active');
+    console.log(`[Dropdown ${this.id}] Classes BEFORE toggle:`, this.optionsElement?.classList); // Log pour débogage
+    this.optionsElement?.classList.toggle('show');
+    this.selectedElement?.classList.toggle('active');
+    console.log(`[Dropdown ${this.id}] Classes AFTER toggle:`, this.optionsElement?.classList); // Log pour débogage
   }
   
   /**
