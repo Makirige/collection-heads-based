@@ -158,6 +158,8 @@
       padding: 1.5rem;
       overflow-y: auto;
       max-height: 70vh;
+      scrollbar-width: thin;
+      scrollbar-color: #2e2e42 #0d1117;
     }
     
     /* Bouton de suppression pour les cartes dans la modal */
@@ -301,7 +303,7 @@
       </div>
     </div>
 
-    <button class="selection-counter button" id="selectionCounter" onclick="openSelectionModal()">
+    <button class="selection-counter button" id="selectionCounter">
       <div class="counter-badge">
         <i class="fas fa-check-circle"></i> <span id="selectedCount">0</span> préréglages sélectionnés
       </div>
