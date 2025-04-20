@@ -402,38 +402,7 @@
       document.getElementById('selectionModal').classList.add('hidden');
     });
   </script>
-    <!-- Additional script to ensure modal is hidden -->
-    <script>
-      // Ensures modal is hidden on load
-      document.addEventListener('DOMContentLoaded', function() {
-        document.getElementById('selectionModal').classList.add('hidden');
-        
-        // Add a global function to open modal directly from onclick attribute
-        window.openSelectionModal = function() {
-          const modal = document.getElementById('selectionModal');
-          modal.classList.remove('hidden');
-          modal.classList.add('visible');
-          document.body.style.overflow = 'hidden';
-        }
-        
-        // Add event listener to close modal
-        document.getElementById('closeSelectionBtn').addEventListener('click', function() {
-          const modal = document.getElementById('selectionModal');
-          modal.classList.remove('visible');
-          modal.classList.add('hidden');
-          document.body.style.overflow = '';
-        });
-        
-        // Close modal when clicking outside
-        document.getElementById('selectionModal').addEventListener('click', function(e) {
-          if (e.target === this) {
-            this.classList.remove('visible');
-            this.classList.add('hidden');
-            document.body.style.overflow = '';
-          }
-        });
-      });
-    </script>
+
   <!-- Script de débogage pour afficher des cartes de test -->
   <script>
     document.addEventListener('DOMContentLoaded', function() {
