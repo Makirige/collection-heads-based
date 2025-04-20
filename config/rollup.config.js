@@ -10,7 +10,7 @@ import babel from '@rollup/plugin-babel';
 const production = !process.env.ROLLUP_WATCH;
 
 export default {
-  input: 'frontend_src/js/main.js',
+  input: 'src/frontend/js/main.js',
   output: {
     file: 'dist/bundle.js',
     format: 'iife',
@@ -35,10 +35,10 @@ export default {
     // Copy static assets
     copy({
       targets: [
-        { src: 'frontend_src/index.html', dest: 'dist' },
-        { src: 'frontend_src/images/**/*', dest: 'dist/images' },
-        { src: 'frontend_src/fonts/**/*', dest: 'dist/fonts' },
-        { src: 'mods_feature/mods.json', dest: 'dist' }
+        { src: 'src/frontend/index.html', dest: 'dist' },
+        { src: 'src/frontend/images/**/*', dest: 'dist/images' },
+        { src: 'src/frontend/fonts/**/*', dest: 'dist/fonts' },
+        { src: 'src/backend/mods.json', dest: 'dist' }
       ]
     }),
     

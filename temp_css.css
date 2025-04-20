@@ -1,4 +1,0 @@
-/* Ajouter ce style dans src/css/styles.css avant les styles de modal-overlay */
-.modal-overlay.hidden {
-  display: none;
-} 
