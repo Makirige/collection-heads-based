@@ -27,6 +27,14 @@
       display: none !important;
     }
     
+    /* Styles additionnels pour gérer l'état après annulation */
+    .modal-overlay[style*="display: none"] {
+      display: none !important;
+      opacity: 0 !important;
+      visibility: hidden !important;
+      pointer-events: none !important;
+    }
+    
     .modal-overlay.visible {
       display: flex !important;
       animation: fadeIn 0.3s ease forwards;
@@ -238,6 +246,134 @@
       border-top: 1px solid #30363d;
     }
     
+    /* Centrer davantage la barre de progression */
+    .download-progress.modal-progress {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto;
+      width: 80%;
+      max-width: 800px;
+      padding: 2rem;
+      border-radius: 10px;
+      margin-top: 1rem;
+      margin-bottom: 1rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+    
+    .download-progress.modal-progress .progress-header {
+      width: 100%;
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+    
+    .download-progress.modal-progress .progress-bar-container {
+      width: 100%;
+    }
+    
+    .download-progress.modal-progress .progress-status {
+      text-align: center;
+      margin-top: 1rem;
+      margin-bottom: 1rem;
+    }
+    
+    /* Style pour le bouton d'annulation */
+    .cancel-download-btn {
+      margin: 1.5rem auto 0;
+      padding: 0.8rem 2rem;
+      background: linear-gradient(to right, var(--accent), var(--accent-secondary));
+      color: white;
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.8rem;
+      transition: all 0.3s ease;
+      z-index: 1000;
+      position: relative;
+      min-width: 180px;
+      box-shadow: 0 4px 10px rgba(255, 110, 110, 0.3);
+    }
+    
+    /* Style pour accentuer le bouton d'annulation */
+    .cancel-download-btn:after {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-radius: 30px;
+      top: 0;
+      left: 0;
+      background: transparent;
+      box-shadow: 0 0 0 4px rgba(255, 80, 80, 0.2);
+      animation: pulsate 2s infinite;
+      z-index: -1;
+    }
+    
+    @keyframes pulsate {
+      0% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.05); opacity: 0.7; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    
+    .cancel-download-btn:hover {
+      background: linear-gradient(to right, #ff5a5a, #ff7676);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(255, 110, 110, 0.5);
+    }
+    
+    .cancel-download-btn i {
+      font-size: 1.1rem;
+    }
+    
+    /* Style pour le message d'alerte */
+    .status.warning {
+      background-color: rgba(255, 150, 50, 0.2);
+      color: #ff9632;
+      border-color: #ff9632;
+      animation: fadeInOut 3s ease forwards;
+    }
+    
+    /* Style pour la notification d'annulation dans le modal */
+    .cancel-notification {
+      margin: 0 auto 1.5rem;
+      padding: 1rem 1.5rem;
+      background-color: rgba(255, 150, 50, 0.2);
+      color: #ff9632;
+      border: 1px solid #ff9632;
+      border-radius: 8px;
+      text-align: center;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.8rem;
+      width: 100%;
+      max-width: 600px;
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+    
+    .cancel-notification.fade-out {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    
+    .cancel-notification i {
+      font-size: 1.1rem;
+    }
+    
+    @keyframes fadeInOut {
+      0% { opacity: 0; transform: translateY(-10px); }
+      15% { opacity: 1; transform: translateY(0); }
+      85% { opacity: 1; transform: translateY(0); }
+      100% { opacity: 0; transform: translateY(-10px); }
+    }
+    
     @media (max-width: 768px) {
       .selected-presets-list {
         grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -246,6 +382,19 @@
       .selection-modal {
         width: 95%;
       }
+    }
+    
+    /* Conteneur pour centrer la barre de progression */
+    .download-progress {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    
+    .download-progress .progress-header,
+    .download-progress .progress-bar-container {
+      width: 100%;
+      max-width: 800px;
     }
   </style>
 </head>
@@ -318,7 +467,7 @@
       <p>Génération de votre pack...</p>
     </div>
 
-    <div class="download-progress" id="downloadProgress">
+    <div class="download-progress" id="downloadProgress" style="display: none;">
       <div class="progress-header">
         <h3>Préparation de vos préréglages de têtes</h3>
         <div class="progress-stats">
@@ -329,6 +478,7 @@
         <div class="progress-bar" id="progressBar"></div>
       </div>
       <p class="progress-status" id="progressStatus">Initialisation du téléchargement...</p>
+      <button class="cancel-download-btn" id="mainCancelDownloadBtn" onclick="if(window.cancelActiveDownload) window.cancelActiveDownload(); return false;"><i class="fas fa-ban"></i> Annuler le téléchargement</button>
     </div>
 
     <div class="mod-list" id="modList">
@@ -368,20 +518,7 @@
         </button>
       </div>
       
-      <div class="modal-content">
-        <p id="noSelectionsMessage" style="display: none;">Aucun préréglage sélectionné pour l'instant.</p>
-        <div class="selected-presets-list" id="selectedPresetsList">
-          <!-- Les presets sélectionnés seront générés ici via JavaScript -->
-        </div>
-      </div>
-      
-      <div class="modal-footer">
-        <button class="modal-generate-btn" id="modalGenerateBtn">
-          <i class="fas fa-download"></i> Générer mon pack
-        </button>
-      </div>
-      
-      <!-- Barre de progression dans la modal -->
+      <!-- Barre de progression déplacée en haut de la modal -->
       <div class="download-progress modal-progress" id="modalDownloadProgress" style="display: none;">
         <div class="progress-header">
           <h3>Préparation de vos préréglages de têtes</h3>
@@ -393,6 +530,26 @@
           <div class="progress-bar" id="modalProgressBar"></div>
         </div>
         <p class="progress-status" id="modalProgressStatus">Initialisation du téléchargement...</p>
+        <button class="cancel-download-btn" id="cancelDownloadBtn" onclick="if(window.cancelActiveDownload) window.cancelActiveDownload(); return false;"><i class="fas fa-ban"></i> Annuler le téléchargement</button>
+      </div>
+      
+      <div class="modal-content">
+        <!-- Message d'annulation affiché au-dessus des cards -->
+        <div class="cancel-notification" id="modalCancelNotification" style="display: none;">
+          <i class="fas fa-exclamation-triangle"></i>
+          <span>Téléchargement interrompu</span>
+        </div>
+        
+        <p id="noSelectionsMessage" style="display: none;">Aucun préréglage sélectionné pour l'instant.</p>
+        <div class="selected-presets-list" id="selectedPresetsList">
+          <!-- Les presets sélectionnés seront générés ici via JavaScript -->
+        </div>
+      </div>
+      
+      <div class="modal-footer">
+        <button class="modal-generate-btn" id="modalGenerateBtn">
+          <i class="fas fa-download"></i> Générer mon pack
+        </button>
       </div>
     </div>
   </div>
@@ -402,6 +559,20 @@
     // S'assure que la modal est cachée au chargement
     document.addEventListener('DOMContentLoaded', function() {
       document.getElementById('selectionModal').classList.add('hidden');
+      
+      // S'assurer que le bouton "Passer" ferme correctement le modal de race
+      const skipRaceBtn = document.getElementById('skipRaceBtn');
+      if (skipRaceBtn) {
+        const originalOnclick = skipRaceBtn.onclick;
+        skipRaceBtn.onclick = function(e) {
+          const raceModal = document.getElementById('raceModal');
+          if (raceModal) {
+            raceModal.classList.add('hidden');
+            raceModal.style.display = 'none';
+          }
+          if (originalOnclick) originalOnclick.call(this, e);
+        };
+      }
     });
   </script>
 
@@ -480,5 +651,6 @@
     });
   </script>
   <script src="bundle.js"></script>
+  <script src="cancelDownload.js"></script>
 </body>
 </html>
