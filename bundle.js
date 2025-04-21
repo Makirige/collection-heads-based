@@ -1197,7 +1197,6 @@
       this.btDropdown = new Dropdown('btDropdown', this.handleBodyTypeChange.bind(this));
       this.raceModal = new RaceModal(this.handleRaceSelect.bind(this), this.handleRaceSkip.bind(this));
       this.downloadManager = new DownloadManager();
-      window.downloadManagerInstance = this.downloadManager;
       this.selectionModal = new SelectionModal(this.modList, this.downloadManager);
 
       // State
