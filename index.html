@@ -97,6 +97,14 @@
       to { transform: translateY(0); opacity: 1; }
     }
     
+    /* Style pour le bouton de sélection */
+    .selection-counter-wrapper {
+      display: flex;
+      justify-content: center;
+      width: 100%;
+      margin: 20px 0;
+    }
+    
     /* Style to make the counter truly clickable */
     .selection-counter {
       pointer-events: auto !important;
@@ -106,7 +114,6 @@
       padding: 0 !important;
       margin: 0 !important;
       outline: none !important;
-      text-align: left !important;
       font-family: inherit !important;
       font-size: inherit !important;
       color: inherit !important;
@@ -382,6 +389,29 @@
       .selection-modal {
         width: 95%;
       }
+      
+      body {
+        padding-top: 160px;
+      }
+      
+      .header-content {
+        flex-direction: column;
+        padding-top: 65px;
+        padding-bottom: 10px;
+      }
+      
+      .logo-container {
+        position: absolute;
+        top: 5px;
+        left: 50%;
+        transform: translateX(-50%);
+        margin-bottom: 10px;
+      }
+      
+      .logo {
+        width: 70px;
+        height: 70px;
+      }
     }
     
     /* Container to center progress bar */
@@ -396,67 +426,211 @@
       width: 100%;
       max-width: 800px;
     }
+
+    /* Logo styles */
+    .logo {
+      width: 90px;
+      height: 90px;
+    }
+
+    /* Header styles */
+    .logo-container {
+      position: absolute;
+      left: 0;
+      display: flex;
+      align-items: center;
+    }
+    
+    .header-content {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      position: relative;
+      justify-content: center;
+      width: 100%;
+      padding: 0;
+    }
+    
+    .header-text {
+      text-align: center;
+      max-width: 800px;
+      margin: 0 auto;
+      padding-top: 15px;
+    }
+
+    .header-text h1 {
+      margin-bottom: 5px;
+    }
+    
+    .subtitle {
+      margin-top: 0;
+      font-size: 0.9rem;
+    }
+
+    /* Header scrolling behavior */
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background-color: var(--bg-dark);
+      z-index: 1000;
+      transition: transform 0.3s ease;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      padding: 10px 0;
+    }
+    
+    header.hidden {
+      transform: translateY(-100%);
+    }
+    
+    /* Controls fixed on scroll */
+    .controls-container {
+      position: sticky;
+      top: 0;
+      background-color: var(--bg-dark);
+      z-index: 999;
+      padding: 15px 0;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    /* Controls styles */
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.5rem;
+    }
+    
+    body {
+      padding-top: 120px;
+    }
+    
+    /* Back to top button */
+    .back-to-top {
+      position: fixed;
+      bottom: 30px;
+      left: 30px;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: linear-gradient(to right, var(--accent), var(--accent-secondary));
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(20px);
+      transition: all 0.3s ease;
+      z-index: 99;
+      border: none;
+      outline: none;
+    }
+    
+    .back-to-top.visible {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+    
+    .back-to-top:focus {
+      outline: none;
+      box-shadow: 0 4px 15px rgba(255, 110, 110, 0.5);
+    }
+    
+    .back-to-top i {
+      font-size: 20px;
+    }
+    
+    .back-to-top:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 15px rgba(255, 110, 110, 0.4);
+      outline: none;
+      border: none;
+    }
+    
+    @media (max-width: 768px) {
+      body {
+        padding-top: 160px;
+      }
+    }
   </style>
 </head>
 <body>
-  <header>
+  <header id="header">
     <div class="container">
-      <h1><span class="maki">Maki</span><span class="apostrophe">'s</span> <span class="mugs">Mugs</span></h1>
-      <p class="subtitle">A collection of head presets for Baldur's Gate 3 to download individually from ModHQ.</p>
+      <div class="header-content">
+        <div class="logo-container">
+          <img src="images/logo.png" alt="Maki's Mugs Logo" class="logo">
+        </div>
+        <div class="header-text">
+          <h1><span class="maki">Maki</span><span class="apostrophe">'s</span> <span class="mugs">Mugs</span></h1>
+          <p class="subtitle">A collection of head presets for Baldur's Gate 3 to download individually from ModHQ.</p>
+        </div>
+      </div>
     </div>
   </header>
 
   <div class="container">
-    <div class="controls">
-      <div class="search-control">
-        <i class="fas fa-search search-icon"></i>
-        <input type="text" id="searchInput" placeholder="Search for a preset...">
-      </div>
-      
-      <div class="custom-dropdown" id="raceDropdown">
-        <div class="dropdown-selected" data-value="">
-          <img src="images/races/150px-Race_Human.png" alt="All races" class="dropdown-icon" id="raceSelectedIcon">
-          <span class="dropdown-text" id="raceSelectedText">All races</span>
-          <i class="fas fa-chevron-down dropdown-arrow"></i>
+    <div class="controls-container">
+      <div class="controls">
+        <div class="search-control">
+          <i class="fas fa-search search-icon"></i>
+          <input type="text" id="searchInput" placeholder="Search for a preset...">
         </div>
-        <div class="dropdown-options" id="raceOptions">
-          <!-- Race options will be generated by JavaScript -->
-        </div>
-      </div>
-      
-      <div class="custom-dropdown" id="btDropdown">
-        <div class="dropdown-selected">
-          <span class="dropdown-text" id="btSelectedText">Body type</span>
-          <i class="fas fa-chevron-down dropdown-arrow"></i>
-        </div>
-        <div class="dropdown-options" id="btOptions">
-          <div class="dropdown-option" data-value="">
-            <span>All types</span>
+        
+        <div class="custom-dropdown" id="raceDropdown">
+          <div class="dropdown-selected" data-value="">
+            <img src="images/races/150px-Race_Human.png" alt="All races" class="dropdown-icon" id="raceSelectedIcon">
+            <span class="dropdown-text" id="raceSelectedText">All races</span>
+            <i class="fas fa-chevron-down dropdown-arrow"></i>
           </div>
-          <div class="dropdown-option" data-value="bt1">
-            <span>BT1 - Female</span>
-          </div>
-          <div class="dropdown-option" data-value="bt2">
-            <span>BT2 - Male</span>
-          </div>
-          <div class="dropdown-option" data-value="bt4">
-            <span>BT4 - Strong male</span>
+          <div class="dropdown-options" id="raceOptions">
+            <!-- Race options will be generated by JavaScript -->
           </div>
         </div>
-      </div>
-      
-      <div class="control-group">
-        <button class="small" onclick="selectAll(true)"><i class="fas fa-check-square"></i> Select all</button>
-        <button class="small" onclick="selectAll(false)"><i class="fas fa-square"></i> Deselect all</button>
-        <button class="small" onclick="clearStorage()"><i class="fas fa-trash"></i> Clear all</button>
+        
+        <div class="custom-dropdown" id="btDropdown">
+          <div class="dropdown-selected">
+            <span class="dropdown-text" id="btSelectedText">Body type</span>
+            <i class="fas fa-chevron-down dropdown-arrow"></i>
+          </div>
+          <div class="dropdown-options" id="btOptions">
+            <div class="dropdown-option" data-value="">
+              <span>All types</span>
+            </div>
+            <div class="dropdown-option" data-value="bt1">
+              <span>BT1 - Female</span>
+            </div>
+            <div class="dropdown-option" data-value="bt2">
+              <span>BT2 - Male</span>
+            </div>
+            <div class="dropdown-option" data-value="bt4">
+              <span>BT4 - Strong male</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="control-group">
+          <button class="small" onclick="selectAll(true)"><i class="fas fa-check-square"></i> Select all</button>
+          <button class="small" onclick="selectAll(false)"><i class="fas fa-square"></i> Deselect all</button>
+          <button class="small" onclick="clearStorage()"><i class="fas fa-trash"></i> Clear all</button>
+        </div>
       </div>
     </div>
 
-    <button class="selection-counter button" id="selectionCounter">
-      <div class="counter-badge">
-        <i class="fas fa-check-circle"></i> <span id="selectedCount">0</span> presets selected
-      </div>
-    </button>
+    <div class="selection-counter-wrapper">
+      <button class="selection-counter button" id="selectionCounter">
+        <div class="counter-badge">
+          <i class="fas fa-check-circle"></i> <span id="selectedCount">0</span> presets selected
+        </div>
+      </button>
+    </div>
 
     <div class="mod-count" id="modCount">Loading presets...</div>
 
@@ -487,6 +661,10 @@
     
     <button class="generate-btn" id="generateBtn"><i class="fas fa-download"></i> Generate my pack</button>
   </div>
+
+  <button class="back-to-top" id="backToTopBtn">
+    <i class="fas fa-arrow-up"></i>
+  </button>
 
   <footer>
     <div class="container">
@@ -598,6 +776,15 @@
           "bodyType": "bt2",
           "imagePath": "https://placehold.co/200x200",
           "downloadUrl": "#"
+        },
+        {
+          "id": "test3",
+          "name": "test-head-3",
+          "displayName": "Test Preset 3",
+          "race": "tiefling",
+          "bodyType": "bt1",
+          "imagePath": "https://placehold.co/200x200",
+          "downloadUrl": "#"
         }
       ];
       
@@ -619,9 +806,42 @@
         document.getElementById('modList').appendChild(card);
       });
       
-      // Make the selection counter visible
-      document.getElementById('selectedCount').textContent = '2';
-      document.getElementById('selectionCounter').classList.add('show');
+      // Update selection count - simple direct counting
+      const updateSelectionCount = function() {
+        const selectedCount = document.querySelectorAll('#modList input[type="checkbox"]:checked').length;
+        document.getElementById('selectedCount').textContent = selectedCount;
+        if (selectedCount > 0) {
+          document.getElementById('selectionCounter').classList.add('show');
+        } else {
+          document.getElementById('selectionCounter').classList.remove('show');
+        }
+      };
+      
+      // Initial count update
+      updateSelectionCount();
+      
+      // Add selection change listeners
+      document.addEventListener('change', function(e) {
+        if (e.target && e.target.type === 'checkbox') {
+          updateSelectionCount();
+        }
+      });
+      
+      // Redefine selectAll function
+      window.selectAll = function(selected) {
+        document.querySelectorAll('#modList input[type="checkbox"]').forEach(checkbox => {
+          checkbox.checked = selected;
+        });
+        updateSelectionCount();
+      };
+      
+      // Redefine clearStorage function
+      window.clearStorage = function() {
+        document.querySelectorAll('#modList input[type="checkbox"]').forEach(checkbox => {
+          checkbox.checked = false;
+        });
+        updateSelectionCount();
+      };
       
       // Add cards in the modal
       const modalList = document.getElementById('selectedPresetsList');
@@ -648,6 +868,36 @@
       
       // Hide the no selections message
       document.getElementById('noSelectionsMessage').style.display = 'none';
+      
+      // Header scroll behavior
+      const header = document.getElementById('header');
+      const backToTopBtn = document.getElementById('backToTopBtn');
+      
+      window.addEventListener('scroll', function() {
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        
+        // Header visibility - only visible at the top of the page
+        if (scrollTop > 50) {
+          header.classList.add('hidden');
+        } else {
+          header.classList.remove('hidden');
+        }
+        
+        // Back to top button visibility
+        if (scrollTop > 500) {
+          backToTopBtn.classList.add('visible');
+        } else {
+          backToTopBtn.classList.remove('visible');
+        }
+      });
+      
+      // Back to top button click event
+      backToTopBtn.addEventListener('click', function() {
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth'
+        });
+      });
     });
   </script>
   <script src="bundle.js"></script>
