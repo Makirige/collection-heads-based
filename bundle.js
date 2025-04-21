@@ -1,4 +1,3 @@
-
 (function(l, r) { if (!l || l.getElementById('livereloadscript')) return; r = l.createElement('script'); r.async = 1; r.src = '//' + (self.location.host || 'localhost').split(':')[0] + ':35729/livereload.js?snipver=1'; r.id = 'livereloadscript'; l.getElementsByTagName('head')[0].appendChild(r) })(self.document);
 (function () {
   'use strict';
@@ -972,7 +971,7 @@
       this.modalElement.classList.remove('hidden');
       this.modalElement.classList.add('visible');
       document.body.style.overflow = 'hidden'; // Prevent scrolling behind modal
-
+      
       // Mettre le focus sur le bouton de téléchargement si des préréglages sont sélectionnés
       if (Object.keys(this.modList.currentSelections).length > 0) {
         this.modalGenerateBtn.focus();
@@ -994,23 +993,12 @@
     populateSelectedPresets() {
       // Clear previous content
       this.selectedPresetsList.innerHTML = '';
-
-      // Get selected mod IDs and convert to array of mod objects
-      const selectedMods = {};
-      const selections = this.modList.currentSelections;
-      const allMods = ModService$1.getAllMods();
-
-      // Find each selected mod in the full list
-      Object.keys(selections).forEach(modId => {
-        const modsWithId = allMods.filter(mod => mod.id === modId);
-        modsWithId.forEach(mod => {
-          selectedMods[mod.id + '-' + mod.name] = mod;
-        });
-      });
-      const selectedModsArray = Object.values(selectedMods);
-
+      
+      // Récupérer directement les éléments de carte sélectionnés
+      const selectedCards = this.modList.modListElement.querySelectorAll('.mod-card input[type=checkbox]:checked');
+      
       // Show message if no selections
-      if (selectedModsArray.length === 0) {
+      if (selectedCards.length === 0) {
         this.noSelectionsMessage.style.display = 'block';
         this.modalGenerateBtn.disabled = true;
         return;
@@ -1018,66 +1006,80 @@
         this.noSelectionsMessage.style.display = 'none';
         this.modalGenerateBtn.disabled = false;
       }
-
-      // Create a card for each selected mod
-      selectedModsArray.forEach(mod => {
-        const card = document.createElement('div');
-        card.className = 'mod-card';
-        card.dataset.id = mod.id;
-        card.dataset.name = mod.name;
-
-        // Get race name and icon
-        const raceName = getRaceName(mod.race);
-        const raceIcon = RACE_ICONS[mod.race] || 'images/races/150px-Race_Human.png';
-        const bodyTypeName = getBodyTypeName(mod.bodyType);
-
-        // Get info link - use mod-specific link if available, otherwise use default
-        const infoLink = mod.infoLink || 'https://bg3.wiki';
-
-        // Add original link if it exists
-        const originalLink = mod.originalLink ? `<a href="${mod.originalLink}" class="original-link" target="_blank" title="View original mod" onclick="event.stopPropagation();">
-            <i class="fas fa-external-link-alt"></i>
-          </a>` : '';
-
-        // Format card HTML to match the main site cards
-        card.innerHTML = `
-        <button class="remove-mod-btn" data-id="${mod.id}" data-name="${mod.name}">
-          <i class="fas fa-times"></i>
-        </button>
-        <div class="image-container">
-          <img src="${mod.imagePath}" alt="${mod.displayName}" />
-          ${originalLink}
-        </div>
-        <div class="content">
-          <div class="title">${mod.displayName}</div>
-          <div class="badges-container">
-            <div class="badges">
-              <div class="badge race-badge" style="background-image: url(${raceIcon}); background-size: 12px; background-repeat: no-repeat; background-position: 5px center; padding-left: 22px;">
-                ${raceName}
-              </div>
-              <div class="badge body-type-badge">
-                ${mod.bodyType.toUpperCase()} - ${bodyTypeName}
+      
+      // Créer une carte pour chaque préréglage sélectionné
+      selectedCards.forEach(checkbox => {
+        const card = checkbox.closest('.mod-card');
+        const modId = card.dataset.id;
+        const modTitle = card.querySelector('.title').textContent;
+        
+        // Obtenir les détails du mod à partir du service
+        const allMods = ModService$1.getAllMods();
+        const mod = allMods.find(m => m.id === modId && m.displayName === modTitle);
+        
+        if (mod) {
+          // Create a card for the selected mod
+          const modalCard = document.createElement('div');
+          modalCard.className = 'mod-card';
+          modalCard.dataset.id = mod.id;
+          modalCard.dataset.name = mod.name;
+          
+          // Get race name and icon
+          const raceName = getRaceName(mod.race);
+          const raceIcon = RACE_ICONS[mod.race] || 'images/races/150px-Race_Human.png';
+          const bodyTypeName = getBodyTypeName(mod.bodyType);
+          
+          // Get info link - use mod-specific link if available, otherwise use default
+          const infoLink = mod.infoLink || 'https://bg3.wiki';
+          
+          // Add original link if it exists
+          const originalLink = mod.originalLink 
+            ? `<a href="${mod.originalLink}" class="original-link" target="_blank" title="View original mod" onclick="event.stopPropagation();">
+                <i class="fas fa-external-link-alt"></i>
+              </a>` 
+            : '';
+          
+          // Format card HTML to match the main site cards
+          modalCard.innerHTML = `
+            <button class="remove-mod-btn" data-id="${mod.id}" data-name="${mod.name}">
+              <i class="fas fa-times"></i>
+            </button>
+            <div class="image-container">
+              <img src="${mod.imagePath}" alt="${mod.displayName}" />
+              ${originalLink}
+            </div>
+            <div class="content">
+              <div class="title">${mod.displayName}</div>
+              <div class="badges-container">
+                <div class="badges">
+                  <div class="badge race-badge" style="background-image: url(${raceIcon}); background-size: 12px; background-repeat: no-repeat; background-position: 5px center; padding-left: 22px;">
+                    ${raceName}
+                  </div>
+                  <div class="badge body-type-badge">
+                    ${mod.bodyType.toUpperCase()} - ${bodyTypeName}
+                  </div>
+                </div>
+                <div class="badge-link-wrapper">
+                  <div class="badge link-badge">
+                    <a href="${infoLink}" target="_blank" onclick="event.stopPropagation();">
+                      <i class="fas fa-info-circle"></i> More info
+                    </a>
+                  </div>
+                </div>
               </div>
             </div>
-            <div class="badge-link-wrapper">
-              <div class="badge link-badge">
-                <a href="${infoLink}" target="_blank" onclick="event.stopPropagation();">
-                  <i class="fas fa-info-circle"></i> More info
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-      `;
-
-        // Add event listeners for the remove button
-        const removeButton = card.querySelector('.remove-mod-btn');
-        removeButton.addEventListener('click', e => {
-          e.preventDefault();
-          e.stopPropagation();
-          this.removeSelectedMod(mod.id, mod.name);
-        });
-        this.selectedPresetsList.appendChild(card);
+          `;
+          
+          // Add event listeners for the remove button
+          const removeButton = modalCard.querySelector('.remove-mod-btn');
+          removeButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            this.removeSelectedMod(mod.id, mod.name);
+          });
+          
+          this.selectedPresetsList.appendChild(modalCard);
+        }
       });
     }
 
@@ -1088,12 +1090,20 @@
      */
     removeSelectedMod(modId, modName) {
       // Find the corresponding checkbox in the main list
-      const modCards = document.querySelectorAll('.mod-card');
+      const modCards = this.modList.modListElement.querySelectorAll('.mod-card');
       let found = false;
+      
       modCards.forEach(card => {
         if (card.dataset.id === modId) {
+          const title = card.querySelector('.title').textContent;
           const checkbox = card.querySelector('input[type="checkbox"]');
-          if (checkbox && checkbox.checked) {
+          
+          // Trouver le mod correspondant pour comparer avec le nom affiché
+          const allMods = ModService$1.getAllMods();
+          const mod = allMods.find(m => m.id === modId && m.displayName === title);
+          
+          // Décocher uniquement si c'est le bon mod
+          if (checkbox && checkbox.checked && mod && mod.name === modName) {
             checkbox.checked = false;
             this.modList.saveCurrentSelections();
             this.modList.onSelectionChange(this.modList.currentSelections);
@@ -1101,6 +1111,7 @@
           }
         }
       });
+      
       if (found) {
         // Refresh the selected presets list
         this.populateSelectedPresets();

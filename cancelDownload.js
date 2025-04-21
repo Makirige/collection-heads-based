@@ -245,20 +245,24 @@
     
     // Afficher également le message dans le modal si présent
     const modalCancelNotification = document.getElementById('modalCancelNotification');
-    if (modalCancelNotification) {
-      // Afficher le message d'annulation
+    if (modalCancelNotification && window.notificationSystem) {
+      // Utiliser le système de notification
+      window.notificationSystem.show('modalCancelNotification', 2000);
+      log('Message d\'annulation affiché dans le modal via le système de notification');
+    } else if (modalCancelNotification) {
+      // Fallback au cas où le système de notification n'est pas chargé
       modalCancelNotification.style.display = 'flex';
-      log('Message d\'annulation affiché dans le modal');
+      log('Message d\'annulation affiché dans le modal (méthode traditionnelle)');
       
-      // Faire disparaître le message après 5 secondes
+      // Faire disparaître le message après 2 secondes
       if (window.cancelNotificationTimer) {
         clearTimeout(window.cancelNotificationTimer);
       }
       
       window.cancelNotificationTimer = setTimeout(function() {
         modalCancelNotification.style.display = 'none';
-        log('Message d\'annulation masqué après 5 secondes');
-      }, 5000);
+        log('Message d\'annulation masqué après 2 secondes');
+      }, 2000);
     }
     
     // Callbacks personnalisés
@@ -271,10 +275,16 @@
       }
     }
     
-    // Arrêter les timers potentiellement problématiques
+    // Arrêter les timers potentiellement problématiques en excluant ceux de notification
     for (let i = 1; i < 1000; i++) {
-      window.clearTimeout(i);
-      window.clearInterval(i);
+      const isProtectedTimer = window.cancelNotificationTimer === i || 
+                             (window.protectNotificationTimers && 
+                              window.protectNotificationTimers().includes(i));
+      
+      if (!isProtectedTimer) {
+        window.clearTimeout(i);
+        window.clearInterval(i);
+      }
     }
     
     // SOLUTION DÉFINITIVE RADICALE: Briser l'objet JSZip
@@ -462,9 +472,15 @@
       window.blockAllDownloads = false;
       
       // Réinitialiser le message d'annulation dans le modal
-      const modalCancelNotification = document.getElementById('modalCancelNotification');
-      if (modalCancelNotification) {
-        modalCancelNotification.style.display = 'none';
+      if (window.notificationSystem) {
+        window.notificationSystem.hide('modalCancelNotification');
+        log('Message d\'annulation réinitialisé via le système de notification');
+      } else {
+        const modalCancelNotification = document.getElementById('modalCancelNotification');
+        if (modalCancelNotification) {
+          modalCancelNotification.style.display = 'none';
+          log('Message d\'annulation réinitialisé (méthode traditionnelle)');
+        }
       }
       
       currentDownloadController = new AbortController();
