@@ -1,35 +1,35 @@
 /**
- * Module de gestion des notifications
- * Ce module gère l'affichage et la disparition des notifications dans l'application
+ * Notifications management module
+ * This module manages the display and hiding of notifications in the application
  */
 (function() {
   'use strict';
   
-  // Timers stockés par ID de notification
+  // Timers stored by notification ID
   const notificationTimers = {};
   
-  // Fonction pour afficher une notification
+  // Function to display a notification
   function showNotification(elementId, duration = 2000) {
     const element = document.getElementById(elementId);
     if (!element) {
-      console.error(`Élément de notification avec ID "${elementId}" non trouvé`);
+      console.error(`Notification element with ID "${elementId}" not found`);
       return false;
     }
     
-    // Nettoyer tout timer existant pour cette notification
+    // Clear any existing timer for this notification
     if (notificationTimers[elementId]) {
       clearTimeout(notificationTimers[elementId]);
     }
     
-    // Afficher la notification
+    // Display the notification
     element.style.display = 'flex';
-    console.log(`Notification "${elementId}" affichée`);
+    console.log(`Notification "${elementId}" displayed`);
     
-    // Configurer le timer pour masquer la notification après le délai spécifié
+    // Set up timer to hide the notification after the specified delay
     if (duration > 0) {
       notificationTimers[elementId] = setTimeout(() => {
         element.style.display = 'none';
-        console.log(`Notification "${elementId}" masquée après ${duration}ms`);
+        console.log(`Notification "${elementId}" hidden after ${duration}ms`);
         delete notificationTimers[elementId];
       }, duration);
     }
@@ -37,39 +37,39 @@
     return true;
   }
   
-  // Fonction pour masquer une notification immédiatement
+  // Function to hide a notification immediately
   function hideNotification(elementId) {
     const element = document.getElementById(elementId);
     if (!element) {
-      console.error(`Élément de notification avec ID "${elementId}" non trouvé`);
+      console.error(`Notification element with ID "${elementId}" not found`);
       return false;
     }
     
-    // Nettoyer tout timer existant
+    // Clear any existing timer
     if (notificationTimers[elementId]) {
       clearTimeout(notificationTimers[elementId]);
       delete notificationTimers[elementId];
     }
     
-    // Masquer la notification
+    // Hide the notification
     element.style.display = 'none';
-    console.log(`Notification "${elementId}" masquée manuellement`);
+    console.log(`Notification "${elementId}" manually hidden`);
     
     return true;
   }
   
-  // Fonction pour vérifier si une notification est visible
+  // Function to check if a notification is visible
   function isNotificationVisible(elementId) {
     const element = document.getElementById(elementId);
     return element && element.style.display !== 'none';
   }
   
-  // Fonction pour obtenir tous les timers de notification actifs
+  // Function to get all active notification timers
   function getActiveTimers() {
     return Object.assign({}, notificationTimers);
   }
   
-  // Exposer les fonctions au scope global
+  // Expose functions to global scope
   window.notificationSystem = {
     show: showNotification,
     hide: hideNotification,
@@ -77,7 +77,7 @@
     getActiveTimers: getActiveTimers
   };
   
-  // S'assurer que les timers de notification ne sont pas supprimés par d'autres scripts
+  // Ensure notification timers are not removed by other scripts
   window.protectNotificationTimers = function() {
     return Object.values(notificationTimers);
   };

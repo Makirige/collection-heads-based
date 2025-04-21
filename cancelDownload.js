@@ -1,51 +1,51 @@
 /**
- * Module de gestion d'annulation de téléchargement
- * Permet d'annuler proprement les téléchargements en cours
+ * Download cancellation management module
+ * Allows for clean cancellation of ongoing downloads
  */
 
 (function() {
   // Configuration
   const config = {
-    debug: true, // Activer pour déboguer
+    debug: true, // Enable for debugging
     useConsoleLog: true
   };
 
-  // Logger personnalisé
+  // Custom logger
   function log(...args) {
     if (config.debug && config.useConsoleLog) {
       console.log('[CancelDownload]', ...args);
     }
   }
 
-  // Variables d'état
+  // State variables
   let downloadInProgress = false;
   let downloadCancelled = false;
   let currentDownloadController = null;
   let activeDownloadRequests = [];
   
-  // Sauvegarder les fonctions originales
+  // Save original functions
   const originalCreateObjectURL = window.URL.createObjectURL;
   const originalFetch = window.fetch;
   const originalXHROpen = XMLHttpRequest.prototype.open;
   const originalXHRSend = XMLHttpRequest.prototype.send;
   const originalCreateElement = document.createElement;
   
-  // Intercepter FileSaver.js - CRITIQUE pour bloquer les téléchargements
+  // Intercept FileSaver.js - CRITICAL to block downloads
   if (window.saveAs) {
-    log('FileSaver.js détecté - Interception...');
+    log('FileSaver.js detected - Intercepting...');
     const originalSaveAs = window.saveAs;
     window.saveAs = function(blob, filename, opts) {
       if (window.blockAllDownloads || downloadCancelled) {
-        log('Téléchargement bloqué via saveAs:', filename);
-        return Promise.reject(new Error('Téléchargement annulé'));
+        log('Download blocked via saveAs:', filename);
+        return Promise.reject(new Error('Download cancelled'));
       }
       return originalSaveAs(blob, filename, opts);
     };
   }
   
-  // Interception globale d'autres méthodes de téléchargement
+  // Global interception of other download methods
   function interceptDownloads() {
-    // Interception directe de toutes les méthodes de téléchargement connues
+    // Direct interception of all known download methods
     [
       'saveAs', 
       'download', 
@@ -59,28 +59,28 @@
         const original = window[funcName];
         window[funcName] = function(...args) {
           if (window.blockAllDownloads || downloadCancelled) {
-            log(`Téléchargement bloqué via ${funcName}`);
-            return Promise.reject(new Error('Téléchargement annulé'));
+            log(`Download blocked via ${funcName}`);
+            return Promise.reject(new Error('Download cancelled'));
           }
           return original.apply(this, args);
         };
-        log(`Fonction interceptée: ${funcName}`);
+        log(`Function intercepted: ${funcName}`);
       }
     });
     
-    // Interception spécifique pour JSZip
+    // Specific interception for JSZip
     if (window.JSZip) {
-      log('JSZip détecté - Interception...');
+      log('JSZip detected - Intercepting...');
       
-      // Intercepter la méthode generateAsync qui crée le zip final
+      // Intercept the generateAsync method that creates the final zip
       const originalGenerateAsync = window.JSZip.prototype.generateAsync;
       window.JSZip.prototype.generateAsync = function(...args) {
         if (window.blockAllDownloads || downloadCancelled) {
-          log('Génération de ZIP bloquée via generateAsync');
-          return Promise.reject(new Error('Téléchargement annulé'));
+          log('ZIP generation blocked via generateAsync');
+          return Promise.reject(new Error('Download cancelled'));
         }
         
-        // Stocker la promesse pour pouvoir l'annuler plus tard
+        // Store the promise so it can be cancelled later
         const zipPromise = originalGenerateAsync.apply(this, args);
         activeDownloadRequests.push(zipPromise);
         
@@ -96,125 +96,125 @@
     }
   }
   
-  // Fonction principale d'annulation
+  // Main cancellation function
   function cancelDownload() {
-    log('Annulation du téléchargement demandée');
+    log('Download cancellation requested');
     
-    // Marquer l'annulation clairement
+    // Mark cancellation clearly
     downloadInProgress = false;
     downloadCancelled = true;
     window.shouldCancelDownload = true;
     window.isGenerating = false;
     
-    // Bloquer immédiatement tous les téléchargements
+    // Immediately block all downloads
     window.blockAllDownloads = true;
     
-    // Arrêter les requêtes en cours
+    // Stop ongoing requests
     if (currentDownloadController) {
       try {
         currentDownloadController.abort();
-        log('AbortController déclenché');
+        log('AbortController triggered');
       } catch (e) {
-        console.error('Erreur lors de l\'annulation via AbortController:', e);
+        console.error('Error when cancelling via AbortController:', e);
       }
     }
     
-    // Interrompre les requêtes fetch actives
+    // Interrupt active fetch requests
     try {
       if (activeDownloadRequests && activeDownloadRequests.length) {
         activeDownloadRequests.forEach(req => {
           if (req && req.abort) req.abort();
         });
-        log(`${activeDownloadRequests.length} requêtes annulées`);
+        log(`${activeDownloadRequests.length} requests cancelled`);
       }
       activeDownloadRequests = [];
     } catch (e) {
-      console.error('Erreur lors de l\'annulation des requêtes fetch:', e);
+      console.error('Error when cancelling fetch requests:', e);
     }
     
-    // Arrêter tous les téléchargements en cours
+    // Stop all downloads in progress
     try {
-      // Supprimer les liens de téléchargement existants
+      // Remove existing download links
       document.querySelectorAll('a[download][href^="blob:"]').forEach(el => {
-        log('Suppression d\'un lien de téléchargement:', el);
+        log('Removing a download link:', el);
         URL.revokeObjectURL(el.href);
         el.remove();
       });
       
-      // Supprimer les iframes de téléchargement
+      // Remove download iframes
       document.querySelectorAll('iframe[src^="blob:"]').forEach(el => {
-        log('Suppression d\'un iframe de téléchargement:', el);
+        log('Removing a download iframe:', el);
         el.remove();
       });
       
-      // Annuler les tâches en attente dans la file de téléchargement
+      // Cancel pending tasks in the download queue
       if (window.downloadQueue) {
-        log(`Annulation de ${window.downloadQueue.length} tâches en attente`);
+        log(`Cancelling ${window.downloadQueue.length} pending tasks`);
         window.downloadQueue = [];
       }
       
       if (window.currentDownloads) {
-        log(`Arrêt de ${window.currentDownloads.length} téléchargements en cours`);
+        log(`Stopping ${window.currentDownloads.length} downloads in progress`);
         window.currentDownloads = [];
       }
       
       if (window.pendingDownloads) {
-        log(`Annulation de ${window.pendingDownloads.length} téléchargements en attente`);
+        log(`Cancelling ${window.pendingDownloads.length} pending downloads`);
         window.pendingDownloads = [];
       }
       
-      // Interrompre la génération du ZIP si elle est en cours
+      // Interrupt ZIP generation if in progress
       if (window.zip && typeof window.zip.abort === 'function') {
         window.zip.abort();
-        log('Génération du ZIP interrompue');
+        log('ZIP generation interrupted');
       }
       
-      // SOLUTION RADICALE: Remplacer temporairement FileSaver.js
+      // RADICAL SOLUTION: Temporarily replace FileSaver.js
       if (window.saveAs) {
         window.originalSaveAs = window.saveAs;
         window.saveAs = function() {
-          log('Tentative de téléchargement bloquée');
-          return Promise.reject(new Error('Téléchargement annulé'));
+          log('Download attempt blocked');
+          return Promise.reject(new Error('Download cancelled'));
         };
-        log('FileSaver.js désactivé temporairement');
+        log('FileSaver.js temporarily disabled');
       }
       
-      // Désactiver également Blob.prototype.slice qui est utilisé dans la génération de fichiers
+      // Also disable Blob.prototype.slice which is used in file generation
       if (Blob.prototype.slice) {
         const originalSlice = Blob.prototype.slice;
         Blob.prototype.slice = function(...args) {
           if (window.blockAllDownloads) {
-            log('Blob.slice bloqué pendant l\'annulation');
+            log('Blob.slice blocked during cancellation');
             return new Blob([], { type: 'application/octet-stream' });
           }
           return originalSlice.apply(this, args);
         };
       }
     } catch (e) {
-      console.error('Erreur lors de l\'arrêt des téléchargements en cours:', e);
+      console.error('Error when stopping downloads in progress:', e);
     }
     
-    // Bloquer aussi navigator.msSaveBlob pour IE
+    // Also block navigator.msSaveBlob for IE
     if (navigator.msSaveBlob) {
       navigator.msSaveBlob = function() {
-        log('msSaveBlob bloqué');
+        log('msSaveBlob blocked');
         return false;
       };
     }
     
-    // Réinitialiser l'interface
+    // Reset interface
     const elements = {
       progressBars: ['downloadProgress', 'modalDownloadProgress', 'loader'],
       modals: ['raceModal', 'selectionModal']
     };
     
-    // Masquer les éléments de progression
+    // Hide progress elements
     elements.progressBars.forEach(id => {
       const el = document.getElementById(id);
       if (el) el.style.display = 'none';
     });
     
-    // Fermer les modals
+    // Close modals
     elements.modals.forEach(id => {
       const modal = document.getElementById(id);
       if (modal) {
@@ -225,16 +225,16 @@
       }
     });
     
-    // Réinitialiser les barres de progression
+    // Reset progress bars
     const progressBar = document.getElementById('progressBar');
     const modalProgressBar = document.getElementById('modalProgressBar');
     if (progressBar) progressBar.style.width = '0%';
     if (modalProgressBar) modalProgressBar.style.width = '0%';
     
-    // Afficher un message à l'utilisateur
+    // Display a message to the user
     const statusMessage = document.getElementById('statusMessage');
     if (statusMessage) {
-      statusMessage.textContent = 'Téléchargement annulé';
+      statusMessage.textContent = 'Download cancelled';
       statusMessage.style.display = 'block';
       statusMessage.className = 'status warning';
       
@@ -243,39 +243,39 @@
       }, 3000);
     }
     
-    // Afficher également le message dans le modal si présent
+    // Also display the message in the modal if present
     const modalCancelNotification = document.getElementById('modalCancelNotification');
     if (modalCancelNotification && window.notificationSystem) {
-      // Utiliser le système de notification
+      // Use the notification system
       window.notificationSystem.show('modalCancelNotification', 2000);
-      log('Message d\'annulation affiché dans le modal via le système de notification');
+      log('Cancellation message displayed in modal via notification system');
     } else if (modalCancelNotification) {
-      // Fallback au cas où le système de notification n'est pas chargé
+      // Fallback in case the notification system is not loaded
       modalCancelNotification.style.display = 'flex';
-      log('Message d\'annulation affiché dans le modal (méthode traditionnelle)');
+      log('Cancellation message displayed in modal (traditional method)');
       
-      // Faire disparaître le message après 2 secondes
+      // Hide the message after 2 seconds
       if (window.cancelNotificationTimer) {
         clearTimeout(window.cancelNotificationTimer);
       }
       
       window.cancelNotificationTimer = setTimeout(function() {
         modalCancelNotification.style.display = 'none';
-        log('Message d\'annulation masqué après 2 secondes');
+        log('Cancellation message hidden after 2 seconds');
       }, 2000);
     }
     
-    // Callbacks personnalisés
+    // Custom callbacks
     if (typeof window.onDownloadCancelled === 'function') {
       try {
         window.onDownloadCancelled();
-        log('Callback d\'annulation exécuté');
+        log('Cancellation callback executed');
       } catch (e) {
-        console.error('Erreur dans le callback d\'annulation:', e);
+        console.error('Error in cancellation callback:', e);
       }
     }
     
-    // Arrêter les timers potentiellement problématiques en excluant ceux de notification
+    // Stop potentially problematic timers excluding notification ones
     for (let i = 1; i < 1000; i++) {
       const isProtectedTimer = window.cancelNotificationTimer === i || 
                              (window.protectNotificationTimers && 
@@ -287,9 +287,9 @@
       }
     }
     
-    // SOLUTION DÉFINITIVE RADICALE: Briser l'objet JSZip
+    // DEFINITIVE RADICAL SOLUTION: Break the JSZip object
     if (window.JSZip) {
-      // Sauvegarde des méthodes originales au cas où
+      // Backup original methods just in case
       if (!window._originalJSZip) {
         window._originalJSZip = {
           generateAsync: window.JSZip.prototype.generateAsync,
@@ -298,28 +298,28 @@
         };
       }
       
-      // Remplacer les méthodes principales par des versions qui échouent
+      // Replace main methods with failing versions
       window.JSZip.prototype.generateAsync = function() {
-        log('JSZip.generateAsync bloqué');
-        return Promise.reject(new Error('Téléchargement annulé'));
+        log('JSZip.generateAsync blocked');
+        return Promise.reject(new Error('Download cancelled'));
       };
       
       window.JSZip.prototype.file = function() {
-        log('JSZip.file bloqué');
+        log('JSZip.file blocked');
         return this;
       };
       
       window.JSZip.prototype.folder = function() {
-        log('JSZip.folder bloqué');
+        log('JSZip.folder blocked');
         return this;
       };
       
-      log('JSZip désactivé');
+      log('JSZip disabled');
     }
     
-    // Réinitialiser l'état après un délai plus long pour assurer que tout est arrêté
+    // Reset state after a longer delay to ensure everything is stopped
     setTimeout(() => {
-      // Restaurer les fonctions originales
+      // Restore original functions
       if (window.originalSaveAs) {
         window.saveAs = window.originalSaveAs;
         window.originalSaveAs = null;
@@ -331,40 +331,40 @@
         window.JSZip.prototype.folder = window._originalJSZip.folder;
       }
       
-      // Réactiver les téléchargements futurs
+      // Re-enable future downloads
       window.blockAllDownloads = false;
       
-      // Réinitialiser les drapeaux d'état
+      // Reset state flags
       downloadCancelled = false;
       downloadInProgress = false;
       window.shouldCancelDownload = false;
       currentDownloadController = null;
       
-      log('État réinitialisé après annulation');
+      log('State reset after cancellation');
       
-      // Redémarrer les intercepteurs
+      // Restart interceptors
       initDownloadInterceptors();
     }, 1000);
     
     return false;
   }
   
-  // Intercepteurs de téléchargement
+  // Download interceptors
   function initDownloadInterceptors() {
-    // Intercepter les téléchargements via createObjectURL
+    // Intercept downloads via createObjectURL
     window.URL.createObjectURL = function(object) {
       if (window.blockAllDownloads || downloadCancelled) {
-        log('Création d\'URL d\'objet bloquée');
+        log('Object URL creation blocked');
         return null;
       }
       return originalCreateObjectURL(object);
     };
     
-    // Intercepter les requêtes fetch
+    // Intercept fetch requests
     window.fetch = function(...args) {
       if (window.blockAllDownloads || downloadCancelled) {
-        log('Requête fetch bloquée car téléchargement annulé');
-        return Promise.reject(new Error('Téléchargement annulé'));
+        log('Fetch request blocked because download cancelled');
+        return Promise.reject(new Error('Download cancelled'));
       }
       
       const fetchPromise = originalFetch.apply(this, args);
@@ -380,7 +380,7 @@
       return fetchPromise;
     };
     
-    // Intercepter la création d'éléments qui pourraient être utilisés pour le téléchargement
+    // Intercept creation of elements that could be used for downloads
     document.createElement = function(tagName) {
       const element = originalCreateElement.call(document, tagName);
       
@@ -388,18 +388,18 @@
         const originalClick = element.click;
         element.click = function() {
           if (this.getAttribute('download') && (window.blockAllDownloads || downloadCancelled)) {
-            log('Clic de téléchargement bloqué');
+            log('Download click blocked');
             return false;
           }
           return originalClick.apply(this, arguments);
         };
         
-        // Surveiller l'attribut href
+        // Monitor href attribute
         const originalSetAttribute = element.setAttribute;
         element.setAttribute = function(name, value) {
           if (name === 'href' && this.hasAttribute('download') && 
               (window.blockAllDownloads || downloadCancelled)) {
-            log('Attribution d\'URL de téléchargement bloquée');
+            log('Download URL attribution blocked');
             return;
           }
           return originalSetAttribute.call(this, name, value);
@@ -409,33 +409,33 @@
       return element;
     };
     
-    // Intercepter les requêtes XMLHttpRequest
+    // Intercept XMLHttpRequest requests
     XMLHttpRequest.prototype.open = function(...args) {
-      this._url = args[1]; // Sauvegarder l'URL pour vérification ultérieure
+      this._url = args[1]; // Save URL for later checking
       return originalXHROpen.apply(this, args);
     };
     
     XMLHttpRequest.prototype.send = function(...args) {
       if (window.blockAllDownloads || downloadCancelled) {
-        log('Requête XHR bloquée:', this._url);
+        log('XHR request blocked:', this._url);
         this.abort();
         return;
       }
       return originalXHRSend.apply(this, args);
     };
     
-    // Intercepter les bibliothèques de téléchargement spécifiques
+    // Intercept specific download libraries
     interceptDownloads();
   }
   
-  // Initialisation du système d'annulation
+  // Initialize cancellation system
   function initCancelation() {
-    log('Initialisation du système d\'annulation');
+    log('Initializing cancellation system');
     
-    // Initialiser les intercepteurs de téléchargement
+    // Initialize download interceptors
     initDownloadInterceptors();
     
-    // Fonction pour attacher les événements
+    // Function to attach events
     function attachCancelEvents() {
       const buttons = [
         document.getElementById('cancelDownloadBtn'),
@@ -444,75 +444,75 @@
       
       buttons.forEach(btn => {
         if (btn) {
-          // Annule tout événement existant et attache le nouveau
+          // Cancel any existing event and attach the new one
           btn.removeEventListener('click', cancelDownload);
           btn.addEventListener('click', cancelDownload);
           
-          // S'assurer que l'attribut onclick est également défini
+          // Ensure onclick attribute is also defined
           btn.onclick = cancelDownload;
           
-          log(`Événement d'annulation attaché à ${btn.id}`);
+          log(`Cancellation event attached to ${btn.id}`);
         }
       });
     }
     
-    // Attacher les événements immédiatement
+    // Attach events immediately
     attachCancelEvents();
     
-    // Vérifier périodiquement pour les éléments ajoutés dynamiquement
+    // Periodically check for dynamically added elements
     setInterval(attachCancelEvents, 800);
     
-    // Exposer l'API d'annulation globalement
+    // Expose cancellation API globally
     window.cancelActiveDownload = cancelDownload;
     
-    // Initialiser les variables d'état
+    // Initialize state variables
     window.startDownloadProcess = function(selectedMods, isModalContext) {
       downloadInProgress = true;
       downloadCancelled = false;
       window.blockAllDownloads = false;
       
-      // Réinitialiser le message d'annulation dans le modal
+      // Reset cancellation message in modal
       if (window.notificationSystem) {
         window.notificationSystem.hide('modalCancelNotification');
-        log('Message d\'annulation réinitialisé via le système de notification');
+        log('Cancellation message reset via notification system');
       } else {
         const modalCancelNotification = document.getElementById('modalCancelNotification');
         if (modalCancelNotification) {
           modalCancelNotification.style.display = 'none';
-          log('Message d\'annulation réinitialisé (méthode traditionnelle)');
+          log('Cancellation message reset (traditional method)');
         }
       }
       
       currentDownloadController = new AbortController();
-      log('Téléchargement initialisé avec support d\'annulation');
+      log('Download initialized with cancellation support');
       
       return currentDownloadController.signal;
     };
     
-    log('Système d\'annulation initialisé avec succès');
+    log('Cancellation system successfully initialized');
   }
   
-  // CRITICAL: Intercepter immédiatement FileSaver.js avant même le chargement du DOM
+  // CRITICAL: Immediately intercept FileSaver.js even before DOM loading
   if (window.saveAs) {
     const originalSaveAs = window.saveAs;
     window.saveAs = function(blob, filename, opts) {
       if (window.blockAllDownloads || downloadCancelled) {
-        console.log('[CancelDownload] Téléchargement via saveAs bloqué:', filename);
+        console.log('[CancelDownload] Download via saveAs blocked:', filename);
         return false;
       }
       return originalSaveAs(blob, filename, opts);
     };
   }
   
-  // Initialiser lorsque le DOM est chargé
+  // Initialize when DOM is loaded
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initCancelation);
   } else {
-    // Si le DOM est déjà chargé, initialiser immédiatement
+    // If DOM is already loaded, initialize immediately
     initCancelation();
   }
   
-  // CRITICAL: Exposer immédiatement la fonction d'annulation
+  // CRITICAL: Immediately expose cancellation function
   window.cancelActiveDownload = cancelDownload;
   window.blockAllDownloads = false;
 })(); 
