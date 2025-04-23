@@ -12,13 +12,12 @@ if not exist "!PYTHON_PATH!" (
     exit /b 1
 )
 
-REM Obtenir le chemin absolu du répertoire parent
+REM Obtenir le chemin absolu du script
 cd /d "%~dp0"
-cd ..
 
-REM Lancer l'application via le module Python
-echo Lancement de l'application Mod Editor...
-"!PYTHON_PATH!" -m mod_editor
+REM Lancer l'application directement via run_app.py
+echo Lancement direct de l'application Mod Editor...
+"!PYTHON_PATH!" "%~dp0run_app.py"
 if errorlevel 1 (
     echo Une erreur s'est produite lors de l'exécution de l'application.
     echo Code d'erreur: !errorlevel!
